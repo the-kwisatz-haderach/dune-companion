@@ -1,0 +1,7 @@
+node_modules
+build
+dist
+lib-esm
+lib
+*.tgz
+.DS_Store
