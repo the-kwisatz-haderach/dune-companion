@@ -1,0 +1,30 @@
+{
+  "name": "dune-companion",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "gustaflundstrom <gustaflundstrom90@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev ./index.ts",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@types/ws": "^7.4.7",
+    "connect-redis": "^6.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "nanoid": "^3.1.23",
+    "redis": "^3.1.2",
+    "ws": "^8.0.0",
+    "dune": "file:../dune-companion-engine/dune-v0.1.22.tgz"
+  },
+  "devDependencies": {
+    "@types/connect-redis": "^0.0.17",
+    "@types/express": "^4.17.13",
+    "@types/express-session": "^1.17.4",
+    "@types/node": "^16.4.10",
+    "@types/redis": "^2.8.31",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.3.5"
+  }
+}

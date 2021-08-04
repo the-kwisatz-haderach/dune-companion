@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Websocket test</title>
+  </head>
+  <body>
+    <div>
+      <input placeholder="Enter room id" id="room-id" />
+      <button onclick="enterRoom()">Enter room</button>
+      <input placeholder="Enter message to room" id="input" />
+      <button onclick="submitForm()">Submit</button>
+    </div>
+    <div id="messages"></div>
+  </body>
+  <script>
+    let websocket;
+    function enterRoom() {
+      const inputEl = document.getElementById("room-id");
+      websocket = new WebSocket(`ws://localhost:3000?id=${inputEl.value}`);
+
+      websocket.onclose = () => {
+        console.log("closing connection to socket!");
+      };
+
+      websocket.onerror = (e) => {
+        console.error("error", e);
+      };
+
+      websocket.onopen = () => {
+        console.log("connected to socket!");
+      };
+      websocket.onmessage = (e) => {
+        const container = document.getElementById("messages");
+        const messageEl = (document.createElement("p").innerText = e.data);
+        container.append(messageEl);
+      };
+    }
+
+    function submitForm() {
+      const inputEl = document.getElementById("input");
+      websocket.send(JSON.stringify({ payload: inputEl.value }));
+    }
+  </script>
+</html>
