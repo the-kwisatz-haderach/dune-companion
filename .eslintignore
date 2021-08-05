@@ -1,6 +1,0 @@
-node_modules
-build
-lib
-lib-esm
-dist
-webpack.config.js

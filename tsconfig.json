@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["ESNext"],
+
+    /* Strict Type-Checking Options */
+    "strict": true,
+
+    /* Module Resolution Options */
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+
+    /* Advanced Options */
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["**/node_modules"],
+  "jsx": "react",
+  "baseUrl": "./packages",
+  "paths": {
+    "@dune-companion/engine/*": ["engine/src/*"],
+    "@dune-companion/server/*": ["server/src/*"],
+    "@dune-companion/web/*": ["web/src/*"]
+  },
+  "references": [
+    { "path": "./packages/web" },
+    { "path": "./packages/engine" },
+    { "path": "./packages/server" }
+  ],
+}
