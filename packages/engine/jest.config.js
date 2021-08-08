@@ -3,5 +3,6 @@ module.exports = {
   testEnvironment: 'node',
   rootDir: 'src',
   testRegex: '.*\\.test\\.(js|ts)',
-  verbose: true
+  verbose: true,
+  testPathIgnorePatterns: ['/node_modules', '/dist']
 }

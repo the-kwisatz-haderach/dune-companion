@@ -12,6 +12,7 @@ export class RoomManager {
     this.publisher = publisher
     this.subscriber.on('message', async (roomId, message) => {
       const action = JSON.parse(message)
+      console.log('Incoming action with payload: ', action)
       this.rooms[roomId].updateGame(action)
     })
   }
@@ -19,10 +20,16 @@ export class RoomManager {
   join(roomId: string, clientId: string, socket: WebSocket): void {
     this.subscriber.subscribe(roomId)
     if (!this.has(roomId)) {
-      this.rooms[roomId] = new GameRoom(roomId, this.publisher)
+      this.rooms[roomId] = new GameRoom()
     }
     const room = this.rooms[roomId]
     room.addClient(clientId, socket)
+
+    // Send back the generated clientId to client.
+    socket.send(
+      JSON.stringify({ type: 'CONNECTION', payload: { playerId: clientId } })
+    )
+
     socket.on('message', message =>
       this.publisher.publish(roomId, message.toString('utf-8'))
     )

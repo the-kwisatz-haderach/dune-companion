@@ -14,7 +14,6 @@ export type Conditions = {
 export type AvailableActions = Record<Player['id'], PlayerActionType[]>
 
 export type Game = {
-  id: string
   conditions: Conditions
   currentPhase: number
   currentTurn: number

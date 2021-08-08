@@ -1,17 +1,19 @@
 import WebSocket from 'ws'
-import { RedisClient } from 'redis'
-import { initialGameState, PlayerAction, gameReducer } from '../engine/src'
+import {
+  initialGameState,
+  PlayerAction,
+  gameReducer,
+  Game,
+  playerActions
+} from '../engine/src'
 
 export class GameRoom {
   private readonly clients: Record<string, WebSocket>
-  private readonly id: string
-  private readonly gameCache: RedisClient
+  private game: Game
 
-  constructor(id: string, gameCache: RedisClient) {
-    this.gameCache = gameCache
-    this.id = id
+  constructor() {
     this.clients = {}
-    this.gameCache.set(this.id, JSON.stringify(initialGameState))
+    this.game = initialGameState
   }
 
   get size() {
@@ -19,35 +21,33 @@ export class GameRoom {
   }
 
   async updateGame(action: PlayerAction): Promise<void> {
-    this.gameCache.get(this.id, async (err, reply) => {
-      if (err) {
-        console.error('Error while reading from cache')
-        console.error(err)
-      } else if (reply) {
-        try {
-          const updatedGame = gameReducer(JSON.parse(reply), action)
-          this.gameCache.set(this.id, JSON.stringify(updatedGame))
-          await Promise.all(
-            this.getClients().map(async socket => {
-              socket.send(JSON.stringify(updatedGame))
-            })
-          )
-        } catch (err) {
-          console.error('Error while updating game')
-          console.error(err)
-        }
-      }
-    })
+    this.game = gameReducer(this.game, action)
+    this.broadcastGameState()
+  }
+
+  async broadcastGameState() {
+    await Promise.all(
+      this.getClients().map(async socket => {
+        socket.send(JSON.stringify(this.game))
+      })
+    )
   }
 
   addClient(clientId: string, socket: WebSocket) {
     if (this.clients[clientId]) return
     this.clients[clientId] = socket
+    this.updateGame(
+      playerActions.JOIN_GAME({
+        playerId: clientId,
+        isAdmin: this.size === 1
+      }) as any
+    )
   }
 
   removeClient(clientId: string) {
     if (this.clients[clientId]) {
       delete this.clients[clientId]
+      this.updateGame(playerActions.LEAVE_GAME({ playerId: clientId }) as any)
     }
   }
 

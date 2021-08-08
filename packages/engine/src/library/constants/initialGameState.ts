@@ -2,7 +2,6 @@ import { Game } from '../../models'
 import { phases } from './phases'
 
 export const initialGameState: Game = {
-  id: '',
   players: {},
   playerOrder: [],
   awaitingAction: [],

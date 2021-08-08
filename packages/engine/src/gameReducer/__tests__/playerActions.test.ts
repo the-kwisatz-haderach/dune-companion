@@ -94,8 +94,7 @@ describe('playerActions', () => {
         initialGameState,
         playerActions.JOIN_GAME({
           playerId: 'test',
-          name: 'paul',
-          gameId: 'test'
+          isAdmin: true
         })
       )
     ).toEqual({
@@ -163,7 +162,7 @@ describe('playerActions', () => {
             }
           }
         },
-        playerActions.START_GAME()
+        playerActions.START_GAME({ playerId: 'somePlayer' })
       )
     ).toEqual({
       ...initialGameState,

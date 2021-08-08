@@ -1,23 +1,28 @@
-import logo from './logo.svg'
-import './App.css'
+import { createTheme, ThemeProvider } from '@material-ui/core'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { WebsocketProvider } from './contexts/WebsocketContext'
+import { Routes } from './Routes'
+
+const theme = createTheme()
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity
+    }
+  }
+})
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ThemeProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <WebsocketProvider>
+            <Routes />
+          </WebsocketProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
     </div>
   )
 }

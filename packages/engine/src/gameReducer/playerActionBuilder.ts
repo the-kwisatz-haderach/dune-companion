@@ -18,14 +18,14 @@ export default function playerActionBuilder(
   builder: ActionReducerMapBuilder<Game>
 ) {
   return builder
-    .addCase(playerActions.CREATE_GAME, (state, action) => {
-      state.id = action.payload.gameId
-    })
     .addCase(playerActions.SET_CONDITIONS, (state, action) => {
       state.conditions = omit(action.payload, 'playerId')
     })
     .addCase(playerActions.SELECT_FACTION, (state, action) => {
       state.players[action.payload.playerId].faction = action.payload.faction
+    })
+    .addCase(playerActions.UPDATE_PLAYER_NAME, (state, action) => {
+      state.players[action.payload.playerId].name = action.payload.name
     })
     .addCase(playerActions.SET_PLAYER_ORDER, (state, action) => {
       state.playerOrder = action.payload.playerOrder
@@ -33,7 +33,7 @@ export default function playerActionBuilder(
     .addCase(playerActions.JOIN_GAME, (state, action) => {
       state.players[action.payload.playerId] = createPlayer({
         id: action.payload.playerId,
-        name: action.payload.name
+        isAdmin: action.payload.isAdmin
       })
     })
     .addCase(playerActions.LEAVE_GAME, (state, action) => {
@@ -44,7 +44,7 @@ export default function playerActionBuilder(
         alliance.players.includes(action.payload.playerId)
       )
       const alliance = state.alliances[allianceIndex]
-      if (alliance.players.length > 2) {
+      if (alliance && alliance.players.length > 2) {
         alliance.players = pull(alliance.players, action.payload.playerId)
       } else {
         state.alliances.splice(allianceIndex, 1)
@@ -60,9 +60,11 @@ export default function playerActionBuilder(
       state.currentTurn = 1
       Object.keys(state.players).forEach(playerId => {
         const player = state.players[playerId]
-        const { startingSpice, startingItems } = factions[player.faction]
-        player.treacheryCards = startingItems
-        player.spice = startingSpice
+        if (player.faction) {
+          const { startingSpice, startingItems } = factions[player.faction]
+          player.treacheryCards = startingItems
+          player.spice = startingSpice
+        }
       })
     })
     .addCase(playerActions.REQUEST_ALLIANCE, (state, action) => {

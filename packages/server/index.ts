@@ -4,6 +4,7 @@ import { createWebsocketServer } from './socket'
 import { createHttpServer } from './app'
 import { nanoid } from 'nanoid'
 import { RoomManager } from './RoomManager'
+import WebSocket from 'ws'
 
 const startServer = () => {
   try {
@@ -25,7 +26,7 @@ const startServer = () => {
     })
 
     wsServer.on('connection', (socket, req) => {
-      console.log('client connected')
+      console.log(socket.readyState === WebSocket.OPEN)
       const roomId = req.url?.split('=')[1]
       if (!roomId) {
         console.log('Missing valid room id. Terminating connection.')
@@ -34,9 +35,11 @@ const startServer = () => {
       }
 
       const clientId = nanoid()
+      console.log(`Client ${clientId} joined room ${roomId}.`)
       roomManager.join(roomId, clientId, socket)
 
       socket.on('close', () => {
+        console.log(`Client ${clientId} removed from room ${roomId}.`)
         roomManager.leave(roomId, clientId)
       })
     })

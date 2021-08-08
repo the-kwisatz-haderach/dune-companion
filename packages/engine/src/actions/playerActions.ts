@@ -10,12 +10,12 @@ const createPlayerAction = <T = {}>(
   return createAction<PlayerActionPayload<T>, PlayerActionType>(type)
 }
 
-export const createGame = createAction<{ gameId: string }>(
-  PlayerActionType.CREATE_GAME
-)
-
 export const setConditions = createPlayerAction<Conditions>(
   PlayerActionType.SET_CONDITIONS
+)
+
+export const updatePlayerName = createPlayerAction<{ name: string }>(
+  PlayerActionType.UPDATE_PLAYER_NAME
 )
 
 export const setPlayerOrder = createPlayerAction<{ playerOrder: string[] }>(
@@ -36,10 +36,7 @@ export const confirmAlliance = createPlayerAction<AllianceRequest>(
   PlayerActionType.CONFIRM_ALLIANCE
 )
 
-export const joinGame = createPlayerAction<{
-  name: string
-  gameId: string
-}>(PlayerActionType.JOIN_GAME)
+export const joinGame = createPlayerAction<{ isAdmin: boolean }>(PlayerActionType.JOIN_GAME)
 
 export const leaveGame = createPlayerAction(PlayerActionType.LEAVE_GAME)
 
@@ -52,7 +49,7 @@ export const playerActions = {
   [PlayerActionType.CONFIRM_ALLIANCE]: confirmAlliance,
   [PlayerActionType.JOIN_GAME]: joinGame,
   [PlayerActionType.LEAVE_GAME]: leaveGame,
-  [PlayerActionType.CREATE_GAME]: createGame
-}
+  [PlayerActionType.UPDATE_PLAYER_NAME]: updatePlayerName,
+} as const
 
 export type PlayerAction = typeof playerActions[keyof typeof playerActions]
