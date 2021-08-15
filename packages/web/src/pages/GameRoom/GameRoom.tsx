@@ -5,11 +5,11 @@ import { ReactElement } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
 import useUserContext from '../../contexts/UserContext'
 import useWebsocketContext from '../../contexts/WebsocketContext'
+import PlayerSetup from './components/PlayerSetup'
 
 export default function GameRoom(): ReactElement {
   const { id } = useParams<{ id: string }>()
   const { username } = useUserContext()
-  const [name, setName] = useState(username)
   const { isConnected, sendMessage } = useWebsocketContext()
 
   const updateName = useCallback(
@@ -31,25 +31,13 @@ export default function GameRoom(): ReactElement {
     return <Redirect to="/" />
   }
 
+  if ('' === '') {
+    return <PlayerSetup updateName={updateName} defaultName={username} />
+  }
+
   return (
     <Box p={1}>
       <Typography>Room {id}</Typography>
-      <Box display="flex">
-        <TextField
-          label="Name"
-          fullWidth
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => updateName(name)}
-        >
-          Update
-        </Button>
-      </Box>
-      <Box></Box>
     </Box>
   )
 }

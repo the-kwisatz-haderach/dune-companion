@@ -50,9 +50,6 @@ export class GameRoom {
     ...payload
   }: { socket: WebSocket } & ReturnType<typeof joinGame>['payload']) {
     const actionSender = this.createActionSender(socket)
-    if (this.clients[payload.playerId]) {
-      return await actionSender('GAME_JOINED', { roomId: payload.roomId })
-    }
     if (this.size >= this.game.conditions.maxPlayers) {
       return await actionSender('SHOW_NOTIFICATION', {
         message: 'Game room is already full.',
@@ -67,7 +64,7 @@ export class GameRoom {
   }
 
   removeClient(clientId: string) {
-    if (this.clients[clientId]) {
+    if (this.hasClient(clientId)) {
       delete this.clients[clientId]
       this.updateGame(clientActions.LEAVE_GAME({ playerId: clientId }))
     }
@@ -78,6 +75,10 @@ export class GameRoom {
       type: T,
       payload: ReturnType<typeof hostActions[T]>['payload']
     ) => socket.send(JSON.stringify(hostActions[type](payload as any)))
+  }
+
+  hasClient(clientId: string): boolean {
+    return Boolean(this.clients[clientId])
   }
 
   private getClients(): WebSocket[] {

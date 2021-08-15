@@ -55,10 +55,13 @@ export class GameManager {
   }: {
     socket: WebSocket
   } & ReturnType<typeof createGame>['payload']): Promise<void> {
-    if (this.has(roomId)) {
-      return socket.close(1000, `Room with id ${roomId} already exists.`)
-    }
     const actionSender = createActionSender(socket)
+    if (this.has(roomId)) {
+      return actionSender('SHOW_NOTIFICATION', {
+        message: `Room with id ${roomId} already exists.`,
+        type: 'info'
+      })
+    }
 
     console.log(`Client ${playerId} created room ${roomId}.`)
     this.rooms[roomId] = new GameRoom(conditions, password)
@@ -93,6 +96,10 @@ export class GameManager {
         message: 'Incorrect password.',
         type: 'error'
       })
+    }
+
+    if (this.rooms[roomId].hasClient(playerId)) {
+      return await actionSender('GAME_JOINED', { roomId })
     }
 
     this.rooms[roomId].addClient({ roomId, password, playerId, socket })
