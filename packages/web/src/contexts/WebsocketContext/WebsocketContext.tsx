@@ -55,7 +55,6 @@ export const WebsocketProvider: React.FC = ({ children }) => {
     }
 
     websocket.current.onmessage = event => {
-      console.log('message')
       const data = JSON.parse(event.data)
 
       switch (data.type) {
@@ -64,14 +63,14 @@ export const WebsocketProvider: React.FC = ({ children }) => {
           break
         case GAME_CREATED:
           history.push(`/game/${data.payload.roomId}`)
-          showSnack(`Created game room ${data.payload.roomId}.`)
+          showSnack(`Created game room ${data.payload.roomId}.`, 'success')
           break
         case GAME_JOINED:
           history.push(`/game/${data.payload.roomId}`)
-          showSnack(`Joined game room ${data.payload.roomId}.`)
+          showSnack(`Joined game room ${data.payload.roomId}.`, 'success')
           break
         case SHOW_ERROR:
-          showSnack(data.payload.message)
+          showSnack(data.payload.message, 'error')
           break
         default:
           console.log('other')
@@ -88,7 +87,8 @@ export const WebsocketProvider: React.FC = ({ children }) => {
   const disconnect = useCallback(() => {
     websocket.current?.close()
     websocket.current = null
-  }, [])
+    showSnack('Disconnected from server.')
+  }, [showSnack])
 
   const sendMessage = useCallback<IWebsocketContext['sendMessage']>(
     async (type, payload) => {

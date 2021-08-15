@@ -1,24 +1,16 @@
-import {
-  Button,
-  createStyles,
-  IconButton,
-  makeStyles,
-  Snackbar
-} from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
+import { createStyles, makeStyles, Snackbar, Theme } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 
-type SnackOptions = {
-  type: 'error' | 'success' | 'info'
-}
+type SnackType = 'error' | 'success' | 'info' | 'warning'
 
 type ISnackbarContext = {
-  showSnack: (message: string, options?: SnackOptions) => void
+  showSnack: (message: string, type?: SnackType) => void
 }
 
 export interface SnackbarMessage {
   message: string
-  options?: SnackOptions
+  type?: SnackType
   key: number
 }
 
@@ -26,21 +18,22 @@ export const SnackbarContext = createContext<ISnackbarContext>({
   showSnack: () => {}
 })
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles<Theme, { type?: SnackType }>(theme =>
   createStyles({
-    close: {
-      padding: theme.spacing(0.5)
+    alert: {
+      width: '100%',
+      color: theme.palette.primary.contrastText
     }
   })
 )
 
 export const SnackbarProvider: React.FC = ({ children }) => {
-  const classes = useStyles()
   const [snackPack, setSnackPack] = useState<SnackbarMessage[]>([])
   const [open, setOpen] = useState(false)
   const [messageInfo, setMessageInfo] = useState<SnackbarMessage | undefined>(
     undefined
   )
+  const classes = useStyles({ type: messageInfo?.type })
 
   useEffect(() => {
     if (snackPack.length && !messageInfo) {
@@ -55,10 +48,10 @@ export const SnackbarProvider: React.FC = ({ children }) => {
   }, [snackPack, messageInfo, open])
 
   const showSnack = useCallback<ISnackbarContext['showSnack']>(
-    (message, options) => {
+    (message, type) => {
       setSnackPack(prev => [
         ...prev,
-        { message, key: new Date().getTime(), options }
+        { message, key: new Date().getTime(), type }
       ])
     },
     []
@@ -88,33 +81,31 @@ export const SnackbarProvider: React.FC = ({ children }) => {
   return (
     <SnackbarContext.Provider value={value}>
       {children}
-      <Snackbar
-        key={messageInfo ? messageInfo.key : undefined}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left'
-        }}
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        onExited={handleExited}
-        message={messageInfo ? messageInfo.message : undefined}
-        action={
-          <>
-            <Button color="secondary" size="small" onClick={handleClose}>
-              CLOSE
-            </Button>
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              className={classes.close}
-              onClick={handleClose}
+      <>
+        {messageInfo && (
+          <Snackbar
+            key={messageInfo.key}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left'
+            }}
+            open={open}
+            autoHideDuration={5000}
+            onClose={handleClose}
+            onExited={handleExited}
+          >
+            <Alert
+              elevation={6}
+              variant="filled"
+              onClose={handleClose}
+              severity={messageInfo?.type}
+              className={classes.alert}
             >
-              <CloseIcon />
-            </IconButton>
-          </>
-        }
-      />
+              {messageInfo.message}
+            </Alert>
+          </Snackbar>
+        )}
+      </>
     </SnackbarContext.Provider>
   )
 }
