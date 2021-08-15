@@ -7,7 +7,8 @@ import {
   Conditions,
   gameCreator,
   joinGame,
-  hostActions
+  hostActions,
+  HostActionType
 } from '@dune-companion/engine'
 
 export class GameRoom {
@@ -33,7 +34,7 @@ export class GameRoom {
     action: ReturnType<typeof clientActions[ClientActionType]>
   ): Promise<void> {
     this.game = gameReducer(this.game, action)
-    this.broadcastMessage(hostActions.UPDATE_GAME({ game: this.game }))
+    this.broadcastMessage(hostActions.GAME_UPDATED({ game: this.game }))
   }
 
   async broadcastMessage<T extends Record<string, unknown>>(message: T) {
@@ -44,15 +45,23 @@ export class GameRoom {
     )
   }
 
-  addClient({
+  async addClient({
     socket,
     ...payload
   }: { socket: WebSocket } & ReturnType<typeof joinGame>['payload']) {
-    if (this.clients[payload.playerId]) return
+    const actionSender = this.createActionSender(socket)
+    if (this.clients[payload.playerId]) {
+      return await actionSender('GAME_JOINED', { roomId: payload.roomId })
+    }
+    if (this.size >= this.game.conditions.maxPlayers) {
+      return await actionSender('SHOW_NOTIFICATION', {
+        message: 'Game room is already full.',
+        type: 'info'
+      })
+    }
+
     this.clients[payload.playerId] = socket
-    socket.send(
-      JSON.stringify(hostActions.GAME_JOINED({ roomId: payload.roomId }))
-    )
+    await actionSender('GAME_JOINED', { roomId: payload.roomId })
     console.log(`Client ${payload.playerId} joined room ${payload.roomId}.`)
     this.updateGame(clientActions.JOIN_GAME(payload))
   }
@@ -64,7 +73,14 @@ export class GameRoom {
     }
   }
 
-  getClients(): WebSocket[] {
+  private createActionSender(socket: WebSocket) {
+    return async <T extends HostActionType>(
+      type: T,
+      payload: ReturnType<typeof hostActions[T]>['payload']
+    ) => socket.send(JSON.stringify(hostActions[type](payload as any)))
+  }
+
+  private getClients(): WebSocket[] {
     return Object.values(this.clients)
   }
 }

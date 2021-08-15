@@ -1,7 +1,8 @@
 import { RedisClient } from 'redis'
 import WebSocket from 'ws'
-import { createGame, hostActions, joinGame } from '@dune-companion/engine'
+import { createGame, joinGame } from '@dune-companion/engine'
 import { GameRoom } from './GameRoom'
+import { createActionSender } from './utils/createActionSender'
 
 export class GameManager {
   private readonly rooms: Record<string, GameRoom> = {}
@@ -27,14 +28,13 @@ export class GameManager {
     })
   }
 
-  handleConnection(socket: WebSocket, connectionUrl?: string) {
+  async handleConnection(socket: WebSocket, connectionUrl?: string) {
+    const actionSender = createActionSender(socket)
     const clientId = connectionUrl?.split('=')[1] || this.idGenerator()
     console.log(`Client ${clientId} connected.`)
 
     // Send back the generated clientId to client.
-    socket.send(
-      JSON.stringify({ type: 'CONNECTION', payload: { playerId: clientId } })
-    )
+    await actionSender('CLIENT_CONNECTED', { clientId })
 
     socket.on('message', message => {
       const { type, payload } = JSON.parse(message.toString('utf-8'))
@@ -46,7 +46,7 @@ export class GameManager {
     })
   }
 
-  create({
+  async create({
     socket,
     roomId,
     password,
@@ -54,15 +54,16 @@ export class GameManager {
     conditions
   }: {
     socket: WebSocket
-  } & ReturnType<typeof createGame>['payload']) {
+  } & ReturnType<typeof createGame>['payload']): Promise<void> {
     if (this.has(roomId)) {
       return socket.close(1000, `Room with id ${roomId} already exists.`)
     }
+    const actionSender = createActionSender(socket)
 
     console.log(`Client ${playerId} created room ${roomId}.`)
     this.rooms[roomId] = new GameRoom(conditions, password)
     this.rooms[roomId].addClient({ roomId, password, playerId, socket })
-    socket.send(JSON.stringify(hostActions.GAME_CREATED({ roomId })))
+    await actionSender('GAME_CREATED', { roomId })
     this.subscriber.subscribe(roomId)
 
     socket.on('close', () => this.leave(roomId, playerId))
@@ -71,32 +72,27 @@ export class GameManager {
     )
   }
 
-  join({
+  async join({
     playerId,
     password,
     roomId,
     socket
   }: {
     socket: WebSocket
-  } & ReturnType<typeof joinGame>['payload']): void {
+  } & ReturnType<typeof joinGame>['payload']): Promise<void> {
+    const actionSender = createActionSender(socket)
     if (!this.has(roomId)) {
-      return socket.send(
-        JSON.stringify(
-          hostActions.SHOW_ERROR({
-            message: `Room with id ${roomId} does not exist.`
-          })
-        )
-      )
+      return await actionSender('SHOW_NOTIFICATION', {
+        message: `Room with id ${roomId} does not exist.`,
+        type: 'info'
+      })
     }
 
     if (!this.rooms[roomId].validatePassword(password)) {
-      return socket.send(
-        JSON.stringify(
-          hostActions.SHOW_ERROR({
-            message: 'Incorrect password.'
-          })
-        )
-      )
+      return await actionSender('SHOW_NOTIFICATION', {
+        message: 'Incorrect password.',
+        type: 'error'
+      })
     }
 
     this.rooms[roomId].addClient({ roomId, password, playerId, socket })

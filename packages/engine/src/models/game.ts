@@ -18,10 +18,10 @@ export type Game = {
   currentPhase: number
   currentTurn: number
   currentFirstPlayer: number
-  awaitingAction: (keyof Game['players'])[]
-  playerOrder: (keyof Game['players'])[]
+  awaitingAction: Player['id'][]
+  playerOrder: Player['id'][]
   actions: AvailableActions
-  players: Record<string, Player>
+  players: Record<Player['id'], Player>
   phases: typeof phases
   auctions: Auction[]
   notifications: Notification[]

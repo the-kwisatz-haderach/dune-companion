@@ -1,26 +1,33 @@
 import { createAction } from '@reduxjs/toolkit'
 import type { Game } from '../models/game'
 
+export type NotificationType = 'error' | 'success' | 'info' | 'warning'
+
+export const CLIENT_CONNECTED = 'CLIENT_CONNECTED'
 export const GAME_CREATED = 'GAME_CREATED'
 export const GAME_JOINED = 'GAME_JOINED'
 export const GAME_LEFT = 'GAME_LEFT'
-export const UPDATE_GAME = 'UPDATE_GAME'
-export const SHOW_ERROR = 'SHOW_ERROR'
+export const GAME_UPDATED = 'GAME_UPDATED'
+export const SHOW_NOTIFICATION = 'SHOW_NOTIFICATION'
 
-export const gameCreated = createAction<{ roomId: string }>(GAME_CREATED)
-export const gameJoined = createAction<{ roomId: string }>(GAME_JOINED)
+
+export const clientConnected = createAction<{ clientId: string }, typeof CLIENT_CONNECTED>(CLIENT_CONNECTED)
+export const gameCreated = createAction<{ roomId: string }, typeof GAME_CREATED>(GAME_CREATED)
+export const gameJoined = createAction<{ roomId: string }, typeof GAME_JOINED>(GAME_JOINED)
 export const gameLeft = createAction(GAME_LEFT)
-export const showError = createAction<{ message: string }>(SHOW_ERROR)
-export const updateGame = createAction<{ game: Game }>(
-  UPDATE_GAME
+export const showNotification = createAction<{ message: string, type: NotificationType }, typeof SHOW_NOTIFICATION>(SHOW_NOTIFICATION)
+export const gameUpdated = createAction<{ game: Game }, typeof GAME_UPDATED>(
+  GAME_UPDATED
 )
 
 export const hostActions = {
+  CLIENT_CONNECTED: clientConnected,
   GAME_CREATED: gameCreated,
   GAME_JOINED: gameJoined,
   GAME_LEFT: gameLeft,
-  UPDATE_GAME: updateGame,
-  SHOW_ERROR: showError,
+  GAME_UPDATED: gameUpdated,
+  SHOW_NOTIFICATION: showNotification,
 } as const
 
 export type HostActionType = keyof typeof hostActions
+export type HostAction = ReturnType<typeof hostActions[HostActionType]>

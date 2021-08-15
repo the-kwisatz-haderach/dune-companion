@@ -3,17 +3,17 @@ import type { AllianceRequest } from '../models/alliance'
 import type { Factions } from '../models/faction'
 import type { Conditions } from '../models/game'
 
-const JOIN_GAME = 'JOIN_GAME'
-const LEAVE_GAME = 'LEAVE_GAME'
-const SET_ADMIN = 'SET_ADMIN'
-const UPDATE_PLAYER_NAME = 'UPDATE_PLAYER_NAME'
-const CREATE_GAME = 'CREATE_GAME'
-const SET_PLAYER_ORDER = 'SET_PLAYER_ORDER'
-const START_GAME = 'START_GAME'
-const SELECT_FACTION = 'SELECT_FACTION'
-const REQUEST_ALLIANCE = 'REQUEST_ALLIANCE'
-const CONFIRM_ALLIANCE = 'CONFIRM_ALLIANCE'
-const TOGGLE_READY_STATUS = 'TOGGLE_READY_STATUS'
+export const JOIN_GAME = 'JOIN_GAME'
+export const LEAVE_GAME = 'LEAVE_GAME'
+export const SET_ADMIN = 'SET_ADMIN'
+export const UPDATE_PLAYER_NAME = 'UPDATE_PLAYER_NAME'
+export const CREATE_GAME = 'CREATE_GAME'
+export const SET_PLAYER_ORDER = 'SET_PLAYER_ORDER'
+export const START_GAME = 'START_GAME'
+export const SELECT_FACTION = 'SELECT_FACTION'
+export const REQUEST_ALLIANCE = 'REQUEST_ALLIANCE'
+export const CONFIRM_ALLIANCE = 'CONFIRM_ALLIANCE'
+export const TOGGLE_READY_STATUS = 'TOGGLE_READY_STATUS'
 
 const createClientAction = <P extends Record<string ,unknown> | void = void, T extends string = string>(
   type: T
@@ -21,29 +21,29 @@ const createClientAction = <P extends Record<string ,unknown> | void = void, T e
   return createAction<P extends void ? { playerId: string } : { playerId: string } & P, T>(type)
 }
 
-export const createGame = createClientAction<{ conditions: Conditions, roomId: string, password?: string }>(
+export const createGame = createClientAction<{ conditions: Conditions, roomId: string, password?: string }, typeof CREATE_GAME>(
   CREATE_GAME
 )
-export const updatePlayerName = createClientAction<{ name: string }>(
+export const updatePlayerName = createClientAction<{ name: string }, typeof UPDATE_PLAYER_NAME>(
   UPDATE_PLAYER_NAME
 )
-export const setPlayerOrder = createClientAction<{ playerOrder: string[] }>(
+export const setPlayerOrder = createClientAction<{ playerOrder: string[] }, typeof SET_PLAYER_ORDER>(
   SET_PLAYER_ORDER
 )
-export const selectFaction = createClientAction<{ faction: Factions }>(
+export const selectFaction = createClientAction<{ faction: Factions }, typeof SELECT_FACTION>(
   SELECT_FACTION
 )
-export const setAdmin = createClientAction<{ id: string }>(SET_ADMIN)
-export const startGame = createClientAction(START_GAME)
-export const requestAlliance = createClientAction<AllianceRequest>(
+export const setAdmin = createClientAction<{ id: string }, typeof SET_ADMIN>(SET_ADMIN)
+export const startGame = createClientAction<void, typeof START_GAME>(START_GAME)
+export const requestAlliance = createClientAction<AllianceRequest, typeof REQUEST_ALLIANCE>(
   REQUEST_ALLIANCE
 )
-export const confirmAlliance = createClientAction<AllianceRequest>(
+export const confirmAlliance = createClientAction<AllianceRequest, typeof CONFIRM_ALLIANCE>(
   CONFIRM_ALLIANCE
 )
-export const joinGame = createClientAction<{ roomId: string; password?: string }>(JOIN_GAME)
-export const leaveGame = createClientAction(LEAVE_GAME)
-export const toggleReadyStatus = createClientAction(TOGGLE_READY_STATUS)
+export const joinGame = createClientAction<{ roomId: string; password?: string }, typeof JOIN_GAME>(JOIN_GAME)
+export const leaveGame = createClientAction<void, typeof LEAVE_GAME>(LEAVE_GAME)
+export const toggleReadyStatus = createClientAction<void, typeof TOGGLE_READY_STATUS>(TOGGLE_READY_STATUS)
 
 export const clientActions = {
   SET_PLAYER_ORDER: setPlayerOrder,
@@ -60,3 +60,4 @@ export const clientActions = {
 } as const
 
 export type ClientActionType = keyof typeof clientActions
+export type ClientAction = typeof clientActions[ClientActionType]

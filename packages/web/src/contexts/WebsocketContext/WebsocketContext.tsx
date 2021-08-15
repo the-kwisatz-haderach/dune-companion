@@ -5,9 +5,7 @@ import useSnackBarContext from '../SnackbarContext'
 import {
   clientActions,
   ClientActionType,
-  GAME_CREATED,
-  GAME_JOINED,
-  SHOW_ERROR
+  HostAction
 } from '@dune-companion/engine'
 
 export type IWebsocketContext = {
@@ -26,6 +24,8 @@ export const WebsocketContext = createContext<IWebsocketContext>({
   disconnect: () => {},
   sendMessage: async () => {}
 })
+
+const parseAction = (data: any): HostAction => JSON.parse(data)
 
 const CONNECTION_URL = `ws://localhost:8000`
 
@@ -46,7 +46,6 @@ export const WebsocketProvider: React.FC = ({ children }) => {
     if (!isConnected.current) {
       createConnection()
     }
-
     if (!websocket.current) return
 
     websocket.current.onopen = () => {
@@ -55,32 +54,31 @@ export const WebsocketProvider: React.FC = ({ children }) => {
     }
 
     websocket.current.onmessage = event => {
-      const data = JSON.parse(event.data)
-
-      switch (data.type) {
-        case 'CONNECTION':
-          window.sessionStorage.setItem('playerId', data.payload.playerId)
+      const action = parseAction(event.data)
+      switch (action.type) {
+        case 'CLIENT_CONNECTED':
+          window.sessionStorage.setItem('playerId', action.payload.clientId)
           break
-        case GAME_CREATED:
-          history.push(`/game/${data.payload.roomId}`)
-          showSnack(`Created game room ${data.payload.roomId}.`, 'success')
+        case 'GAME_CREATED':
+          history.push(`/game/${action.payload.roomId}`)
+          showSnack(`Created game room ${action.payload.roomId}.`, 'success')
           break
-        case GAME_JOINED:
-          history.push(`/game/${data.payload.roomId}`)
-          showSnack(`Joined game room ${data.payload.roomId}.`, 'success')
+        case 'GAME_JOINED':
+          history.push(`/game/${action.payload.roomId}`)
+          showSnack(`Joined game room ${action.payload.roomId}.`, 'success')
           break
-        case SHOW_ERROR:
-          showSnack(data.payload.message, 'error')
+        case 'SHOW_NOTIFICATION':
+          showSnack(action.payload.message, action.payload.type)
           break
         default:
           console.log('other')
-          console.log(data)
+          console.log(action)
       }
     }
 
     websocket.current.onclose = event => {
       isConnected.current = false
-      showSnack(event.reason)
+      showSnack(event.reason, 'error')
     }
   }, [history, showSnack])
 

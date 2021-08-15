@@ -1,6 +1,6 @@
 {
   "name": "@dune-companion/engine",
-  "version": "0.1.29",
+  "version": "0.1.33",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "module": "lib-esm/index.js",
@@ -22,7 +22,7 @@
     "dev": "tsc --watch",
     "ts:defs": "tsc --declaration --outDir './build' --emitDeclarationOnly",
     "test": "jest --watchAll",
-    "clean": "rm -rf lib lib-esm dist || rm *.tgz"
+    "clean": "rm -rf lib lib-esm dist && rm *.tgz"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.0"
