@@ -11,7 +11,7 @@ import {
 } from '@dune-companion/engine'
 
 export type IWebsocketContext = {
-  isConnected: boolean
+  isConnected: () => boolean
   connect: () => Promise<void>
   disconnect: () => void
   sendMessage: <T extends ClientActionType>(
@@ -21,7 +21,7 @@ export type IWebsocketContext = {
 }
 
 export const WebsocketContext = createContext<IWebsocketContext>({
-  isConnected: false,
+  isConnected: () => false,
   connect: async () => {},
   disconnect: () => {},
   sendMessage: async () => {}
@@ -55,6 +55,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
     }
 
     websocket.current.onmessage = event => {
+      console.log('message')
       const data = JSON.parse(event.data)
 
       switch (data.type) {
@@ -113,7 +114,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
       disconnect,
       connect,
       sendMessage,
-      isConnected: isConnected.current
+      isConnected: () => isConnected.current
     }),
     [disconnect, connect, sendMessage]
   )

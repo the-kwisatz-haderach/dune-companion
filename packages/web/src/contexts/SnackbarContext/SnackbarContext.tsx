@@ -87,36 +87,34 @@ export const SnackbarProvider: React.FC = ({ children }) => {
 
   return (
     <SnackbarContext.Provider value={value}>
-      <div>
-        {children}
-        <Snackbar
-          key={messageInfo ? messageInfo.key : undefined}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left'
-          }}
-          open={open}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          onExited={handleExited}
-          message={messageInfo ? messageInfo.message : undefined}
-          action={
-            <>
-              <Button color="secondary" size="small" onClick={handleClose}>
-                CLOSE
-              </Button>
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                className={classes.close}
-                onClick={handleClose}
-              >
-                <CloseIcon />
-              </IconButton>
-            </>
-          }
-        />
-      </div>
+      {children}
+      <Snackbar
+        key={messageInfo ? messageInfo.key : undefined}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        onExited={handleExited}
+        message={messageInfo ? messageInfo.message : undefined}
+        action={
+          <>
+            <Button color="secondary" size="small" onClick={handleClose}>
+              CLOSE
+            </Button>
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              className={classes.close}
+              onClick={handleClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          </>
+        }
+      />
     </SnackbarContext.Provider>
   )
 }
