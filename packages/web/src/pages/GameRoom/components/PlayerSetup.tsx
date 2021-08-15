@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  createStyles,
-  makeStyles,
-  TextField
-} from '@material-ui/core'
+import { Button, createStyles, makeStyles, TextField } from '@material-ui/core'
 import { ReactElement, useState } from 'react'
 
 interface Props {
@@ -34,7 +28,13 @@ export default function PlayerSetup({
   const classes = useStyles()
   const [name, setName] = useState(defaultName)
   return (
-    <Box className={classes.container}>
+    <form
+      className={classes.container}
+      onSubmit={e => {
+        e.preventDefault()
+        updateName(name)
+      }}
+    >
       <TextField
         label="Name"
         fullWidth
@@ -42,13 +42,9 @@ export default function PlayerSetup({
         required
         onChange={e => setName(e.target.value)}
       />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => updateName(name)}
-      >
+      <Button type="submit" variant="contained" color="primary">
         Enter
       </Button>
-    </Box>
+    </form>
   )
 }

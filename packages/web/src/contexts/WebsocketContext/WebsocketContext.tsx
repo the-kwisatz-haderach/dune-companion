@@ -1,14 +1,17 @@
 import { createContext, useCallback, useEffect, useMemo, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import useSnackBarContext from '../SnackbarContext'
 import {
   clientActions,
   ClientActionType,
-  HostAction
+  HostAction,
+  hostActions
 } from '@dune-companion/engine'
 
 export type IWebsocketContext = {
+  getClientId: () => string
   isConnected: () => boolean
   connect: () => Promise<void>
   disconnect: () => void
@@ -19,6 +22,7 @@ export type IWebsocketContext = {
 }
 
 export const WebsocketContext = createContext<IWebsocketContext>({
+  getClientId: () => '',
   isConnected: () => false,
   connect: async () => {},
   disconnect: () => {},
@@ -30,15 +34,16 @@ const parseAction = (data: any): HostAction => JSON.parse(data)
 const CONNECTION_URL = `ws://localhost:8000`
 
 export const WebsocketProvider: React.FC = ({ children }) => {
+  const dispatch = useDispatch()
   const isConnected = useRef(false)
+  const clientId = useRef(window.sessionStorage.getItem('clientId'))
   const websocket = useRef<ReconnectingWebSocket | null>(null)
   const history = useHistory()
   const { showSnack } = useSnackBarContext()
 
   const createConnection = () => {
     websocket.current = new ReconnectingWebSocket(
-      `${CONNECTION_URL}?clientId=${window.sessionStorage.getItem('playerId') ??
-        ''}`
+      `${CONNECTION_URL}?clientId=${clientId.current ?? ''}`
     )
   }
 
@@ -57,7 +62,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
       const action = parseAction(event.data)
       switch (action.type) {
         case 'CLIENT_CONNECTED':
-          window.sessionStorage.setItem('playerId', action.payload.clientId)
+          window.sessionStorage.setItem('clientId', action.payload.clientId)
           break
         case 'GAME_CREATED':
           history.push(`/game/${action.payload.roomId}`)
@@ -70,6 +75,9 @@ export const WebsocketProvider: React.FC = ({ children }) => {
         case 'SHOW_NOTIFICATION':
           showSnack(action.payload.message, action.payload.type)
           break
+        case 'GAME_UPDATED':
+          dispatch(hostActions.GAME_UPDATED(action.payload))
+          break
         default:
           console.log('other')
           console.log(action)
@@ -80,7 +88,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
       isConnected.current = false
       showSnack(event.reason, 'error')
     }
-  }, [history, showSnack])
+  }, [dispatch, history, showSnack])
 
   const disconnect = useCallback(() => {
     websocket.current?.close()
@@ -90,13 +98,12 @@ export const WebsocketProvider: React.FC = ({ children }) => {
 
   const sendMessage = useCallback<IWebsocketContext['sendMessage']>(
     async (type, payload) => {
-      const playerId = window.sessionStorage.getItem('playerId')
-      if (playerId) {
+      if (clientId.current) {
         websocket.current?.send(
           JSON.stringify(
             clientActions[type]({
               ...payload,
-              playerId
+              playerId: clientId.current
             } as any)
           )
         )
@@ -112,6 +119,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
       disconnect,
       connect,
       sendMessage,
+      getClientId: () => clientId.current ?? '',
       isConnected: () => isConnected.current
     }),
     [disconnect, connect, sendMessage]

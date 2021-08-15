@@ -30,7 +30,7 @@ export const updatePlayerName = createClientAction<{ name: string }, typeof UPDA
 export const setPlayerOrder = createClientAction<{ playerOrder: string[] }, typeof SET_PLAYER_ORDER>(
   SET_PLAYER_ORDER
 )
-export const selectFaction = createClientAction<{ faction: Factions }, typeof SELECT_FACTION>(
+export const selectFaction = createClientAction<{ faction: Factions | null }, typeof SELECT_FACTION>(
   SELECT_FACTION
 )
 export const setAdmin = createClientAction<{ id: string }, typeof SET_ADMIN>(SET_ADMIN)

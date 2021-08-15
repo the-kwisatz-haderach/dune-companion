@@ -58,9 +58,9 @@ export class GameRoom {
     }
 
     this.clients[payload.playerId] = socket
-    await actionSender('GAME_JOINED', { roomId: payload.roomId })
     console.log(`Client ${payload.playerId} joined room ${payload.roomId}.`)
     this.updateGame(clientActions.JOIN_GAME(payload))
+    await actionSender('GAME_JOINED', { roomId: payload.roomId })
   }
 
   removeClient(clientId: string) {

@@ -1,11 +1,26 @@
 import { BrowserRouter as Router } from 'react-router-dom'
 import { createTheme, ThemeProvider } from '@material-ui/core'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { Provider } from 'react-redux'
 import { UserProvider } from './contexts/UserContext'
 import { Routes } from './Routes'
 import { SnackbarProvider } from './contexts/SnackbarContext'
+import { store } from './store'
 
-const theme = createTheme()
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#335482',
+      light: '#93afd6',
+      dark: '#1F3A55'
+    },
+    secondary: {
+      main: '#E9D597',
+      light: '#F3E7C4',
+      dark: '#BDAC75'
+    }
+  }
+})
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,15 +33,17 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        <SnackbarProvider>
-          <QueryClientProvider client={queryClient}>
-            <UserProvider>
-              <Routes />
-            </UserProvider>
-          </QueryClientProvider>
-        </SnackbarProvider>
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <SnackbarProvider>
+            <QueryClientProvider client={queryClient}>
+              <UserProvider>
+                <Routes />
+              </UserProvider>
+            </QueryClientProvider>
+          </SnackbarProvider>
+        </Router>
+      </Provider>
     </ThemeProvider>
   )
 }

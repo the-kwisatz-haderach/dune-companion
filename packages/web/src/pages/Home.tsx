@@ -8,8 +8,7 @@ import {
   TextField,
   Typography
 } from '@material-ui/core'
-import { FormEvent, useState } from 'react'
-import { ReactElement } from 'react'
+import { ReactElement, FormEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import useWebsocketContext from '../contexts/WebsocketContext'
 

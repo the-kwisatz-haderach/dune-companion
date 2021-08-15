@@ -35,6 +35,7 @@ export default function playerActionBuilder(
       state.playerOrder = action.payload.playerOrder
     })
     .addCase(clientActions.JOIN_GAME, (state, action) => {
+      if (state.players[action.payload.playerId]) return state
       state.players[action.payload.playerId] = createPlayer({
         id: action.payload.playerId,
         isAdmin: Object.keys(state.players).length === 0

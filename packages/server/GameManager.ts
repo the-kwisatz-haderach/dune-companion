@@ -99,6 +99,7 @@ export class GameManager {
     }
 
     if (this.rooms[roomId].hasClient(playerId)) {
+      console.log(`Client ${playerId} rejoining room ${roomId}.`)
       return await actionSender('GAME_JOINED', { roomId })
     }
 

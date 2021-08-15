@@ -64,31 +64,60 @@ describe('clientActions', () => {
       playerOrder: ['one', 'two', 'three']
     })
   })
-  test('selectFaction', () => {
-    expect(
-      gameReducer(
-        {
-          ...initialGameState,
-          players: {
-            test: {
-              ...playerFixture,
-              faction: Factions.BENE_GESSERIT
+  describe('selectFaction', () => {
+    it('selects a faction', () => {
+      expect(
+        gameReducer(
+          {
+            ...initialGameState,
+            players: {
+              test: {
+                ...playerFixture,
+                faction: Factions.BENE_GESSERIT
+              }
             }
+          },
+          clientActions.SELECT_FACTION({
+            playerId: 'test',
+            faction: Factions.EMPEROR
+          })
+        )
+      ).toEqual({
+        ...initialGameState,
+        players: {
+          test: {
+            ...playerFixture,
+            faction: Factions.EMPEROR
           }
-        },
-        clientActions.SELECT_FACTION({
-          playerId: 'test',
-          faction: Factions.EMPEROR
-        })
-      )
-    ).toEqual({
-      ...initialGameState,
-      players: {
-        test: {
-          ...playerFixture,
-          faction: Factions.EMPEROR
         }
-      }
+      })
+    })
+    it('deselects a faction when null is provided', () => {
+      expect(
+        gameReducer(
+          {
+            ...initialGameState,
+            players: {
+              test: {
+                ...playerFixture,
+                faction: Factions.BENE_GESSERIT
+              }
+            }
+          },
+          clientActions.SELECT_FACTION({
+            playerId: 'test',
+            faction: null
+          })
+        )
+      ).toEqual({
+        ...initialGameState,
+        players: {
+          test: {
+            ...playerFixture,
+            faction: null
+          }
+        }
+      })
     })
   })
   describe('joinGame', () => {
@@ -148,6 +177,29 @@ describe('clientActions', () => {
             treacheryCards: 0
           }
         }
+      })
+    })
+    it('does nothing if the player is already in the game', () => {
+      const initialState = {
+        ...initialGameState,
+        players: {
+          somePlayer: {
+            ...playerFixture,
+            id: 'somePlayer'
+          }
+        }
+      }
+      expect(
+        gameReducer(
+          initialState,
+          clientActions.JOIN_GAME({
+            playerId: 'somePlayer',
+            roomId: 'someId'
+          })
+        )
+      ).toEqual({
+        ...initialState,
+        players: initialState.players
       })
     })
   })
