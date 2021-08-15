@@ -1,31 +1,12 @@
-import { createStyles, makeStyles, Snackbar, Theme } from '@material-ui/core'
+import { Snackbar } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
-
-type SnackType = 'error' | 'success' | 'info' | 'warning'
-
-type ISnackbarContext = {
-  showSnack: (message: string, type?: SnackType) => void
-}
-
-export interface SnackbarMessage {
-  message: string
-  type?: SnackType
-  key: number
-}
+import { ISnackbarContext, SnackbarMessage } from './types'
+import { useStyles } from './useStyles'
 
 export const SnackbarContext = createContext<ISnackbarContext>({
   showSnack: () => {}
 })
-
-const useStyles = makeStyles<Theme, { type?: SnackType }>(theme =>
-  createStyles({
-    alert: {
-      width: '100%',
-      color: theme.palette.primary.contrastText
-    }
-  })
-)
 
 export const SnackbarProvider: React.FC = ({ children }) => {
   const [snackPack, setSnackPack] = useState<SnackbarMessage[]>([])
