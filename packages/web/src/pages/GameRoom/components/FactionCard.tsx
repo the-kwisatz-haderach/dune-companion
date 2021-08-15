@@ -10,9 +10,18 @@ import {
 const useStyles = makeStyles(theme =>
   createStyles({
     container: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'baseline',
       backgroundColor: theme.palette.secondary.light,
       borderRadius: theme.shape.borderRadius,
-      padding: theme.spacing(3)
+      padding: theme.spacing(3),
+      '& > *:not(:last-child)': {
+        marginBottom: theme.spacing(1)
+      }
+    },
+    button: {
+      marginTop: theme.spacing(1)
     }
   })
 )
@@ -36,6 +45,7 @@ export const FactionCard: React.FC<Faction & Props> = ({
       <Typography variant="h6">{name}</Typography>
       <Typography>{description}</Typography>
       <Button
+        className={classes.button}
         disabled={disabled}
         variant="contained"
         color={isSelected ? 'default' : 'primary'}

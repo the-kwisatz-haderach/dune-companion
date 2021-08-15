@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from '@material-ui/core'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
 import { UserProvider } from './contexts/UserContext'
+import { WebsocketProvider } from './contexts/WebsocketContext'
 import { Routes } from './Routes'
 import { SnackbarProvider } from './contexts/SnackbarContext'
 import { store } from './store'
@@ -38,7 +39,9 @@ function App() {
           <SnackbarProvider>
             <QueryClientProvider client={queryClient}>
               <UserProvider>
-                <Routes />
+                <WebsocketProvider>
+                  <Routes />
+                </WebsocketProvider>
               </UserProvider>
             </QueryClientProvider>
           </SnackbarProvider>

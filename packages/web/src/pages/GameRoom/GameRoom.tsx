@@ -26,12 +26,19 @@ export default function GameRoom(): ReactElement {
 
   const onSelectFaction = useCallback(
     (faction: Factions | null) => {
+      if (player?.isReady) {
+        sendMessage('TOGGLE_READY_STATUS', {})
+      }
       sendMessage('SELECT_FACTION', {
         faction
       })
     },
-    [sendMessage]
+    [sendMessage, player]
   )
+
+  const onToggleReady = useCallback(() => {
+    sendMessage('TOGGLE_READY_STATUS', {})
+  }, [sendMessage])
 
   if (!isConnected()) {
     return <Redirect to="/" />
@@ -45,6 +52,8 @@ export default function GameRoom(): ReactElement {
   if (players.some(player => !player.isReady)) {
     return (
       <CharacterSelect
+        isReady={player.isReady}
+        onToggleReady={onToggleReady}
         playerSelection={player.faction}
         onSelectFaction={onSelectFaction}
         selectedFactions={
