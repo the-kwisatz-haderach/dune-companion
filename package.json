@@ -2,8 +2,9 @@
   "private": true,
   "name": "dune-companion",
   "scripts": {
-    "web": "yarn workspace @dune-companion/web start",
-    "server": "yarn workspace @dune-companion/server dev",
+    "web": "yarn workspace @dune-companion/web",
+    "server": "yarn workspace @dune-companion/server",
+    "engine": "yarn workspace @dune-companion/engine",
     "start": "concurrently --kill-others-on-fail \"yarn server\"  \"yarn web\""
   },
   "workspaces": [

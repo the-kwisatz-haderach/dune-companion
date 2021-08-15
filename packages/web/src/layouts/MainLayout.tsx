@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Button,
   createStyles,
   IconButton,
   makeStyles,
@@ -8,6 +9,7 @@ import {
   Typography
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
+import useUserContext from '../contexts/UserContext'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,6 +22,9 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column'
     },
+    toolBar: {
+      justifyContent: 'space-between'
+    },
     childContainer: {
       flex: 1
     },
@@ -31,11 +36,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const MainLayout: React.FC = ({ children }) => {
   const classes = useStyles()
+  const { isAuthenticated, username, authenticate } = useUserContext()
   return (
     <div className={classes.root}>
-      <div className={classes.childContainer}>{children}</div>
       <AppBar position="static" className={classes.appBar}>
-        <Toolbar>
+        <Toolbar className={classes.toolBar}>
           <IconButton
             edge="start"
             className={classes.menuButton}
@@ -44,11 +49,16 @@ export const MainLayout: React.FC = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <IconButton color="inherit">
-            <Typography>Play</Typography>
-          </IconButton>
+          {isAuthenticated ? (
+            <Typography>{username}</Typography>
+          ) : (
+            <Button color="inherit" onClick={authenticate}>
+              Login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
+      <div className={classes.childContainer}>{children}</div>
     </div>
   )
 }

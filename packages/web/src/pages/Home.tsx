@@ -4,19 +4,37 @@ import {
   Container,
   createStyles,
   makeStyles,
+  Paper,
   TextField,
   Typography
 } from '@material-ui/core'
-import { useState } from 'react'
-import { FormEvent, ReactElement } from 'react'
+import { FormEvent, useState } from 'react'
+import { ReactElement } from 'react'
+import { Link } from 'react-router-dom'
 import useWebsocketContext from '../contexts/WebsocketContext'
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles(theme =>
   createStyles({
     container: {
       height: '100%',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      backgroundColor: theme.palette.grey[100],
+      padding: 15
+    },
+    link: {
+      height: '100%',
+      width: '100%',
+      textDecoration: 'none',
+      '&:first-child': {
+        marginBottom: 15
+      }
+    },
+    playContainer: {
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
     }
   })
 )
@@ -24,69 +42,46 @@ const useStyles = makeStyles(() =>
 export default function Home(): ReactElement {
   const classes = useStyles()
   const { connect, sendMessage } = useWebsocketContext()
-  const [newRoomId, setNewRoomId] = useState('')
   const [roomId, setRoomId] = useState('')
+  const [password, setPassword] = useState('')
 
-  const handleCreateGame = (e: FormEvent<HTMLFormElement>) => {
+  const handleJoinGame = async (e: FormEvent) => {
     e.preventDefault()
-    connect(newRoomId)
-  }
-
-  const handleJoinGame = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    connect(roomId)
-  }
-
-  const submitAction = () => {
-    sendMessage({
-      type: 'SET_CONDITIONS',
-      payload: {
-        advancedMode: true,
-        maxPlayers: 6,
-        maxTurns: 3
-      }
+    await connect()
+    await sendMessage('JOIN_GAME', {
+      roomId,
+      password
     })
   }
 
   return (
     <Container className={classes.container}>
-      <Box
-        flex={1}
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Typography variant="h6">Start Game</Typography>
-        <form onSubmit={handleCreateGame} autoComplete="off">
-          <TextField
-            value={roomId}
-            onChange={e => {
-              setRoomId(e.target.value)
-            }}
-            label="Room ID"
-          />
-          <Button onClick={() => connect(roomId)}>Create Room</Button>
-          <Button onClick={submitAction}>SET CONDITIONS</Button>
-        </form>
+      <Box height="50%" p={1}>
+        <Link className={classes.link} to="/game">
+          <Paper elevation={8} className={classes.playContainer}>
+            <Typography variant="h5">Create Game</Typography>
+          </Paper>
+        </Link>
       </Box>
-      <Box
-        flex={1}
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Typography variant="h6">Join Game</Typography>
-        <form onSubmit={handleJoinGame} autoComplete="off">
+      <Box height="50%" p={1}>
+        <Typography variant="h5">Join Game</Typography>
+        <form onSubmit={handleJoinGame}>
           <TextField
-            value={newRoomId}
-            onChange={e => {
-              setNewRoomId(e.target.value)
-            }}
             label="Room ID"
+            fullWidth
+            value={roomId}
+            required
+            onChange={e => setRoomId(e.target.value)}
           />
-          <Button onClick={() => connect(newRoomId)}>Join Room</Button>
+          <TextField
+            label="Password"
+            fullWidth
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+          <Button type="submit" variant="contained" color="primary">
+            Connect
+          </Button>
         </form>
       </Box>
     </Container>

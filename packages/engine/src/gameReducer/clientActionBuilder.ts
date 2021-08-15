@@ -1,5 +1,5 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit'
-import { playerActions } from '../actions'
+import { clientActions } from '../actions'
 import { factions } from '../library/constants/factions'
 import { createPlayer } from '../library/factories'
 import { Game } from '../models/game'
@@ -18,25 +18,29 @@ export default function playerActionBuilder(
   builder: ActionReducerMapBuilder<Game>
 ) {
   return builder
-    .addCase(playerActions.SET_CONDITIONS, (state, action) => {
-      state.conditions = omit(action.payload, 'playerId')
+    .addCase(clientActions.CREATE_GAME, (state, action) => {
+      state.conditions = action.payload.conditions
     })
-    .addCase(playerActions.SELECT_FACTION, (state, action) => {
+    .addCase(clientActions.SELECT_FACTION, (state, action) => {
       state.players[action.payload.playerId].faction = action.payload.faction
     })
-    .addCase(playerActions.UPDATE_PLAYER_NAME, (state, action) => {
+    .addCase(clientActions.UPDATE_PLAYER_NAME, (state, action) => {
       state.players[action.payload.playerId].name = action.payload.name
     })
-    .addCase(playerActions.SET_PLAYER_ORDER, (state, action) => {
+    .addCase(clientActions.SET_ADMIN, (state, action) => {
+      state.players[action.payload.playerId].isAdmin = false
+      state.players[action.payload.id].isAdmin = true
+    })
+    .addCase(clientActions.SET_PLAYER_ORDER, (state, action) => {
       state.playerOrder = action.payload.playerOrder
     })
-    .addCase(playerActions.JOIN_GAME, (state, action) => {
+    .addCase(clientActions.JOIN_GAME, (state, action) => {
       state.players[action.payload.playerId] = createPlayer({
         id: action.payload.playerId,
-        isAdmin: action.payload.isAdmin
+        isAdmin: Object.keys(state.players).length === 0
       })
     })
-    .addCase(playerActions.LEAVE_GAME, (state, action) => {
+    .addCase(clientActions.LEAVE_GAME, (state, action) => {
       delete state.players[action.payload.playerId]
 
       state.awaitingAction = pull(state.awaitingAction, action.payload.playerId)
@@ -56,7 +60,7 @@ export default function playerActionBuilder(
       )
       state.playerOrder = pull(state.playerOrder, action.payload.playerId)
     })
-    .addCase(playerActions.START_GAME, state => {
+    .addCase(clientActions.START_GAME, state => {
       state.currentTurn = 1
       Object.keys(state.players).forEach(playerId => {
         const player = state.players[playerId]
@@ -67,7 +71,7 @@ export default function playerActionBuilder(
         }
       })
     })
-    .addCase(playerActions.REQUEST_ALLIANCE, (state, action) => {
+    .addCase(clientActions.REQUEST_ALLIANCE, (state, action) => {
       state.allianceRequests.push(omit(action.payload, 'playerId'))
     })
 }

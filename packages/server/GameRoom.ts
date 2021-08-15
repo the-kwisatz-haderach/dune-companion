@@ -1,53 +1,62 @@
 import WebSocket from 'ws'
 import {
-  initialGameState,
-  PlayerAction,
+  ClientActionType,
+  clientActions,
   gameReducer,
   Game,
-  playerActions
-} from '../engine/src'
+  Conditions,
+  gameCreator,
+  joinGame,
+  hostActions
+} from '@dune-companion/engine'
 
 export class GameRoom {
   private readonly clients: Record<string, WebSocket>
   private game: Game
+  private readonly password?: string
 
-  constructor() {
+  constructor(conditions: Conditions, password?: string) {
     this.clients = {}
-    this.game = initialGameState
+    this.password = password
+    this.game = gameCreator(conditions)
+  }
+
+  validatePassword(password?: string) {
+    return this.password === undefined || this.password === password
   }
 
   get size() {
     return Object.keys(this.clients).length
   }
 
-  async updateGame(action: PlayerAction): Promise<void> {
+  async updateGame(
+    action: ReturnType<typeof clientActions[ClientActionType]>
+  ): Promise<void> {
     this.game = gameReducer(this.game, action)
-    this.broadcastGameState()
+    this.broadcastMessage(hostActions.UPDATE_GAME({ game: this.game }))
   }
 
-  async broadcastGameState() {
+  async broadcastMessage<T extends Record<string, unknown>>(message: T) {
     await Promise.all(
       this.getClients().map(async socket => {
-        socket.send(JSON.stringify(this.game))
+        socket.send(JSON.stringify(message))
       })
     )
   }
 
-  addClient(clientId: string, socket: WebSocket) {
-    if (this.clients[clientId]) return
-    this.clients[clientId] = socket
-    this.updateGame(
-      playerActions.JOIN_GAME({
-        playerId: clientId,
-        isAdmin: this.size === 1
-      }) as any
-    )
+  addClient({
+    socket,
+    ...payload
+  }: { socket: WebSocket } & ReturnType<typeof joinGame>['payload']) {
+    if (this.clients[payload.playerId]) return
+    this.clients[payload.playerId] = socket
+    this.updateGame(clientActions.JOIN_GAME(payload))
   }
 
   removeClient(clientId: string) {
     if (this.clients[clientId]) {
       delete this.clients[clientId]
-      this.updateGame(playerActions.LEAVE_GAME({ playerId: clientId }) as any)
+      this.updateGame(clientActions.LEAVE_GAME({ playerId: clientId }))
     }
   }
 

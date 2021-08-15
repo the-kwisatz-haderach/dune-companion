@@ -1,20 +1,23 @@
-import { playerActions } from '../../actions'
-import { gameReducer } from '../'
+import { clientActions } from '../../actions'
+import { gameReducer } from '..'
 import { factions } from '../../library/constants/factions'
 import { Factions } from '../../models/faction'
 import { initialGameState } from '../../library/constants'
 import { playerFixture } from './__fixtures__'
 
-describe('playerActions', () => {
-  test('setConditions', () => {
+describe('clientActions', () => {
+  test('createGame', () => {
     expect(
       gameReducer(
         initialGameState,
-        playerActions.SET_CONDITIONS({
+        clientActions.CREATE_GAME({
           playerId: 'test',
-          maxPlayers: 4,
-          maxTurns: 5,
-          advancedMode: true
+          roomId: 'someId',
+          conditions: {
+            maxPlayers: 4,
+            maxTurns: 5,
+            advancedMode: true
+          }
         })
       )
     ).toEqual({
@@ -33,7 +36,7 @@ describe('playerActions', () => {
           ...initialGameState,
           allianceRequests: []
         },
-        playerActions.REQUEST_ALLIANCE({
+        clientActions.REQUEST_ALLIANCE({
           playerId: 'test',
           requester: 'atreides',
           responder: 'fremen'
@@ -51,7 +54,7 @@ describe('playerActions', () => {
           ...initialGameState,
           playerOrder: ['three', 'two', 'one']
         },
-        playerActions.SET_PLAYER_ORDER({
+        clientActions.SET_PLAYER_ORDER({
           playerId: 'test',
           playerOrder: ['one', 'two', 'three']
         })
@@ -73,7 +76,7 @@ describe('playerActions', () => {
             }
           }
         },
-        playerActions.SELECT_FACTION({
+        clientActions.SELECT_FACTION({
           playerId: 'test',
           faction: Factions.EMPEROR
         })
@@ -88,27 +91,66 @@ describe('playerActions', () => {
       }
     })
   })
-  test('joinGame', () => {
-    expect(
-      gameReducer(
-        initialGameState,
-        playerActions.JOIN_GAME({
-          playerId: 'test',
-          isAdmin: true
-        })
-      )
-    ).toEqual({
-      ...initialGameState,
-      players: {
-        test: {
-          id: 'test',
-          isAdmin: false,
-          name: 'paul',
-          faction: null,
-          spice: 0,
-          treacheryCards: 0
+  describe('joinGame', () => {
+    it('adds a player to the game as an admin if no other players are in the game', () => {
+      expect(
+        gameReducer(
+          initialGameState,
+          clientActions.JOIN_GAME({
+            playerId: 'test',
+            roomId: 'someId'
+          })
+        )
+      ).toEqual({
+        ...initialGameState,
+        players: {
+          test: {
+            id: 'test',
+            isAdmin: true,
+            name: '',
+            faction: null,
+            spice: 0,
+            treacheryCards: 0
+          }
+        }
+      })
+    })
+    it('adds a player to the game', () => {
+      const initialState = {
+        ...initialGameState,
+        players: {
+          somePlayer: {
+            id: 'somePlayer',
+            isAdmin: false,
+            name: '',
+            faction: null,
+            spice: 0,
+            treacheryCards: 0
+          }
         }
       }
+      expect(
+        gameReducer(
+          initialState,
+          clientActions.JOIN_GAME({
+            playerId: 'test',
+            roomId: 'someId'
+          })
+        )
+      ).toEqual({
+        ...initialState,
+        players: {
+          ...initialState.players,
+          test: {
+            id: 'test',
+            isAdmin: false,
+            name: '',
+            faction: null,
+            spice: 0,
+            treacheryCards: 0
+          }
+        }
+      })
     })
   })
   test('leaveGame', () => {
@@ -131,7 +173,7 @@ describe('playerActions', () => {
           alliances: [{ players: ['test', 'other', 'third'] }],
           playerOrder: ['test', 'other', 'third']
         },
-        playerActions.LEAVE_GAME({ playerId: 'test' })
+        clientActions.LEAVE_GAME({ playerId: 'test' })
       )
     ).toEqual({
       ...initialGameState,
@@ -162,7 +204,7 @@ describe('playerActions', () => {
             }
           }
         },
-        playerActions.START_GAME({ playerId: 'somePlayer' })
+        clientActions.START_GAME({ playerId: 'somePlayer' })
       )
     ).toEqual({
       ...initialGameState,

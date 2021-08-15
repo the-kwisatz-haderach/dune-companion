@@ -1,22 +1,19 @@
-import { PlayerActionType } from '../models/actions'
 import { Game } from '../models/game'
 import { Phases } from '../models/phase'
 import { Player } from '../models/player'
+import { ClientActionType } from './clientActions'
 
 export default function getPlayerActions(
   player: Player,
   game: Game
-): PlayerActionType[] {
+): ClientActionType[] {
   const { currentTurn, currentPhase } = game
-  const actions: PlayerActionType[] = []
+  const actions: ClientActionType[] = []
 
   if (currentTurn === 0) {
-    actions.push(PlayerActionType.SELECT_FACTION)
+    actions.push('SELECT_FACTION')
     if (player.isAdmin) {
-      actions.push(
-        PlayerActionType.START_GAME,
-        PlayerActionType.SET_PLAYER_ORDER
-      )
+      actions.push('START_GAME', 'SET_PLAYER_ORDER')
     }
     return actions
   }

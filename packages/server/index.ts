@@ -3,8 +3,7 @@ import { config } from './config'
 import { createWebsocketServer } from './socket'
 import { createHttpServer } from './app'
 import { nanoid } from 'nanoid'
-import { RoomManager } from './RoomManager'
-import WebSocket from 'ws'
+import { GameManager } from './GameManager'
 
 const startServer = () => {
   try {
@@ -13,7 +12,11 @@ const startServer = () => {
     const httpServer = createHttpServer(subscriber)
     const wsServer = createWebsocketServer(httpServer)
 
-    const roomManager = new RoomManager(subscriber, publisher)
+    const gameManager = new GameManager({
+      subscriber,
+      publisher,
+      idGenerator: nanoid
+    })
 
     // httpServer.on("upgrade", (req, socket, head) => {
     //   if (isNotAuthenticated) {
@@ -25,24 +28,9 @@ const startServer = () => {
       console.log(`HTTP server started at port: ${config.API_PORT}.`)
     })
 
-    wsServer.on('connection', (socket, req) => {
-      console.log(socket.readyState === WebSocket.OPEN)
-      const roomId = req.url?.split('=')[1]
-      if (!roomId) {
-        console.log('Missing valid room id. Terminating connection.')
-        socket.send('Missing valid room id. Terminating connection.')
-        return socket.terminate()
-      }
-
-      const clientId = nanoid()
-      console.log(`Client ${clientId} joined room ${roomId}.`)
-      roomManager.join(roomId, clientId, socket)
-
-      socket.on('close', () => {
-        console.log(`Client ${clientId} removed from room ${roomId}.`)
-        roomManager.leave(roomId, clientId)
-      })
-    })
+    wsServer.on('connection', (ws, req) =>
+      gameManager.handleConnection(ws, req.url)
+    )
   } catch (error) {
     console.error(`Error occured: ${error.message}`)
   }
