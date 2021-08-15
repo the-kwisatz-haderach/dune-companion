@@ -50,6 +50,10 @@ export class GameRoom {
   }: { socket: WebSocket } & ReturnType<typeof joinGame>['payload']) {
     if (this.clients[payload.playerId]) return
     this.clients[payload.playerId] = socket
+    socket.send(
+      JSON.stringify(hostActions.GAME_JOINED({ roomId: payload.roomId }))
+    )
+    console.log(`Client ${payload.playerId} joined room ${payload.roomId}.`)
     this.updateGame(clientActions.JOIN_GAME(payload))
   }
 

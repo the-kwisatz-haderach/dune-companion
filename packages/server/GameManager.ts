@@ -100,8 +100,6 @@ export class GameManager {
     }
 
     this.rooms[roomId].addClient({ roomId, password, playerId, socket })
-    socket.send(JSON.stringify(hostActions.GAME_JOINED({ roomId })))
-    console.log(`Client ${playerId} joined room ${roomId}.`)
 
     socket.on('close', () => this.leave(roomId, playerId))
     socket.on('message', message =>

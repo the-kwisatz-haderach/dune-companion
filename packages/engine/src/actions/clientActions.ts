@@ -13,6 +13,7 @@ const START_GAME = 'START_GAME'
 const SELECT_FACTION = 'SELECT_FACTION'
 const REQUEST_ALLIANCE = 'REQUEST_ALLIANCE'
 const CONFIRM_ALLIANCE = 'CONFIRM_ALLIANCE'
+const TOGGLE_READY_STATUS = 'TOGGLE_READY_STATUS'
 
 const createClientAction = <P extends Record<string ,unknown> | void = void, T extends string = string>(
   type: T
@@ -23,34 +24,26 @@ const createClientAction = <P extends Record<string ,unknown> | void = void, T e
 export const createGame = createClientAction<{ conditions: Conditions, roomId: string, password?: string }>(
   CREATE_GAME
 )
-
 export const updatePlayerName = createClientAction<{ name: string }>(
   UPDATE_PLAYER_NAME
 )
-
 export const setPlayerOrder = createClientAction<{ playerOrder: string[] }>(
   SET_PLAYER_ORDER
 )
-
 export const selectFaction = createClientAction<{ faction: Factions }>(
   SELECT_FACTION
 )
-
 export const setAdmin = createClientAction<{ id: string }>(SET_ADMIN)
-
 export const startGame = createClientAction(START_GAME)
-
 export const requestAlliance = createClientAction<AllianceRequest>(
   REQUEST_ALLIANCE
 )
-
 export const confirmAlliance = createClientAction<AllianceRequest>(
   CONFIRM_ALLIANCE
 )
-
 export const joinGame = createClientAction<{ roomId: string; password?: string }>(JOIN_GAME)
-
 export const leaveGame = createClientAction(LEAVE_GAME)
+export const toggleReadyStatus = createClientAction(TOGGLE_READY_STATUS)
 
 export const clientActions = {
   SET_PLAYER_ORDER: setPlayerOrder,
@@ -63,6 +56,7 @@ export const clientActions = {
   LEAVE_GAME: leaveGame,
   UPDATE_PLAYER_NAME: updatePlayerName,
   SET_ADMIN: setAdmin,
+  TOGGLE_READY_STATUS: toggleReadyStatus
 } as const
 
 export type ClientActionType = keyof typeof clientActions

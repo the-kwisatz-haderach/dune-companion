@@ -74,4 +74,9 @@ export default function playerActionBuilder(
     .addCase(clientActions.REQUEST_ALLIANCE, (state, action) => {
       state.allianceRequests.push(omit(action.payload, 'playerId'))
     })
+    .addCase(clientActions.TOGGLE_READY_STATUS, (state, action) => {
+      state.players[action.payload.playerId].isReady = !state.players[
+        action.payload.playerId
+      ].isReady
+    })
 }

@@ -5,6 +5,7 @@ export const playerFixture: Player = {
   id: '',
   name: '',
   spice: 0,
+  isReady: false,
   treacheryCards: 0,
   faction: null
 }

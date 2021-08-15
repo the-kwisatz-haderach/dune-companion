@@ -10,6 +10,7 @@ export function createPlayer({
   return {
     id,
     name: '',
+    isReady: false,
     isAdmin,
     faction: null,
     spice: 0,

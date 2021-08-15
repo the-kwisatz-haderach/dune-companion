@@ -107,6 +107,7 @@ describe('clientActions', () => {
           test: {
             id: 'test',
             isAdmin: true,
+            isReady: false,
             name: '',
             faction: null,
             spice: 0,
@@ -120,12 +121,8 @@ describe('clientActions', () => {
         ...initialGameState,
         players: {
           somePlayer: {
-            id: 'somePlayer',
-            isAdmin: false,
-            name: '',
-            faction: null,
-            spice: 0,
-            treacheryCards: 0
+            ...playerFixture,
+            id: 'somePlayer'
           }
         }
       }
@@ -144,6 +141,7 @@ describe('clientActions', () => {
           test: {
             id: 'test',
             isAdmin: false,
+            isReady: false,
             name: '',
             faction: null,
             spice: 0,
@@ -162,6 +160,7 @@ describe('clientActions', () => {
           players: {
             test: {
               id: 'test',
+              isReady: false,
               isAdmin: false,
               name: 'paul',
               faction: null,
@@ -221,6 +220,30 @@ describe('clientActions', () => {
           faction: Factions.HOUSE_ATREIDES,
           spice: factions[Factions.HOUSE_ATREIDES].startingSpice,
           treacheryCards: factions[Factions.HOUSE_ATREIDES].startingItems
+        }
+      }
+    })
+  })
+  test('toggleReadyStatus', () => {
+    expect(
+      gameReducer(
+        {
+          ...initialGameState,
+          players: {
+            harkonnen: {
+              ...playerFixture,
+              isReady: true
+            }
+          }
+        },
+        clientActions.TOGGLE_READY_STATUS({ playerId: 'harkonnen' })
+      )
+    ).toEqual({
+      ...initialGameState,
+      players: {
+        harkonnen: {
+          ...playerFixture,
+          isReady: false
         }
       }
     })
