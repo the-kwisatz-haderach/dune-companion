@@ -79,7 +79,7 @@ export const SnackbarProvider: React.FC = ({ children }) => {
               elevation={6}
               variant="filled"
               onClose={handleClose}
-              severity={messageInfo?.type}
+              severity={messageInfo?.type ?? 'info'}
               className={classes.alert}
             >
               {messageInfo.message}
