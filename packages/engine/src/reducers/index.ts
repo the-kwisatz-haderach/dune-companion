@@ -6,7 +6,6 @@ import { currentTurnReducer } from './currentTurnReducer/currentTurnReducer'
 import { currentFirstPlayerReducer } from './currentFirstPlayerReducer/currentFirstPlayerReducer'
 import { awaitingActionReducer } from './awaitingActionReducer/awaitingActionReducer'
 import { playerOrderReducer } from './playerOrderReducer/playerOrderReducer'
-import { availableActionsReducer } from './availableActionsReducer/availableActionsReducer'
 import { playersReducer } from './playersReducer/playersReducer'
 import { auctionsReducer } from './auctionsReducer/auctionsReducer'
 import { allianceRequestsReducer } from './allianceRequestsReducer/allianceRequestsReducer'
@@ -20,10 +19,9 @@ export const rootReducer = combineReducers<Game>({
   currentFirstPlayer: currentFirstPlayerReducer,
   awaitingAction: awaitingActionReducer,
   playerOrder: playerOrderReducer,
-  availableActions: availableActionsReducer,
-  players: playersReducer,
   auctions: auctionsReducer,
   notifications: notificationsReducer,
   allianceRequests: allianceRequestsReducer,
-  alliances: alliancesReducer
+  alliances: alliancesReducer,
+  players: playersReducer
 })

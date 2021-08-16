@@ -62,13 +62,9 @@ describe('playersReducer', () => {
         )
       ).toEqual({
         test: {
+          ...playerFixture,
           id: 'test',
-          isAdmin: true,
-          isReady: false,
-          name: '',
-          faction: null,
-          spice: 0,
-          treacheryCards: 0
+          isAdmin: true
         }
       })
     })
@@ -90,13 +86,8 @@ describe('playersReducer', () => {
       ).toEqual({
         ...initialState,
         test: {
-          id: 'test',
-          isAdmin: false,
-          isReady: false,
-          name: '',
-          faction: null,
-          spice: 0,
-          treacheryCards: 0
+          ...playerFixture,
+          id: 'test'
         }
       })
     })
@@ -123,6 +114,7 @@ describe('playersReducer', () => {
       playersReducer(
         {
           test: {
+            ...playerFixture,
             id: 'test',
             isReady: false,
             isAdmin: false,

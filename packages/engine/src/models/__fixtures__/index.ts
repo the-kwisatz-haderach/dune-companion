@@ -7,5 +7,7 @@ export const playerFixture: Player = {
   spice: 0,
   isReady: false,
   treacheryCards: 0,
-  faction: null
+  faction: null,
+  primaryActions: [],
+  secondaryActions: []
 }
