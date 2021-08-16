@@ -1,4 +1,4 @@
-import { Auction } from '../../models'
+import { Auction } from '../models'
 
 export function createAuction(playerIds: string[]): Auction {
   return {

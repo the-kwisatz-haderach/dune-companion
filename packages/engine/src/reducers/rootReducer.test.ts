@@ -1,17 +1,17 @@
-import { gameReducer } from './gameReducer'
+import { rootReducer } from './rootReducer'
 import { clientActions } from '../actions'
-import { initialGameState } from '../library'
-import { factions } from '../library/constants/factions'
+import { initialGameState } from '../constants'
+import { factions } from '../constants/factions'
 import { Factions } from '../models/faction'
 import { playerFixture } from '../models/__fixtures__'
 
-describe('gameReducer', () => {
+describe('rootReducer', () => {
   test('invalid action', () => {
-    expect(gameReducer(initialGameState, {} as any)).toEqual(initialGameState)
+    expect(rootReducer(initialGameState, {} as any)).toEqual(initialGameState)
   })
   test('createGame', () => {
     expect(
-      gameReducer(
+      rootReducer(
         initialGameState,
         clientActions.CREATE_GAME({
           playerId: 'test',
@@ -34,7 +34,7 @@ describe('gameReducer', () => {
   })
   test('requestAlliance', () => {
     expect(
-      gameReducer(
+      rootReducer(
         {
           ...initialGameState,
           allianceRequests: []
@@ -52,7 +52,7 @@ describe('gameReducer', () => {
   })
   test('setPlayerOrder', () => {
     expect(
-      gameReducer(
+      rootReducer(
         {
           ...initialGameState,
           playerOrder: ['three', 'two', 'one']
@@ -70,7 +70,7 @@ describe('gameReducer', () => {
   describe('selectFaction', () => {
     it('selects a faction', () => {
       expect(
-        gameReducer(
+        rootReducer(
           {
             ...initialGameState,
             players: {
@@ -97,7 +97,7 @@ describe('gameReducer', () => {
     })
     it('deselects a faction when null is provided', () => {
       expect(
-        gameReducer(
+        rootReducer(
           {
             ...initialGameState,
             players: {
@@ -126,7 +126,7 @@ describe('gameReducer', () => {
   describe('joinGame', () => {
     it('adds a player to the game as an admin if no other players are in the game', () => {
       expect(
-        gameReducer(
+        rootReducer(
           initialGameState,
           clientActions.JOIN_GAME({
             playerId: 'test',
@@ -159,7 +159,7 @@ describe('gameReducer', () => {
         }
       }
       expect(
-        gameReducer(
+        rootReducer(
           initialState,
           clientActions.JOIN_GAME({
             playerId: 'test',
@@ -193,7 +193,7 @@ describe('gameReducer', () => {
         }
       }
       expect(
-        gameReducer(
+        rootReducer(
           initialState,
           clientActions.JOIN_GAME({
             playerId: 'somePlayer',
@@ -208,7 +208,7 @@ describe('gameReducer', () => {
   })
   test('leaveGame', () => {
     expect(
-      gameReducer(
+      rootReducer(
         {
           ...initialGameState,
           awaitingAction: ['test'],
@@ -240,7 +240,7 @@ describe('gameReducer', () => {
   })
   test('startGame', () => {
     expect(
-      gameReducer(
+      rootReducer(
         {
           ...initialGameState,
           players: {
@@ -281,7 +281,7 @@ describe('gameReducer', () => {
   })
   test('toggleReadyStatus', () => {
     expect(
-      gameReducer(
+      rootReducer(
         {
           ...initialGameState,
           players: {

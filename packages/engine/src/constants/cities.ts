@@ -1,4 +1,4 @@
-import { Cities, City } from '../../models/city'
+import { Cities, City } from '../models/city'
 
 export const cities: Record<Cities, City> = {
   ARRAKEEN: {

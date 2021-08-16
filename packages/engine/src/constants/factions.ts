@@ -1,5 +1,5 @@
-import { Cities } from '../../models/city'
-import { Factions, Faction } from '../../models/faction'
+import { Cities } from '../models/city'
+import { Factions, Faction } from '../models/faction'
 
 export const factions: Record<Factions, Faction> = {
   BENE_GESSERIT: {
@@ -19,7 +19,8 @@ export const factions: Record<Factions, Faction> = {
     name: 'House Atreides',
     shorthand: 'ATR',
     powers: [],
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
     itemsAllowed: 4,
     freeRevivals: 0,
     startingSpice: 5,
@@ -31,7 +32,8 @@ export const factions: Record<Factions, Faction> = {
     name: 'House Harkonnen',
     shorthand: 'HAR',
     powers: [],
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
     itemsAllowed: 8,
     freeRevivals: 0,
     startingSpice: 0,
@@ -43,7 +45,8 @@ export const factions: Record<Factions, Faction> = {
     name: 'Fremen',
     shorthand: 'FRE',
     powers: [],
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
     itemsAllowed: 4,
     freeRevivals: 0,
     startingSpice: 0,
@@ -55,7 +58,8 @@ export const factions: Record<Factions, Faction> = {
     name: 'Spacing Guild',
     shorthand: 'SGU',
     powers: [],
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
     itemsAllowed: 4,
     freeRevivals: 0,
     startingSpice: 0,
@@ -67,7 +71,8 @@ export const factions: Record<Factions, Faction> = {
     name: 'Emperor',
     shorthand: 'EMP',
     powers: [],
-    description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
     itemsAllowed: 4,
     freeRevivals: 0,
     startingSpice: 6,

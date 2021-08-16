@@ -1,4 +1,4 @@
-import { AuctionRound } from '../../models'
+import { AuctionRound } from '../models'
 
 export function createAuctionRound(initialBidderId: string): AuctionRound {
   return {

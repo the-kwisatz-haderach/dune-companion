@@ -1,4 +1,5 @@
-export * from './library'
-export * from './gameReducer'
+export * from './constants'
+export * from './factories'
+export * from './reducers'
 export * from './actions'
 export * from './models'

@@ -1,5 +1,4 @@
-import { Game } from '../../models'
-import { phases } from './phases'
+import { Game } from '../models'
 
 export const initialGameState: Game = {
   players: {},
@@ -17,6 +16,5 @@ export const initialGameState: Game = {
   auctions: [],
   allianceRequests: [],
   alliances: [],
-  notifications: [],
-  phases
+  notifications: []
 }

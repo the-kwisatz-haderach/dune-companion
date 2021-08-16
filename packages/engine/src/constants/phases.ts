@@ -1,4 +1,4 @@
-import { Phase, Phases } from '../../models/phase'
+import { Phase, Phases } from '../models/phase'
 
 export const phases: Record<Phases, Phase> = {
   [Phases.STORM]: {

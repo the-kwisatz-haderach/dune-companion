@@ -1,5 +1,6 @@
+export type NotificationType = 'error' | 'success' | 'info' | 'warning'
+
 export type Notification = {
-  title: string
-  description: string
-  type: string
+  message: string
+  type: NotificationType
 }

@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit'
+import { Conditions } from '../models'
 import type { AllianceRequest } from '../models/alliance'
 import type { Factions } from '../models/faction'
-import type { Conditions } from '../models/game'
 
 export const JOIN_GAME = 'JOIN_GAME'
 export const LEAVE_GAME = 'LEAVE_GAME'
