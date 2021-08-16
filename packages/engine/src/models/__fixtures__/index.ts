@@ -1,4 +1,4 @@
-import { Player } from '../../../models/player'
+import { Player } from '../player'
 
 export const playerFixture: Player = {
   isAdmin: false,

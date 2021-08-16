@@ -1,11 +1,14 @@
-import { clientActions } from '../../actions'
-import { gameReducer } from '..'
-import { factions } from '../../library/constants/factions'
-import { Factions } from '../../models/faction'
-import { initialGameState } from '../../library/constants'
-import { playerFixture } from './__fixtures__'
+import { gameReducer } from '.'
+import { clientActions } from '../actions'
+import { initialGameState } from '../library'
+import { factions } from '../library/constants/factions'
+import { Factions } from '../models/faction'
+import { playerFixture } from '../models/__fixtures__'
 
-describe('clientActions', () => {
+describe('gameReducer', () => {
+  test('invalid action', () => {
+    expect(gameReducer(initialGameState, {} as any)).toEqual(initialGameState)
+  })
   test('createGame', () => {
     expect(
       gameReducer(

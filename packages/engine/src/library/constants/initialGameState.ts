@@ -10,7 +10,7 @@ export const initialGameState: Game = {
     maxPlayers: 6,
     maxTurns: 10
   },
-  actions: {},
+  availableActions: {},
   currentTurn: 0,
   currentFirstPlayer: 0,
   currentPhase: 0,

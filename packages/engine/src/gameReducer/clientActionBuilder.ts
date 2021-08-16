@@ -3,24 +3,12 @@ import { clientActions } from '../actions'
 import { factions } from '../library/constants/factions'
 import { createPlayer } from '../library/factories'
 import { Game } from '../models/game'
+import { pull, omit } from './helpers'
 
-const pull = <T>(items: T[], key: T): T[] => items.filter(item => item !== key)
-const omit = <T extends Record<string, unknown>>(
-  object: T,
-  property: keyof T
-) => {
-  const cloned = { ...object }
-  delete cloned[property]
-  return cloned
-}
-
-export default function playerActionBuilder(
+export default function clientActionBuilder(
   builder: ActionReducerMapBuilder<Game>
 ) {
   return builder
-    .addCase(clientActions.CREATE_GAME, (state, action) => {
-      state.conditions = action.payload.conditions
-    })
     .addCase(clientActions.SELECT_FACTION, (state, action) => {
       state.players[action.payload.playerId].faction = action.payload.faction
     })

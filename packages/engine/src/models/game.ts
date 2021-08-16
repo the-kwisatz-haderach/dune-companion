@@ -2,8 +2,8 @@ import { Player } from './player'
 import { Auction } from './auction'
 import { Alliance, AllianceRequest } from './alliance'
 import { Notification } from './notification'
-import { phases } from '../library/constants/phases'
 import { ClientActionType } from '../actions'
+import { Phase, Phases } from './phase'
 
 export type Conditions = {
   advancedMode: boolean
@@ -11,7 +11,13 @@ export type Conditions = {
   maxTurns: number
 }
 
-export type AvailableActions = Record<Player['id'], ClientActionType[]>
+export type AvailableActions = Record<
+  Player['id'],
+  {
+    primary: ClientActionType
+    secondary: ClientActionType[]
+  }
+>
 
 export type Game = {
   conditions: Conditions
@@ -20,9 +26,9 @@ export type Game = {
   currentFirstPlayer: number
   awaitingAction: Player['id'][]
   playerOrder: Player['id'][]
-  actions: AvailableActions
+  availableActions: AvailableActions
   players: Record<Player['id'], Player>
-  phases: typeof phases
+  phases: Record<Phases, Phase>
   auctions: Auction[]
   notifications: Notification[]
   allianceRequests: AllianceRequest[]
