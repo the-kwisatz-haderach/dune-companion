@@ -1,4 +1,4 @@
-import { gameReducer } from '.'
+import { gameReducer } from './gameReducer'
 import { clientActions } from '../actions'
 import { initialGameState } from '../library'
 import { factions } from '../library/constants/factions'
