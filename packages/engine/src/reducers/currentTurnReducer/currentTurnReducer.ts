@@ -1,7 +1,7 @@
 import { ActionReducerMapBuilder, createReducer } from '@reduxjs/toolkit'
-import { clientActions } from '../actions'
-import { initialGameState } from '../constants'
-import { Game } from '../models'
+import { clientActions } from '../../actions'
+import { initialGameState } from '../../constants'
+import { Game } from '../../models'
 
 export const currentTurnReducer = createReducer(
   initialGameState.currentTurn,

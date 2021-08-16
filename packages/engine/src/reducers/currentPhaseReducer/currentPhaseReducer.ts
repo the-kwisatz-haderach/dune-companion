@@ -1,6 +1,6 @@
 import { ActionReducerMapBuilder, createReducer } from '@reduxjs/toolkit'
-import { initialGameState } from '../constants'
-import { Game } from '../models'
+import { initialGameState } from '../../constants'
+import { Game } from '../../models'
 
 export const currentPhaseReducer = createReducer(
   initialGameState.currentPhase,

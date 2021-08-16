@@ -1,8 +1,8 @@
 import { ActionReducerMapBuilder, createReducer } from '@reduxjs/toolkit'
-import { clientActions } from '../actions'
-import { factions, initialGameState } from '../constants'
-import { createPlayer } from '../factories'
-import { Game } from '../models'
+import { clientActions } from '../../actions'
+import { factions, initialGameState } from '../../constants'
+import { createPlayer } from '../../factories'
+import { Game } from '../../models'
 
 export const playersReducer = createReducer(
   initialGameState.players,
