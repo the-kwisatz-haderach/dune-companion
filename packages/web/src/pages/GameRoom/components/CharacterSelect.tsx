@@ -45,6 +45,7 @@ export default function CharacterSelect({
       {Object.entries(factions).map(([factionId, faction]) => (
         <FactionCard
           {...faction}
+          key={factionId}
           isSelected={playerSelection === factionId}
           disabled={
             playerSelection !== factionId &&
