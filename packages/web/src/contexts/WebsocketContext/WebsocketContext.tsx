@@ -32,37 +32,40 @@ export const WebsocketContext = createContext<IWebsocketContext>({
 const parseAction = (data: any): HostAction => JSON.parse(data)
 
 const CONNECTION_URL = `ws://localhost:8000`
+const getClientId = () => window.sessionStorage.getItem('clientId') ?? ''
+const setClientId = (clientId: string) =>
+  window.sessionStorage.setItem('clientId', clientId)
+const getSocketUrl = async () => `${CONNECTION_URL}?clientId=${getClientId()}`
 
 export const WebsocketProvider: React.FC = ({ children }) => {
   const dispatch = useDispatch()
-  const isConnected = useRef(false)
-  const clientId = useRef(window.sessionStorage.getItem('clientId'))
-  const websocket = useRef<ReconnectingWebSocket | null>(null)
   const history = useHistory()
   const { showSnack } = useSnackBarContext()
+  const websocket = useRef<ReconnectingWebSocket>(
+    new ReconnectingWebSocket(getSocketUrl, undefined, {
+      startClosed: true
+    })
+  )
 
-  const createConnection = () => {
-    websocket.current = new ReconnectingWebSocket(
-      `${CONNECTION_URL}?clientId=${clientId.current ?? ''}`
-    )
-  }
+  const isConnected = useCallback(
+    () => websocket.current.readyState === ReconnectingWebSocket.OPEN,
+    []
+  )
 
   const connect = useCallback<IWebsocketContext['connect']>(async () => {
-    if (!isConnected.current) {
-      createConnection()
+    if (!isConnected()) {
+      websocket.current.reconnect()
     }
-    if (!websocket.current) return
 
     websocket.current.onopen = () => {
       console.log(`Successfully connected to ${CONNECTION_URL}.`)
-      isConnected.current = true
     }
 
     websocket.current.onmessage = event => {
       const action = parseAction(event.data)
       switch (action.type) {
         case 'CLIENT_CONNECTED':
-          window.sessionStorage.setItem('clientId', action.payload.clientId)
+          setClientId(action.payload.clientId)
           break
         case 'GAME_CREATED':
           history.push(`/game/${action.payload.roomId}`)
@@ -84,26 +87,29 @@ export const WebsocketProvider: React.FC = ({ children }) => {
       }
     }
 
-    websocket.current.onclose = event => {
-      isConnected.current = false
-      showSnack(event.reason, 'error')
+    websocket.current.onerror = event => {
+      showSnack(event.message, 'error')
     }
-  }, [dispatch, history, showSnack])
+
+    websocket.current.onclose = event => {
+      showSnack(event.reason, 'info')
+    }
+  }, [dispatch, history, showSnack, isConnected])
 
   const disconnect = useCallback(() => {
-    websocket.current?.close()
-    websocket.current = null
+    websocket.current.close()
     showSnack('Disconnected from server.')
   }, [showSnack])
 
   const sendMessage = useCallback<IWebsocketContext['sendMessage']>(
     async (type, payload) => {
-      if (clientId.current) {
-        websocket.current?.send(
+      const clientId = getClientId()
+      if (clientId) {
+        websocket.current.send(
           JSON.stringify(
             clientActions[type]({
               ...payload,
-              playerId: clientId.current
+              playerId: clientId
             } as any)
           )
         )
@@ -119,10 +125,10 @@ export const WebsocketProvider: React.FC = ({ children }) => {
       disconnect,
       connect,
       sendMessage,
-      getClientId: () => clientId.current ?? '',
-      isConnected: () => isConnected.current
+      isConnected,
+      getClientId
     }),
-    [disconnect, connect, sendMessage]
+    [isConnected, disconnect, connect, sendMessage]
   )
 
   return (
