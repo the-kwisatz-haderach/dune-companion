@@ -73,7 +73,9 @@ export const SnackbarProvider: React.FC = ({ children }) => {
             open={open}
             autoHideDuration={5000}
             onClose={handleClose}
-            onExited={handleExited}
+            TransitionProps={{
+              onExited: handleExited
+            }}
           >
             <Alert
               elevation={6}
