@@ -1,6 +1,6 @@
 import { conditionsReducer } from './conditionsReducer'
 import { clientActions } from '../../actions'
-import { initialGameState } from '../../constants'
+import { initialGameState } from '../initialGameState'
 
 describe('conditionsReducer', () => {
   test('createGame', () => {

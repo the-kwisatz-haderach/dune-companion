@@ -1,9 +1,8 @@
 import { playersReducer } from './playersReducer'
 import { clientActions } from '../../actions'
-import { initialGameState } from '../../constants'
-import { factions } from '../../constants/factions'
 import { Factions } from '../../models/faction'
 import { playerFixture } from '../../models/__fixtures__'
+import { initialGameState } from '../initialGameState'
 
 describe('playersReducer', () => {
   describe('selectFaction', () => {
@@ -116,7 +115,6 @@ describe('playersReducer', () => {
           test: {
             ...playerFixture,
             id: 'test',
-            isReady: false,
             isAdmin: false,
             name: 'paul',
             faction: null,
@@ -127,58 +125,6 @@ describe('playersReducer', () => {
         clientActions.LEAVE_GAME({ playerId: 'test' })
       )
     ).toEqual({})
-  })
-  test('startGame', () => {
-    expect(
-      playersReducer(
-        {
-          harkonnen: {
-            ...playerFixture,
-            faction: Factions.HOUSE_HARKONNEN,
-            spice: 0,
-            treacheryCards: 0
-          },
-          atreides: {
-            ...playerFixture,
-            faction: Factions.HOUSE_ATREIDES,
-            spice: 0,
-            treacheryCards: 0
-          }
-        },
-        clientActions.START_GAME({ playerId: 'somePlayer' })
-      )
-    ).toEqual({
-      harkonnen: {
-        ...playerFixture,
-        faction: Factions.HOUSE_HARKONNEN,
-        spice: factions[Factions.HOUSE_HARKONNEN].startingSpice,
-        treacheryCards: factions[Factions.HOUSE_HARKONNEN].startingItems
-      },
-      atreides: {
-        ...playerFixture,
-        faction: Factions.HOUSE_ATREIDES,
-        spice: factions[Factions.HOUSE_ATREIDES].startingSpice,
-        treacheryCards: factions[Factions.HOUSE_ATREIDES].startingItems
-      }
-    })
-  })
-  test('toggleReadyStatus', () => {
-    expect(
-      playersReducer(
-        {
-          harkonnen: {
-            ...playerFixture,
-            isReady: true
-          }
-        },
-        clientActions.TOGGLE_READY_STATUS({ playerId: 'harkonnen' })
-      )
-    ).toEqual({
-      harkonnen: {
-        ...playerFixture,
-        isReady: false
-      }
-    })
   })
   test('updatePlayerName', () => {
     expect(

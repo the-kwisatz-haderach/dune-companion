@@ -1,7 +1,7 @@
 import { ActionReducerMapBuilder, createReducer } from '@reduxjs/toolkit'
 import { clientActions } from '../../actions'
-import { initialGameState } from '../../constants'
 import { Game } from '../../models'
+import { initialGameState } from '../initialGameState'
 
 export const conditionsReducer = createReducer(
   initialGameState.conditions,

@@ -1,8 +1,8 @@
 import { ActionReducerMapBuilder, createReducer } from '@reduxjs/toolkit'
 import { clientActions } from '../../actions'
-import { factions, initialGameState } from '../../constants'
 import { createPlayer } from '../../factories'
 import { Game } from '../../models'
+import { initialGameState } from '../initialGameState'
 
 export const playersReducer = createReducer(
   initialGameState.players,
@@ -28,19 +28,5 @@ export const playersReducer = createReducer(
       })
       .addCase(clientActions.LEAVE_GAME, (state, action) => {
         delete state[action.payload.playerId]
-      })
-      .addCase(clientActions.START_GAME, state => {
-        Object.keys(state).forEach(playerId => {
-          const player = state[playerId]
-          if (player.faction) {
-            const { startingSpice, startingItems } = factions[player.faction]
-            player.treacheryCards = startingItems
-            player.spice = startingSpice
-          }
-        })
-      })
-      .addCase(clientActions.TOGGLE_READY_STATUS, (state, action) => {
-        state[action.payload.playerId].isReady = !state[action.payload.playerId]
-          .isReady
       })
 )

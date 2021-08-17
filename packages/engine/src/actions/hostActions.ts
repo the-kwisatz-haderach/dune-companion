@@ -9,7 +9,6 @@ export const GAME_LEFT = 'GAME_LEFT'
 export const GAME_UPDATED = 'GAME_UPDATED'
 export const SHOW_NOTIFICATION = 'SHOW_NOTIFICATION'
 
-
 export const clientConnected = createAction<{ clientId: string }, typeof CLIENT_CONNECTED>(CLIENT_CONNECTED)
 export const gameCreated = createAction<{ roomId: string }, typeof GAME_CREATED>(GAME_CREATED)
 export const gameJoined = createAction<{ roomId: string }, typeof GAME_JOINED>(GAME_JOINED)

@@ -1,4 +1,4 @@
-export * from './constants'
+export * from './dictionaries'
 export * from './factories'
 export * from './reducers'
 export * from './actions'

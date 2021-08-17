@@ -9,11 +9,11 @@ export const SET_ADMIN = 'SET_ADMIN'
 export const UPDATE_PLAYER_NAME = 'UPDATE_PLAYER_NAME'
 export const CREATE_GAME = 'CREATE_GAME'
 export const SET_PLAYER_ORDER = 'SET_PLAYER_ORDER'
-export const START_GAME = 'START_GAME'
 export const SELECT_FACTION = 'SELECT_FACTION'
 export const REQUEST_ALLIANCE = 'REQUEST_ALLIANCE'
 export const CONFIRM_ALLIANCE = 'CONFIRM_ALLIANCE'
-export const TOGGLE_READY_STATUS = 'TOGGLE_READY_STATUS'
+export const SET_IS_READY = 'SET_IS_READY'
+export const SET_IS_NOT_READY = 'SET_IS_NOT_READY'
 
 const createClientAction = <P extends Record<string ,unknown> | void = void, T extends string = string>(
   type: T
@@ -34,7 +34,6 @@ export const selectFaction = createClientAction<{ faction: Factions | null }, ty
   SELECT_FACTION
 )
 export const setAdmin = createClientAction<{ id: string }, typeof SET_ADMIN>(SET_ADMIN)
-export const startGame = createClientAction<void, typeof START_GAME>(START_GAME)
 export const requestAlliance = createClientAction<AllianceRequest, typeof REQUEST_ALLIANCE>(
   REQUEST_ALLIANCE
 )
@@ -43,21 +42,22 @@ export const confirmAlliance = createClientAction<AllianceRequest, typeof CONFIR
 )
 export const joinGame = createClientAction<{ roomId: string; password?: string }, typeof JOIN_GAME>(JOIN_GAME)
 export const leaveGame = createClientAction<void, typeof LEAVE_GAME>(LEAVE_GAME)
-export const toggleReadyStatus = createClientAction<void, typeof TOGGLE_READY_STATUS>(TOGGLE_READY_STATUS)
+export const setIsReady = createClientAction<void, typeof SET_IS_READY>(SET_IS_READY)
+export const setIsNotReady = createClientAction<void, typeof SET_IS_NOT_READY>(SET_IS_NOT_READY)
 
 export const clientActions = {
   SET_PLAYER_ORDER: setPlayerOrder,
   SELECT_FACTION: selectFaction,
   CREATE_GAME: createGame,
   REQUEST_ALLIANCE: requestAlliance,
-  START_GAME: startGame,
   CONFIRM_ALLIANCE: confirmAlliance,
   JOIN_GAME: joinGame,
   LEAVE_GAME: leaveGame,
   UPDATE_PLAYER_NAME: updatePlayerName,
   SET_ADMIN: setAdmin,
-  TOGGLE_READY_STATUS: toggleReadyStatus
+  SET_IS_READY: setIsReady,
+  SET_IS_NOT_READY: setIsNotReady,
 } as const
 
 export type ClientActionType = keyof typeof clientActions
-export type ClientAction = typeof clientActions[ClientActionType]
+export type ClientAction = ReturnType<typeof clientActions[ClientActionType]>

@@ -1,27 +1,33 @@
-import { combineReducers } from '@reduxjs/toolkit'
-import { Game } from '../models'
+import { combineReducers, Reducer } from '@reduxjs/toolkit'
 import { conditionsReducer } from './conditionsReducer/conditionsReducer'
-import { currentPhaseReducer } from './currentPhaseReducer/currentPhaseReducer'
-import { currentTurnReducer } from './currentTurnReducer/currentTurnReducer'
-import { currentFirstPlayerReducer } from './currentFirstPlayerReducer/currentFirstPlayerReducer'
 import { awaitingActionReducer } from './awaitingActionReducer/awaitingActionReducer'
 import { playerOrderReducer } from './playerOrderReducer/playerOrderReducer'
 import { playersReducer } from './playersReducer/playersReducer'
 import { auctionsReducer } from './auctionsReducer/auctionsReducer'
 import { allianceRequestsReducer } from './allianceRequestsReducer/allianceRequestsReducer'
 import { alliancesReducer } from './alliancesReducer/alliancesReducer'
-import { notificationsReducer } from './notificationsReducer/notificationsReducer'
+import { actionSideEffectsReducer } from './actionSideEffectsReducer/actionSideEffectsReducer'
+import { initialGameState } from './initialGameState'
+import { ClientAction, HostAction } from '../actions'
+import { Game } from '../models'
 
-export const rootReducer = combineReducers<Game>({
+const combinedReducer = combineReducers({
   conditions: conditionsReducer,
-  currentPhase: currentPhaseReducer,
-  currentTurn: currentTurnReducer,
-  currentFirstPlayer: currentFirstPlayerReducer,
   awaitingAction: awaitingActionReducer,
   playerOrder: playerOrderReducer,
   auctions: auctionsReducer,
-  notifications: notificationsReducer,
   allianceRequests: allianceRequestsReducer,
   alliances: alliancesReducer,
   players: playersReducer
 })
+
+export const rootReducer: Reducer<Game, ClientAction | HostAction> = (
+  state = initialGameState,
+  action
+) => {
+  const intermediateState = combinedReducer(state, action)
+  return actionSideEffectsReducer({
+    ...state,
+    ...intermediateState
+  })
+}

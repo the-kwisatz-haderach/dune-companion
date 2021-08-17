@@ -1,19 +1,19 @@
 import { Player } from './player'
 import { Auction } from './auction'
 import { Alliance, AllianceRequest } from './alliance'
-import { Notification } from './notification'
 import { Conditions } from './conditions'
+import { Phases } from './phase'
 
 export type Game = {
+  isFinished: boolean
   conditions: Conditions
-  currentPhase: number
+  currentPhase: Phases
   currentTurn: number
   currentFirstPlayer: number
   awaitingAction: Player['id'][]
   playerOrder: Player['id'][]
   players: Record<Player['id'], Player>
   auctions: Auction[]
-  notifications: Notification[]
   allianceRequests: AllianceRequest[]
   alliances: Alliance[]
 }

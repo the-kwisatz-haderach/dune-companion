@@ -1,6 +1,7 @@
 import { Game } from '../models'
 
 export const initialGameState: Game = {
+  isFinished: false,
   players: {},
   playerOrder: [],
   awaitingAction: [],
@@ -9,12 +10,10 @@ export const initialGameState: Game = {
     maxPlayers: 6,
     maxTurns: 10
   },
-  availableActions: {},
   currentTurn: 0,
   currentFirstPlayer: 0,
   currentPhase: 0,
   auctions: [],
   allianceRequests: [],
-  alliances: [],
-  notifications: []
+  alliances: []
 }

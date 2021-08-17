@@ -2,7 +2,7 @@ import { ActionReducerMapBuilder, createReducer } from '@reduxjs/toolkit'
 import { clientActions } from '../../actions'
 import { Game } from '../../models'
 import { pull } from '../../helpers'
-import { initialGameState } from '../../constants'
+import { initialGameState } from '../initialGameState'
 
 export const alliancesReducer = createReducer(
   initialGameState.alliances,
