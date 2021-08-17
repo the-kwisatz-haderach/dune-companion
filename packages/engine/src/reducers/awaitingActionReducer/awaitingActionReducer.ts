@@ -1,19 +1,14 @@
 import { ActionReducerMapBuilder, createReducer } from '@reduxjs/toolkit'
-import { clientActions } from '../../actions'
+import { ClientAction, clientActions } from '../../actions'
 import { Game } from '../../models'
-import { pull } from '../../helpers'
+import { append, pull } from '../../helpers'
 import { initialGameState } from '../initialGameState'
 
-const pushToList = (
-  state: string[],
-  action: { payload: { playerId: string } }
-) => {
-  state.push(action.payload.playerId)
-}
-const pullFromList = (
-  state: string[],
-  action: { payload: { playerId: string } }
-) => pull(state, action.payload.playerId)
+const pushToList = (state: string[], action: ClientAction) =>
+  append(state, action.payload.playerId)
+
+const pullFromList = (state: string[], action: ClientAction) =>
+  pull(state, action.payload.playerId)
 
 export const awaitingActionReducer = createReducer(
   initialGameState.awaitingAction,

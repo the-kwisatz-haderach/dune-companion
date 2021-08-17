@@ -1,6 +1,5 @@
 import { factions, phases } from '../../dictionaries'
 import { Game } from '../../models'
-import { initialGameState } from '../initialGameState'
 
 const reduceGameStartState = (state: Game): Game => {
   const playerKeys = Object.keys(state.players)
@@ -45,9 +44,7 @@ const reduceNewGamePhaseState = (state: Game): Game => {
   }
 }
 
-export const actionSideEffectsReducer = (
-  state: Game = initialGameState
-): Game => {
+export const actionSideEffectsReducer = (state: Game): Game => {
   const isSetup = state.currentTurn === 0
   const isAwaitingAction = state.awaitingAction.length !== 0
   switch (true) {
