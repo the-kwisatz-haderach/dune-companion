@@ -3,6 +3,7 @@ import {
   AvailableActionCollection,
   AvailablePlayerActionsMap
 } from '../../models/availablePlayerActions'
+import { initialGameState } from '../initialGameState'
 
 const reducePlayerPhaseActions = (
   state: Game
@@ -46,18 +47,9 @@ const reducePlayerPhaseActions = (
 })
 
 export const availableActionsReducer = (
-  state: Game
-): AvailablePlayerActionsMap => {
+  state: Game = initialGameState
+): Game => {
   const availablePlayerActions: AvailablePlayerActionsMap = {}
 
-  if (state.currentTurn === 0) {
-    Object.values(state.players).forEach(player => {
-      if (!player.faction) {
-        availablePlayerActions[player.id].primary.push()
-      }
-    })
-  } else {
-  }
-
-  return availablePlayerActions
+  return state
 }

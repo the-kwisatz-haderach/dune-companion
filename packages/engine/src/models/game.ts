@@ -2,7 +2,7 @@ import { Player } from './player'
 import { Auction } from './auction'
 import { Alliance, AllianceRequest } from './alliance'
 import { Conditions } from './conditions'
-import { Phases } from './phase'
+import { Phases, PhaseStates } from './phase'
 
 export type Game = {
   isFinished: boolean
@@ -16,4 +16,5 @@ export type Game = {
   auctions: Auction[]
   allianceRequests: AllianceRequest[]
   alliances: Alliance[]
+  phaseStates: PhaseStates
 }

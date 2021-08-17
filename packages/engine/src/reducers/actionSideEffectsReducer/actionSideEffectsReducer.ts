@@ -1,5 +1,6 @@
 import { factions, phases } from '../../dictionaries'
 import { Game } from '../../models'
+import { initialGameState } from '../initialGameState'
 
 const reduceGameStartState = (state: Game): Game => {
   const playerKeys = Object.keys(state.players)
@@ -35,24 +36,25 @@ const reduceNewGamePhaseState = (state: Game): Game => {
     }
   }
   const nextPhase = (state.currentPhase + 1) % Object.keys(phases).length
-  const nextTurn = nextPhase === 0 ? state.currentTurn + 1 : state.currentTurn
+  const isNewTurn = nextPhase === 0
   return {
     ...state,
-    currentTurn: nextTurn,
+    phaseStates: isNewTurn ? initialGameState.phaseStates : state.phaseStates,
+    currentTurn: isNewTurn ? state.currentTurn + 1 : state.currentTurn,
     currentPhase: nextPhase,
     awaitingAction: Object.keys(state.players)
   }
 }
 
-export const actionSideEffectsReducer = (state: Game): Game => {
+export const actionSideEffectsReducer = (
+  state: Game = initialGameState
+): Game => {
   const isSetup = state.currentTurn === 0
   const isAwaitingAction = state.awaitingAction.length !== 0
-  switch (true) {
-    case isSetup && !isAwaitingAction:
-      return reduceGameStartState(state)
-    case !isAwaitingAction:
-      return reduceNewGamePhaseState(state)
-    default:
-      return state
+  if (isSetup && !isAwaitingAction) {
+    return reduceGameStartState(state)
+  } else if (!isAwaitingAction) {
+    return reduceNewGamePhaseState(state)
   }
+  return state
 }
