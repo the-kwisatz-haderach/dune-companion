@@ -11,5 +11,9 @@ export const actionLabels: Record<ClientActionType, string> = {
   SET_PLAYER_ORDER: 'Set player order',
   SET_IS_NOT_READY: 'Not ready',
   SET_IS_READY: 'Ready',
-  UPDATE_PLAYER_NAME: 'Update name'
+  UPDATE_PLAYER_NAME: 'Update name',
+  MARK_PHASE_STEP_COMPLETED: 'Complete',
+  MARK_PHASE_STEP_NOT_COMPLETED: 'Not Completed',
+  DECLARE_AS_WINNER: 'Declare winner',
+  CONFIRM_WINNER: 'Confirm winner'
 }

@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit'
-import type { Conditions, Phases, PhaseStates } from '../models'
+import  { Conditions, Phases, PhaseStates } from '../models'
 import type { AllianceRequest } from '../models/alliance'
 import type { Factions } from '../models/faction'
 
@@ -16,7 +16,8 @@ export const SET_IS_READY = 'SET_IS_READY'
 export const SET_IS_NOT_READY = 'SET_IS_NOT_READY'
 export const DECLARE_AS_WINNER = 'DECLARE_AS_WINNER'
 export const CONFIRM_WINNER = 'CONFIRM_WINNER'
-export const COMPLETE_PHASE_STEP = 'COMPLETE_PHASE_STEP'
+export const MARK_PHASE_STEP_COMPLETED = 'MARK_PHASE_STEP_COMPLETED'
+export const MARK_PHASE_STEP_NOT_COMPLETED = 'MARK_PHASE_STEP_NOT_COMPLETED'
 
 const createClientAction = <P extends Record<string ,unknown> | void = void, T extends string = string>(
   type: T
@@ -49,7 +50,18 @@ export const setIsReady = createClientAction<void, typeof SET_IS_READY>(SET_IS_R
 export const setIsNotReady = createClientAction<void, typeof SET_IS_NOT_READY>(SET_IS_NOT_READY)
 export const declareAsWinner = createClientAction<void, typeof DECLARE_AS_WINNER>(DECLARE_AS_WINNER)
 export const confirmWinner = createClientAction<void, typeof CONFIRM_WINNER>(CONFIRM_WINNER)
-export const completePhaseStep = createClientAction<Partial<PhaseStates[Phases]>, typeof COMPLETE_PHASE_STEP>(COMPLETE_PHASE_STEP)
+
+export const markPhaseStepCompleted = createClientAction<{
+  step: {
+    [K in Phases]: keyof PhaseStates[K]
+  }[Phases]
+}, typeof MARK_PHASE_STEP_COMPLETED>(MARK_PHASE_STEP_COMPLETED)
+
+export const markPhaseStepNotCompleted = createClientAction<{
+  step: {
+    [K in Phases]: keyof PhaseStates[K]
+  }[Phases]
+}, typeof MARK_PHASE_STEP_NOT_COMPLETED>(MARK_PHASE_STEP_NOT_COMPLETED)
 
 
 export const clientActions = {
@@ -66,7 +78,8 @@ export const clientActions = {
   SET_IS_NOT_READY: setIsNotReady,
   DECLARE_AS_WINNER: declareAsWinner,
   CONFIRM_WINNER: confirmWinner,
-  COMPLETE_PHASE_STEP: completePhaseStep
+  MARK_PHASE_STEP_COMPLETED: markPhaseStepCompleted,
+  MARK_PHASE_STEP_NOT_COMPLETED: markPhaseStepNotCompleted
 } as const
 
 export type ClientActionType = keyof typeof clientActions

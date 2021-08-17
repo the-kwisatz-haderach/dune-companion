@@ -1,16 +1,15 @@
-import { factions, phases } from '../../dictionaries'
-import { Game } from '../../models'
+import { factions, phaseOrder } from '../../dictionaries'
+import { Game, Phases } from '../../models'
 import { initialGameState } from '../initialGameState'
 
-const reduceGameStartState = (state: Game): Game => {
-  const playerKeys = Object.keys(state.players)
-  if (playerKeys.length < 2) return state
+const createInitialGameState = (players: Game['players']): Game => {
+  const playerKeys = Object.keys(players)
   return {
-    ...state,
-    currentTurn: state.currentTurn + 1,
+    ...initialGameState,
+    currentTurn: 1,
     awaitingAction: playerKeys,
     players: playerKeys.reduce<Game['players']>((acc, playerId) => {
-      const player = state.players[playerId]
+      const player = players[playerId]
       return {
         ...acc,
         [playerId]: {
@@ -27,34 +26,39 @@ const reduceGameStartState = (state: Game): Game => {
   }
 }
 
-const reduceNewGamePhaseState = (state: Game): Game => {
-  const isFinished = state.currentTurn === state.conditions.maxTurns
-  if (isFinished) {
-    return {
-      ...state,
-      isFinished
-    }
-  }
-  const nextPhase = (state.currentPhase + 1) % Object.keys(phases).length
-  const isNewTurn = nextPhase === 0
-  return {
-    ...state,
-    phaseStates: isNewTurn ? initialGameState.phaseStates : state.phaseStates,
-    currentTurn: isNewTurn ? state.currentTurn + 1 : state.currentTurn,
-    currentPhase: nextPhase,
-    awaitingAction: Object.keys(state.players)
-  }
-}
+const createFinishedGameState = (state: Game): Game => ({
+  ...state,
+  isFinished: true
+})
+
+const createNextPhaseState = (state: Game): Game => ({
+  ...state,
+  currentPhase: phaseOrder[phaseOrder.indexOf(state.currentPhase) + 1],
+  awaitingAction: Object.keys(state.players)
+})
+
+const createNextTurnState = (state: Game): Game => ({
+  ...state,
+  phaseStates: initialGameState.phaseStates,
+  currentTurn: state.currentTurn + 1,
+  currentPhase: 'STORM',
+  awaitingAction: Object.keys(state.players)
+})
+
+const isInProgress = (state: Game) => state.awaitingAction.length !== 0
+const isLastPhase = (state: Game) => state.currentPhase === 'MENTAT_PAUSE'
+const isLastTurn = (state: Game) =>
+  state.currentTurn === state.conditions.maxTurns
+const isFirstTurn = (state: Game) => state.currentTurn === 0
 
 export const actionSideEffectsReducer = (
   state: Game = initialGameState
 ): Game => {
-  const isSetup = state.currentTurn === 0
-  const isAwaitingAction = state.awaitingAction.length !== 0
-  if (isSetup && !isAwaitingAction) {
-    return reduceGameStartState(state)
-  } else if (!isAwaitingAction) {
-    return reduceNewGamePhaseState(state)
+  if (isInProgress(state)) return state
+  if (isLastPhase(state)) {
+    if (isLastTurn(state)) return createFinishedGameState(state)
+    return createNextTurnState(state)
   }
-  return state
+  if (isFirstTurn(state)) return createInitialGameState(state.players)
+  return createNextPhaseState(state)
 }

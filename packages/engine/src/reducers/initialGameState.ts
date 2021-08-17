@@ -1,4 +1,4 @@
-import { Game, Phases } from '../models'
+import { Game } from '../models'
 
 export const initialGameState: Game = {
   isFinished: false,
@@ -12,42 +12,42 @@ export const initialGameState: Game = {
   },
   currentTurn: 0,
   currentFirstPlayer: 0,
-  currentPhase: 0,
+  currentPhase: 'STORM',
   auctions: [],
   allianceRequests: [],
   alliances: [],
   phaseStates: {
-    [Phases.STORM]: {
+    STORM: {
       isStormMarkerMoved: false,
       isDamageDealt: false,
       isFirstPlayerDetermined: false
     },
-    [Phases.SPICE_BLOW_AND_NEXUS]: {
+    SPICE_BLOW_AND_NEXUS: {
       isTopCardTurned: false,
       isSpicePlacedOnTerritory: false,
       isNexusCompleted: false
     },
-    [Phases.CHOAM_CHARITY]: {
+    CHOAM_CHARITY: {
       isChoamCharityDistributed: false
     },
-    [Phases.BIDDING]: {
+    BIDDING: {
       isTreacheryDeclared: false,
       isSpiceConfigured: false,
       isAuctionCompleted: false
     },
-    [Phases.REVIVAL]: {
+    REVIVAL: {
       isRevivalCompleted: false
     },
-    [Phases.SHIPMENT_AND_MOVEMENT]: {
+    SHIPMENT_AND_MOVEMENT: {
       isMovementCompleted: false
     },
-    [Phases.BATTLE]: {
+    BATTLE: {
       isBattlesCompleted: false
     },
-    [Phases.SPICE_HARVEST]: {
+    SPICE_HARVEST: {
       isSpiceCollected: false
     },
-    [Phases.MENTAT_PAUSE]: {
+    MENTAT_PAUSE: {
       isWinnerDetermined: false
     }
   }

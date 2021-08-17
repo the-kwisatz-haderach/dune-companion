@@ -6,15 +6,6 @@ import { actionSideEffectsReducer } from './actionSideEffectsReducer'
 
 describe('actionSideEffectsReducer', () => {
   describe('when setup is completed and there are no awaiting actions', () => {
-    it('returns the state if there are less than two players', () => {
-      const state: Game = {
-        ...initialGameState,
-        players: {
-          somePlayer: playerFixture
-        }
-      }
-      expect(actionSideEffectsReducer(state)).toEqual(state)
-    })
     it("sets up the game's starting conditions", () => {
       const state: Game = {
         ...initialGameState,
@@ -62,8 +53,14 @@ describe('actionSideEffectsReducer', () => {
       const state: Game = {
         ...initialGameState,
         currentTurn: 3,
-        currentPhase: Phases.CHOAM_CHARITY,
+        currentPhase: 'CHOAM_CHARITY',
         awaitingAction: [],
+        phaseStates: {
+          ...initialGameState.phaseStates,
+          CHOAM_CHARITY: {
+            isChoamCharityDistributed: true
+          }
+        },
         players: {
           somePlayer: {
             isAdmin: true,
@@ -87,15 +84,32 @@ describe('actionSideEffectsReducer', () => {
         ...state,
         currentTurn: 3,
         awaitingAction: ['somePlayer', 'anotherPlayer'],
-        currentPhase: Phases.BIDDING
+        currentPhase: 'BIDDING',
+        phaseStates: {
+          ...initialGameState.phaseStates,
+          CHOAM_CHARITY: {
+            isChoamCharityDistributed: true
+          }
+        }
       })
     })
     it('sets up a new turn if the last phase was completed', () => {
       const state: Game = {
         ...initialGameState,
         currentTurn: 3,
-        currentPhase: Phases.MENTAT_PAUSE, // Mentat pause is the last phase of the game.
+        currentPhase: 'MENTAT_PAUSE', // Mentat pause is the last phase of the game.
         awaitingAction: [],
+        phaseStates: {
+          ...initialGameState.phaseStates,
+          BIDDING: {
+            isAuctionCompleted: true,
+            isSpiceConfigured: false,
+            isTreacheryDeclared: true
+          },
+          CHOAM_CHARITY: {
+            isChoamCharityDistributed: false
+          }
+        },
         players: {
           somePlayer: {
             isAdmin: true,
@@ -119,7 +133,8 @@ describe('actionSideEffectsReducer', () => {
         ...state,
         currentTurn: 4,
         awaitingAction: ['somePlayer', 'anotherPlayer'],
-        currentPhase: Phases.STORM // Storm is the first phase of the game.
+        phaseStates: initialGameState.phaseStates,
+        currentPhase: 'STORM' // Storm is the first phase of the game.
       })
     })
     it('sets the finished status to true if the last turn was completed', () => {
@@ -130,7 +145,7 @@ describe('actionSideEffectsReducer', () => {
           maxTurns: 3
         },
         currentTurn: 3,
-        currentPhase: Phases.MENTAT_PAUSE,
+        currentPhase: 'MENTAT_PAUSE',
         awaitingAction: [],
         players: {
           somePlayer: {
@@ -146,7 +161,34 @@ describe('actionSideEffectsReducer', () => {
         isFinished: true,
         currentTurn: 3,
         awaitingAction: [],
-        currentPhase: Phases.MENTAT_PAUSE
+        currentPhase: 'MENTAT_PAUSE'
+      })
+    })
+    it('only sets the finished status to true if the last phase of the last turn was completed', () => {
+      const state: Game = {
+        ...initialGameState,
+        conditions: {
+          ...initialGameState.conditions,
+          maxTurns: 3
+        },
+        currentTurn: 3,
+        currentPhase: 'BATTLE',
+        awaitingAction: [],
+        players: {
+          somePlayer: {
+            ...playerFixture
+          },
+          anotherPlayer: {
+            ...playerFixture
+          }
+        }
+      }
+      expect(actionSideEffectsReducer(state)).toEqual({
+        ...state,
+        isFinished: false,
+        currentTurn: 3,
+        awaitingAction: ['somePlayer', 'anotherPlayer'],
+        currentPhase: 'SPICE_HARVEST'
       })
     })
   })

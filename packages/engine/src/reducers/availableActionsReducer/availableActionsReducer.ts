@@ -8,39 +8,39 @@ import { initialGameState } from '../initialGameState'
 const reducePlayerPhaseActions = (
   state: Game
 ): Record<Phases, AvailableActionCollection> => ({
-  [Phases.STORM]: {
+  STORM: {
     primary: [], // If Fremen is in game
     secondary: []
   },
-  [Phases.SPICE_BLOW_AND_NEXUS]: {
+  SPICE_BLOW_AND_NEXUS: {
     primary: [],
     secondary: []
   },
-  [Phases.CHOAM_CHARITY]: {
+  CHOAM_CHARITY: {
     primary: [],
     secondary: []
   },
-  [Phases.BIDDING]: {
+  BIDDING: {
     primary: [],
     secondary: []
   },
-  [Phases.REVIVAL]: {
+  REVIVAL: {
     primary: [],
     secondary: []
   },
-  [Phases.SHIPMENT_AND_MOVEMENT]: {
+  SHIPMENT_AND_MOVEMENT: {
     primary: [],
     secondary: []
   },
-  [Phases.BATTLE]: {
+  BATTLE: {
     primary: [],
     secondary: []
   },
-  [Phases.SPICE_HARVEST]: {
+  SPICE_HARVEST: {
     primary: [],
     secondary: []
   },
-  [Phases.MENTAT_PAUSE]: {
+  MENTAT_PAUSE: {
     primary: [],
     secondary: []
   }
