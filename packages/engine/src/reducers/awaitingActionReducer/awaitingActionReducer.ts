@@ -4,8 +4,8 @@ import { append } from '../../helpers'
 import { AwaitingAction, Game } from '../../models'
 import { initialGameState } from '../initialGameState'
 
-const removeCompleted: Reducer<Game['awaitingActions'], ClientAction> = (
-  state = initialGameState.awaitingActions,
+const removeCompleted: Reducer<Game['requiredActions'], ClientAction> = (
+  state = initialGameState.requiredActions,
   action
 ) => {
   if (
@@ -29,7 +29,7 @@ const removeCompleted: Reducer<Game['awaitingActions'], ClientAction> = (
   )
 }
 
-const addReaction = createReducer(initialGameState.awaitingActions, builder =>
+const addReaction = createReducer(initialGameState.requiredActions, builder =>
   builder
     .addCase(clientActions.JOIN_GAME, (state, action) =>
       append(state, {
@@ -54,6 +54,6 @@ const addReaction = createReducer(initialGameState.awaitingActions, builder =>
 )
 
 export const awaitingActionReducer: Reducer<
-  Game['awaitingActions'],
+  Game['requiredActions'],
   ClientAction
 > = (state, action) => addReaction(removeCompleted(state, action), action)

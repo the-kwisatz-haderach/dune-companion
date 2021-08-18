@@ -3,6 +3,7 @@ import { clientActions } from '../../actions'
 import { Factions } from '../../models/faction'
 import { playerFixture } from '../../models/__fixtures__'
 import { initialGameState } from '../initialGameState'
+import { Game } from '../../models'
 
 describe('playersReducer', () => {
   describe('selectFaction', () => {
@@ -23,7 +24,8 @@ describe('playersReducer', () => {
       ).toEqual({
         test: {
           ...playerFixture,
-          faction: Factions.EMPEROR
+          faction: Factions.EMPEROR,
+          actions: ['SET_IS_READY']
         }
       })
     })
@@ -33,7 +35,8 @@ describe('playersReducer', () => {
           {
             test: {
               ...playerFixture,
-              faction: Factions.BENE_GESSERIT
+              faction: Factions.BENE_GESSERIT,
+              actions: ['SET_IS_READY']
             }
           },
           clientActions.SELECT_FACTION({
@@ -44,7 +47,8 @@ describe('playersReducer', () => {
       ).toEqual({
         test: {
           ...playerFixture,
-          faction: null
+          faction: null,
+          actions: []
         }
       })
     })
@@ -68,7 +72,7 @@ describe('playersReducer', () => {
       })
     })
     it('adds a player to the game', () => {
-      const initialState = {
+      const initialState: Game['players'] = {
         somePlayer: {
           ...playerFixture,
           id: 'somePlayer'
@@ -91,7 +95,7 @@ describe('playersReducer', () => {
       })
     })
     it('does nothing if the player is already in the game', () => {
-      const initialState = {
+      const initialState: Game['players'] = {
         somePlayer: {
           ...playerFixture,
           id: 'somePlayer'
@@ -173,6 +177,46 @@ describe('playersReducer', () => {
       anotherPlayer: {
         ...playerFixture,
         isAdmin: true
+      }
+    })
+  })
+  test('SET_IS_READY', () => {
+    expect(
+      playersReducer(
+        {
+          somePlayer: {
+            ...playerFixture,
+            actions: ['SET_IS_READY']
+          }
+        },
+        clientActions.SET_IS_READY({
+          playerId: 'somePlayer'
+        })
+      )
+    ).toEqual({
+      somePlayer: {
+        ...playerFixture,
+        actions: ['SET_IS_NOT_READY']
+      }
+    })
+  })
+  test('SET_IS_NOT_READY', () => {
+    expect(
+      playersReducer(
+        {
+          somePlayer: {
+            ...playerFixture,
+            actions: ['SET_IS_NOT_READY']
+          }
+        },
+        clientActions.SET_IS_NOT_READY({
+          playerId: 'somePlayer'
+        })
+      )
+    ).toEqual({
+      somePlayer: {
+        ...playerFixture,
+        actions: ['SET_IS_READY']
       }
     })
   })

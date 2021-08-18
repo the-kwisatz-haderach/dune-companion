@@ -13,10 +13,10 @@ import { auctionsReducer } from './auctionsReducer/auctionsReducer'
 import { allianceRequestsReducer } from './allianceRequestsReducer/allianceRequestsReducer'
 import { alliancesReducer } from './alliancesReducer/alliancesReducer'
 import { actionSideEffectsReducer } from './actionSideEffectsReducer/actionSideEffectsReducer'
-import { availableActionsReducer } from './availableActionsReducer'
 import { ClientAction, HostAction } from '../actions'
 import { Game } from '../models'
 import { initialGameState } from './initialGameState'
+import { phaseStatesReducer } from './phaseStatesReducer/phaseStatesReducer'
 
 const defaultBuilder = <T>(builder: ActionReducerMapBuilder<T>) =>
   builder.addDefaultCase(state => state)
@@ -26,17 +26,17 @@ const combinedReducer: Reducer<
   ClientAction | HostAction
 > = combineReducers({
   conditions: conditionsReducer,
-  awaitingActions: awaitingActionReducer,
+  requiredActions: awaitingActionReducer,
   playerOrder: playerOrderReducer,
   auctions: auctionsReducer,
   allianceRequests: allianceRequestsReducer,
   alliances: alliancesReducer,
   players: playersReducer,
+  phaseStates: phaseStatesReducer,
   /*
     Below are states not affected by specific actions.
     Adding with defaultBuilder to include in composed reducer output below.
   */
-  phaseStates: createReducer(initialGameState.phaseStates, defaultBuilder),
   isFinished: createReducer(initialGameState.isFinished, defaultBuilder),
   currentPhase: createReducer(initialGameState.currentPhase, defaultBuilder),
   currentTurn: createReducer(initialGameState.currentTurn, defaultBuilder),
@@ -48,4 +48,4 @@ const combinedReducer: Reducer<
 
 export const rootReducer: Reducer<Game, ClientAction | HostAction> = compose<
   Game
->(availableActionsReducer, actionSideEffectsReducer, combinedReducer)
+>(actionSideEffectsReducer, combinedReducer)

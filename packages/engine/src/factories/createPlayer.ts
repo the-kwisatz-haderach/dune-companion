@@ -13,6 +13,7 @@ export function createPlayer({
     isAdmin,
     faction: null,
     spice: 0,
-    treacheryCards: 0
+    treacheryCards: 0,
+    actions: []
   }
 }

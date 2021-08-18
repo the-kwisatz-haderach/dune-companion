@@ -11,7 +11,7 @@ export type Game = {
   currentPhase: Phases
   currentTurn: number
   currentFirstPlayer: number
-  awaitingActions: AwaitingAction[]
+  requiredActions: AwaitingAction[]
   playerOrder: Player['id'][]
   players: Record<Player['id'], Player>
   auctions: Auction[]

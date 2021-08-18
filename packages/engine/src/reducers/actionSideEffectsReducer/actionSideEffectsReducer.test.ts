@@ -31,7 +31,7 @@ describe('actionSideEffectsReducer', () => {
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
         currentTurn: 1,
-        awaitingActions: [
+        requiredActions: [
           { playerId: 'somePlayer', type: 'SET_IS_READY' },
           { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
         ],
@@ -57,7 +57,7 @@ describe('actionSideEffectsReducer', () => {
         ...initialGameState,
         currentTurn: 3,
         currentPhase: 'CHOAM_CHARITY',
-        awaitingActions: [],
+        requiredActions: [],
         phaseStates: {
           ...initialGameState.phaseStates,
           CHOAM_CHARITY: {
@@ -86,7 +86,7 @@ describe('actionSideEffectsReducer', () => {
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
         currentTurn: 3,
-        awaitingActions: [
+        requiredActions: [
           { playerId: 'somePlayer', type: 'SET_IS_READY' },
           { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
         ],
@@ -104,7 +104,7 @@ describe('actionSideEffectsReducer', () => {
         ...initialGameState,
         currentTurn: 3,
         currentPhase: 'MENTAT_PAUSE', // Mentat pause is the last phase of the game.
-        awaitingActions: [],
+        requiredActions: [],
         phaseStates: {
           ...initialGameState.phaseStates,
           BIDDING: {
@@ -138,7 +138,7 @@ describe('actionSideEffectsReducer', () => {
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
         currentTurn: 4,
-        awaitingActions: [
+        requiredActions: [
           { playerId: 'somePlayer', type: 'SET_IS_READY' },
           { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
         ],
@@ -155,7 +155,7 @@ describe('actionSideEffectsReducer', () => {
         },
         currentTurn: 3,
         currentPhase: 'MENTAT_PAUSE',
-        awaitingActions: [],
+        requiredActions: [],
         players: {
           somePlayer: {
             ...playerFixture
@@ -169,7 +169,7 @@ describe('actionSideEffectsReducer', () => {
         ...state,
         isFinished: true,
         currentTurn: 3,
-        awaitingActions: [],
+        requiredActions: [],
         currentPhase: 'MENTAT_PAUSE'
       })
     })
@@ -182,7 +182,7 @@ describe('actionSideEffectsReducer', () => {
         },
         currentTurn: 3,
         currentPhase: 'BATTLE',
-        awaitingActions: [],
+        requiredActions: [],
         players: {
           somePlayer: {
             ...playerFixture
@@ -196,7 +196,7 @@ describe('actionSideEffectsReducer', () => {
         ...state,
         isFinished: false,
         currentTurn: 3,
-        awaitingActions: [
+        requiredActions: [
           { playerId: 'somePlayer', type: 'SET_IS_READY' },
           { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
         ],
