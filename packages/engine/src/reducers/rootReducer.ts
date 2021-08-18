@@ -6,7 +6,7 @@ import {
   Reducer
 } from '@reduxjs/toolkit'
 import { conditionsReducer } from './conditionsReducer/conditionsReducer'
-import { awaitingActionReducer } from './awaitingActionReducer/awaitingActionReducer'
+import { requiredActionsReducer } from './requiredActionsReducer/requiredActionsReducer'
 import { playerOrderReducer } from './playerOrderReducer/playerOrderReducer'
 import { playersReducer } from './playersReducer/playersReducer'
 import { auctionsReducer } from './auctionsReducer/auctionsReducer'
@@ -26,7 +26,7 @@ const combinedReducer: Reducer<
   ClientAction | HostAction
 > = combineReducers({
   conditions: conditionsReducer,
-  requiredActions: awaitingActionReducer,
+  requiredActions: requiredActionsReducer,
   playerOrder: playerOrderReducer,
   auctions: auctionsReducer,
   allianceRequests: allianceRequestsReducer,

@@ -1,21 +1,34 @@
+import { promisify } from 'util'
+import { nanoid } from '@reduxjs/toolkit'
 import redis from 'redis'
 import { config } from './config'
 import { createWebsocketServer } from './socket'
 import { createHttpServer } from './app'
-import { nanoid } from 'nanoid'
 import { GameManager } from './GameManager'
 
 const startServer = () => {
   try {
-    const publisher = redis.createClient(config.REDIS_SERVER)
-    const subscriber = redis.createClient(config.REDIS_SERVER)
-    const httpServer = createHttpServer(subscriber)
+    const redisClient = redis.createClient(config.REDIS_SERVER)
+    const httpServer = createHttpServer(redisClient)
     const wsServer = createWebsocketServer(httpServer)
 
+    const get = promisify(redisClient.get).bind(redisClient)
+    const set = promisify(redisClient.set).bind(redisClient)
+
     const gameManager = new GameManager({
-      subscriber,
-      publisher,
-      idGenerator: nanoid
+      idGenerator: nanoid,
+      dataStore: {
+        get: async key => {
+          const data = await get(key)
+          if (!data) return data
+          return JSON.parse(data)
+        },
+        persist: async (key, data) =>
+          set(key, JSON.stringify(data)) as Promise<void>,
+        remove: async key => {
+          redisClient.del(key)
+        }
+      }
     })
 
     // httpServer.on("upgrade", (req, socket, head) => {

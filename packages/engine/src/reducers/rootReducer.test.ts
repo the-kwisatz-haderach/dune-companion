@@ -17,7 +17,7 @@ describe('rootReducer', () => {
         test: {
           ...playerFixture,
           id: 'test',
-          isAdmin: true
+          isAdmin: false
         }
       }
     })

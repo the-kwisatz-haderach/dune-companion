@@ -7,14 +7,14 @@ export const createHttpServer = (redisClient: Client) => {
   const app: Application = express()
   const RedisStore = connectRedis(session)
 
-  // const sessionMiddleware = session({
-  //   store: new RedisStore({ client: redisClient }),
-  //   secret: 'keyboard cat',
-  //   saveUninitialized: true,
-  //   resave: true
-  // })
+  const sessionMiddleware = session({
+    store: new RedisStore({ client: redisClient }),
+    secret: 'keyboard cat',
+    saveUninitialized: true,
+    resave: true
+  })
 
-  // app.use(sessionMiddleware)
+  app.use(sessionMiddleware)
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
 

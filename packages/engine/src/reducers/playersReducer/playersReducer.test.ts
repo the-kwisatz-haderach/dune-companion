@@ -6,6 +6,27 @@ import { initialGameState } from '../initialGameState'
 import { Game } from '../../models'
 
 describe('playersReducer', () => {
+  describe('CREATE_GAME', () => {
+    it('adds the creator to the game as admin', () => {
+      expect(
+        playersReducer(
+          initialGameState.players,
+          clientActions.CREATE_GAME({
+            playerId: 'test',
+            roomId: 'someId',
+            conditions: initialGameState.conditions
+          })
+        )
+      ).toEqual({
+        ...initialGameState.players,
+        test: {
+          ...playerFixture,
+          id: 'test',
+          isAdmin: true
+        }
+      })
+    })
+  })
   describe('selectFaction', () => {
     it('selects a faction', () => {
       expect(
@@ -54,23 +75,6 @@ describe('playersReducer', () => {
     })
   })
   describe('joinGame', () => {
-    it('adds a player to the game as an admin if no other players are in the game', () => {
-      expect(
-        playersReducer(
-          initialGameState.players,
-          clientActions.JOIN_GAME({
-            playerId: 'test',
-            roomId: 'someId'
-          })
-        )
-      ).toEqual({
-        test: {
-          ...playerFixture,
-          id: 'test',
-          isAdmin: true
-        }
-      })
-    })
     it('adds a player to the game', () => {
       const initialState: Game['players'] = {
         somePlayer: {

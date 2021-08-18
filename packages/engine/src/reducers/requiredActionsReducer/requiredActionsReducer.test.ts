@@ -1,10 +1,27 @@
-import { awaitingActionReducer } from './awaitingActionReducer'
+import { requiredActionsReducer } from './requiredActionsReducer'
 import { clientActions } from '../../actions'
+import { initialGameState } from '../initialGameState'
+import { Factions } from '../../models'
 
-describe('awaitingActionReducer', () => {
+describe('requiredActionsReducer', () => {
+  test('Invalid action', () => {
+    expect(requiredActionsReducer([], { type: 'NONSENSE' } as any)).toEqual([])
+  })
+  test('CREATE_GAME', () => {
+    expect(
+      requiredActionsReducer(
+        [],
+        clientActions.CREATE_GAME({
+          playerId: 'test',
+          roomId: 'test',
+          conditions: initialGameState.conditions
+        })
+      )
+    ).toEqual([{ playerId: 'test', type: 'SELECT_FACTION' }])
+  })
   test('JOIN_GAME', () => {
     expect(
-      awaitingActionReducer(
+      requiredActionsReducer(
         [],
         clientActions.JOIN_GAME({ playerId: 'test', roomId: 'test' })
       )
@@ -12,15 +29,36 @@ describe('awaitingActionReducer', () => {
   })
   test('LEAVE_GAME', () => {
     expect(
-      awaitingActionReducer(
+      requiredActionsReducer(
         [{ playerId: 'test', type: 'LEAVE_GAME' }],
         clientActions.LEAVE_GAME({ playerId: 'test' })
       )
     ).toEqual([])
   })
+  describe('SELECT_FACTION', () => {
+    it('adds set is ready to required actions', () => {
+      expect(
+        requiredActionsReducer(
+          [{ playerId: 'test', type: 'SELECT_FACTION' }],
+          clientActions.SELECT_FACTION({
+            playerId: 'test',
+            faction: Factions.EMPEROR
+          })
+        )
+      ).toEqual([{ playerId: 'test', type: 'SET_IS_READY' }])
+    })
+    it('re-adds select faction to required actions if faction is set to null', () => {
+      expect(
+        requiredActionsReducer(
+          [{ playerId: 'test', type: 'SET_IS_READY' }],
+          clientActions.SELECT_FACTION({ playerId: 'test', faction: null })
+        )
+      ).toEqual([{ playerId: 'test', type: 'SELECT_FACTION' }])
+    })
+  })
   test('SET_IS_READY', () => {
     expect(
-      awaitingActionReducer(
+      requiredActionsReducer(
         [
           { playerId: 'test', type: 'SET_IS_READY' },
           { playerId: 'test2', type: 'SET_IS_READY' }
@@ -31,7 +69,7 @@ describe('awaitingActionReducer', () => {
   })
   test('SET_IS_NOT_READY', () => {
     expect(
-      awaitingActionReducer(
+      requiredActionsReducer(
         [{ playerId: 'test2', type: 'SET_IS_READY' }],
         clientActions.SET_IS_NOT_READY({ playerId: 'test' })
       )
@@ -42,7 +80,7 @@ describe('awaitingActionReducer', () => {
   })
   test('REQUEST_ALLIANCE', () => {
     expect(
-      awaitingActionReducer(
+      requiredActionsReducer(
         [],
         clientActions.REQUEST_ALLIANCE({
           playerId: 'somePlayer',
@@ -67,7 +105,7 @@ describe('awaitingActionReducer', () => {
     describe('when one player accepts', () => {
       it('still requires the other player to respond', () => {
         expect(
-          awaitingActionReducer(
+          requiredActionsReducer(
             [
               {
                 playerId: 'anotherPlayer',
@@ -98,7 +136,7 @@ describe('awaitingActionReducer', () => {
   describe('when one player declines', () => {
     it('removes all awaiting actions related to the original alliance request', () => {
       expect(
-        awaitingActionReducer(
+        requiredActionsReducer(
           [
             {
               playerId: 'anotherPlayer',

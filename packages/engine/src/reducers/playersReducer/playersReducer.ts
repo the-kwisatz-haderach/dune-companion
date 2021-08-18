@@ -16,8 +16,13 @@ export const playersReducer = createReducer(
     builder
       .addCase(clientActions.SELECT_FACTION, (state, action) => {
         state[action.payload.playerId].faction = action.payload.faction
-        if (action.payload.faction) {
-          state[action.payload.playerId].actions.push('SET_IS_READY')
+        if (action.payload.faction !== null) {
+          state[action.payload.playerId].actions = [
+            ...new Set<ClientActionType>([
+              ...state[action.payload.playerId].actions,
+              'SET_IS_READY'
+            ])
+          ]
         } else {
           state[action.payload.playerId].actions = pull(
             state[action.payload.playerId].actions,
@@ -32,15 +37,22 @@ export const playersReducer = createReducer(
         state[action.payload.playerId].isAdmin = false
         state[action.payload.id].isAdmin = true
       })
+      .addCase(clientActions.CREATE_GAME, (state, action) => {
+        state[action.payload.playerId] = createPlayer({
+          id: action.payload.playerId,
+          isAdmin: true
+        })
+      })
       .addCase(clientActions.JOIN_GAME, (state, action) => {
         if (!state[action.payload.playerId]) {
           state[action.payload.playerId] = createPlayer({
             id: action.payload.playerId,
-            isAdmin: Object.keys(state).length === 0
+            isAdmin: false
           })
         }
       })
       .addCase(clientActions.LEAVE_GAME, (state, action) => {
+        // Add additional cleanup.
         delete state[action.payload.playerId]
       })
       .addMatcher(

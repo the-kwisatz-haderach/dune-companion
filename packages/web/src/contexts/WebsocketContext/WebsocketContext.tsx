@@ -68,10 +68,12 @@ export const WebsocketProvider: React.FC = ({ children }) => {
           setClientId(action.payload.clientId)
           break
         case 'GAME_CREATED':
+          console.log('created', action)
           history.push(`/game/${action.payload.roomId}`)
           showSnack(`Created game room ${action.payload.roomId}.`, 'success')
           break
         case 'GAME_JOINED':
+          console.log('joined', action)
           history.push(`/game/${action.payload.roomId}`)
           showSnack(`Joined game room ${action.payload.roomId}.`, 'success')
           break

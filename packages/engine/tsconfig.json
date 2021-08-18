@@ -8,6 +8,7 @@
     "target": "ES5",
     "allowJs": true,
     "removeComments": true,
+    "downlevelIteration": true,
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "declaration": true,

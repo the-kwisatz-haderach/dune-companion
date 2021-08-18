@@ -1,25 +1,62 @@
 import WebSocket from 'ws'
 import {
-  ClientActionType,
+  applyMiddleware,
+  createStore,
+  Middleware,
+  Store
+} from '@reduxjs/toolkit'
+import {
   clientActions,
-  gameReducer,
+  rootReducer,
   Game,
-  Conditions,
-  gameCreator,
-  joinGame,
   hostActions,
-  HostActionType
+  ClientAction,
+  HostAction
 } from '@dune-companion/engine'
+import { createActionSender } from './utils/createActionSender'
 
+const createPersistStateMiddleware = (
+  persistGame: (game: Game) => Promise<void>
+): Middleware<{}, Game> => ({ getState }) => next => async action => {
+  const result = next(action)
+  const state = getState()
+  await persistGame(state)
+  return result
+}
+
+type GameRoomDependencies = {
+  initialGameState: Game
+  password?: string
+  persistGame: (game: Game) => Promise<void>
+}
 export class GameRoom {
   private readonly clients: Record<string, WebSocket>
-  private game: Game
+  private readonly store: Store<Game, ClientAction | HostAction>
   private readonly password?: string
 
-  constructor(conditions: Conditions, password?: string) {
+  constructor({
+    initialGameState,
+    password,
+    persistGame
+  }: GameRoomDependencies) {
     this.clients = {}
     this.password = password
-    this.game = gameCreator(conditions)
+    this.store = createStore(
+      rootReducer,
+      initialGameState,
+      applyMiddleware(createPersistStateMiddleware(persistGame))
+    )
+
+    this.store.subscribe(async () => {
+      const updatedGame = this.store.getState()
+      await this.broadcastMessage(
+        hostActions.GAME_UPDATED({ game: updatedGame })
+      )
+    })
+  }
+
+  updateGame(action: ClientAction) {
+    this.store.dispatch(action)
   }
 
   validatePassword(password?: string) {
@@ -30,13 +67,6 @@ export class GameRoom {
     return Object.keys(this.clients).length
   }
 
-  async updateGame(
-    action: ReturnType<typeof clientActions[ClientActionType]>
-  ): Promise<void> {
-    this.game = gameReducer(this.game, action)
-    this.broadcastMessage(hostActions.GAME_UPDATED({ game: this.game }))
-  }
-
   async broadcastMessage<T extends Record<string, unknown>>(message: T) {
     await Promise.all(
       this.getClients().map(async socket => {
@@ -45,22 +75,31 @@ export class GameRoom {
     )
   }
 
-  async addClient({
+  async create({
     socket,
     ...payload
-  }: { socket: WebSocket } & ReturnType<typeof joinGame>['payload']) {
-    const actionSender = this.createActionSender(socket)
-    if (this.size >= this.game.conditions.maxPlayers) {
-      return await actionSender('SHOW_NOTIFICATION', {
-        message: 'Game room is already full.',
-        type: 'info'
-      })
+  }: { socket: WebSocket } & ClientAction<'CREATE_GAME'>['payload']) {
+    this.clients[payload.playerId] = socket
+    this.updateGame(clientActions.CREATE_GAME(payload))
+  }
+
+  async join({
+    socket,
+    ...payload
+  }: { socket: WebSocket } & ClientAction<'JOIN_GAME'>['payload']) {
+    const actionSender = createActionSender(socket)
+    if (this.size >= this.store.getState().conditions.maxPlayers) {
+      return await actionSender(
+        hostActions.SHOW_NOTIFICATION({
+          message: 'Game room is already full.',
+          type: 'info'
+        })
+      )
     }
 
     this.clients[payload.playerId] = socket
     console.log(`Client ${payload.playerId} joined room ${payload.roomId}.`)
     this.updateGame(clientActions.JOIN_GAME(payload))
-    await actionSender('GAME_JOINED', { roomId: payload.roomId })
   }
 
   removeClient(clientId: string) {
@@ -68,13 +107,6 @@ export class GameRoom {
       delete this.clients[clientId]
       this.updateGame(clientActions.LEAVE_GAME({ playerId: clientId }))
     }
-  }
-
-  private createActionSender(socket: WebSocket) {
-    return async <T extends HostActionType>(
-      type: T,
-      payload: ReturnType<typeof hostActions[T]>['payload']
-    ) => socket.send(JSON.stringify(hostActions[type](payload as any)))
   }
 
   hasClient(clientId: string): boolean {

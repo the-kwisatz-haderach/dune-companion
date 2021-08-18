@@ -1,6 +1,6 @@
 import { Box, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
-import { useCallback, ReactElement } from 'react'
+import { useCallback, ReactElement, useState } from 'react'
 import { Redirect, useParams } from 'react-router-dom'
 import useUserContext from '../../contexts/UserContext'
 import useWebsocketContext from '../../contexts/WebsocketContext'
@@ -9,10 +9,12 @@ import { Factions, Game } from '@dune-companion/engine'
 import CharacterSelect from './components/CharacterSelect'
 
 export default function GameRoom(): ReactElement {
+  const [isReady, setIsReady] = useState(false)
   const { id } = useParams<{ id: string }>()
   const { username } = useUserContext()
   const { isConnected, sendMessage, getClientId } = useWebsocketContext()
   const player = useSelector((state: Game) => state.players[getClientId()])
+  const requiredActions = useSelector((state: Game) => state.requiredActions)
   const playersTable = useSelector((state: Game) => state.players)
 
   const updateName = useCallback(
@@ -26,19 +28,20 @@ export default function GameRoom(): ReactElement {
 
   const onSelectFaction = useCallback(
     (faction: Factions | null) => {
-      if (player?.isReady) {
-        sendMessage('TOGGLE_READY_STATUS', {})
-      }
       sendMessage('SELECT_FACTION', {
         faction
       })
     },
-    [sendMessage, player]
+    [sendMessage]
   )
 
   const onToggleReady = useCallback(() => {
-    sendMessage('TOGGLE_READY_STATUS', {})
-  }, [sendMessage])
+    setIsReady(curr => !curr)
+    if (isReady) {
+      return sendMessage('SET_IS_NOT_READY', {})
+    }
+    sendMessage('SET_IS_READY', {})
+  }, [sendMessage, isReady])
 
   if (!isConnected()) {
     return <Redirect to="/" />
@@ -49,10 +52,11 @@ export default function GameRoom(): ReactElement {
   }
 
   const players = Object.values(playersTable)
-  if (players.some(player => !player.isReady)) {
+
+  if (requiredActions.length !== 0) {
     return (
       <CharacterSelect
-        isReady={player.isReady}
+        isReady={isReady}
         onToggleReady={onToggleReady}
         playerSelection={player.faction}
         onSelectFaction={onSelectFaction}
