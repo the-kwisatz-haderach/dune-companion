@@ -28,4 +28,4 @@ export const hostActions = {
 } as const
 
 export type HostActionType = keyof typeof hostActions
-export type HostAction = ReturnType<typeof hostActions[HostActionType]>
+export type HostAction<T extends HostActionType = HostActionType> = ReturnType<typeof hostActions[T]>

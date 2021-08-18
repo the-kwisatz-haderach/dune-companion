@@ -1,5 +1,5 @@
 import { factions } from '../../dictionaries'
-import { Factions, Game, Phases } from '../../models'
+import { Factions, Game } from '../../models'
 import { playerFixture } from '../../models/__fixtures__'
 import { initialGameState } from '../initialGameState'
 import { actionSideEffectsReducer } from './actionSideEffectsReducer'
@@ -31,7 +31,10 @@ describe('actionSideEffectsReducer', () => {
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
         currentTurn: 1,
-        awaitingAction: ['somePlayer', 'anotherPlayer'],
+        awaitingActions: [
+          { playerId: 'somePlayer', type: 'SET_IS_READY' },
+          { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
+        ],
         players: {
           ...state.players,
           somePlayer: {
@@ -54,7 +57,7 @@ describe('actionSideEffectsReducer', () => {
         ...initialGameState,
         currentTurn: 3,
         currentPhase: 'CHOAM_CHARITY',
-        awaitingAction: [],
+        awaitingActions: [],
         phaseStates: {
           ...initialGameState.phaseStates,
           CHOAM_CHARITY: {
@@ -83,7 +86,10 @@ describe('actionSideEffectsReducer', () => {
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
         currentTurn: 3,
-        awaitingAction: ['somePlayer', 'anotherPlayer'],
+        awaitingActions: [
+          { playerId: 'somePlayer', type: 'SET_IS_READY' },
+          { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
+        ],
         currentPhase: 'BIDDING',
         phaseStates: {
           ...initialGameState.phaseStates,
@@ -98,7 +104,7 @@ describe('actionSideEffectsReducer', () => {
         ...initialGameState,
         currentTurn: 3,
         currentPhase: 'MENTAT_PAUSE', // Mentat pause is the last phase of the game.
-        awaitingAction: [],
+        awaitingActions: [],
         phaseStates: {
           ...initialGameState.phaseStates,
           BIDDING: {
@@ -132,7 +138,10 @@ describe('actionSideEffectsReducer', () => {
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
         currentTurn: 4,
-        awaitingAction: ['somePlayer', 'anotherPlayer'],
+        awaitingActions: [
+          { playerId: 'somePlayer', type: 'SET_IS_READY' },
+          { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
+        ],
         phaseStates: initialGameState.phaseStates,
         currentPhase: 'STORM' // Storm is the first phase of the game.
       })
@@ -146,7 +155,7 @@ describe('actionSideEffectsReducer', () => {
         },
         currentTurn: 3,
         currentPhase: 'MENTAT_PAUSE',
-        awaitingAction: [],
+        awaitingActions: [],
         players: {
           somePlayer: {
             ...playerFixture
@@ -160,7 +169,7 @@ describe('actionSideEffectsReducer', () => {
         ...state,
         isFinished: true,
         currentTurn: 3,
-        awaitingAction: [],
+        awaitingActions: [],
         currentPhase: 'MENTAT_PAUSE'
       })
     })
@@ -173,7 +182,7 @@ describe('actionSideEffectsReducer', () => {
         },
         currentTurn: 3,
         currentPhase: 'BATTLE',
-        awaitingAction: [],
+        awaitingActions: [],
         players: {
           somePlayer: {
             ...playerFixture
@@ -187,7 +196,10 @@ describe('actionSideEffectsReducer', () => {
         ...state,
         isFinished: false,
         currentTurn: 3,
-        awaitingAction: ['somePlayer', 'anotherPlayer'],
+        awaitingActions: [
+          { playerId: 'somePlayer', type: 'SET_IS_READY' },
+          { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
+        ],
         currentPhase: 'SPICE_HARVEST'
       })
     })

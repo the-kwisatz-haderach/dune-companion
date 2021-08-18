@@ -26,7 +26,7 @@ const combinedReducer: Reducer<
   ClientAction | HostAction
 > = combineReducers({
   conditions: conditionsReducer,
-  awaitingAction: awaitingActionReducer,
+  awaitingActions: awaitingActionReducer,
   playerOrder: playerOrderReducer,
   auctions: auctionsReducer,
   allianceRequests: allianceRequestsReducer,

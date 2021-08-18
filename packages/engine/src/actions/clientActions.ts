@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit'
 import  { Conditions, Phases, PhaseStates } from '../models'
-import type { AllianceRequest } from '../models/alliance'
+import type { AllianceRequest, AllianceRequestResponse } from '../models/alliance'
 import type { Factions } from '../models/faction'
 
 export const JOIN_GAME = 'JOIN_GAME'
@@ -11,7 +11,7 @@ export const CREATE_GAME = 'CREATE_GAME'
 export const SET_PLAYER_ORDER = 'SET_PLAYER_ORDER'
 export const SELECT_FACTION = 'SELECT_FACTION'
 export const REQUEST_ALLIANCE = 'REQUEST_ALLIANCE'
-export const CONFIRM_ALLIANCE = 'CONFIRM_ALLIANCE'
+export const RESPOND_TO_ALLIANCE_REQUEST = 'RESPOND_TO_ALLIANCE_REQUEST'
 export const SET_IS_READY = 'SET_IS_READY'
 export const SET_IS_NOT_READY = 'SET_IS_NOT_READY'
 export const DECLARE_AS_WINNER = 'DECLARE_AS_WINNER'
@@ -41,8 +41,8 @@ export const setAdmin = createClientAction<{ id: string }, typeof SET_ADMIN>(SET
 export const requestAlliance = createClientAction<AllianceRequest, typeof REQUEST_ALLIANCE>(
   REQUEST_ALLIANCE
 )
-export const confirmAlliance = createClientAction<AllianceRequest, typeof CONFIRM_ALLIANCE>(
-  CONFIRM_ALLIANCE
+export const respondToAllianceRequest = createClientAction<AllianceRequestResponse, typeof RESPOND_TO_ALLIANCE_REQUEST>(
+  RESPOND_TO_ALLIANCE_REQUEST
 )
 export const joinGame = createClientAction<{ roomId: string; password?: string }, typeof JOIN_GAME>(JOIN_GAME)
 export const leaveGame = createClientAction<void, typeof LEAVE_GAME>(LEAVE_GAME)
@@ -69,7 +69,7 @@ export const clientActions = {
   SELECT_FACTION: selectFaction,
   CREATE_GAME: createGame,
   REQUEST_ALLIANCE: requestAlliance,
-  CONFIRM_ALLIANCE: confirmAlliance,
+  RESPOND_TO_ALLIANCE_REQUEST: respondToAllianceRequest,
   JOIN_GAME: joinGame,
   LEAVE_GAME: leaveGame,
   UPDATE_PLAYER_NAME: updatePlayerName,
@@ -83,4 +83,4 @@ export const clientActions = {
 } as const
 
 export type ClientActionType = keyof typeof clientActions
-export type ClientAction = ReturnType<typeof clientActions[ClientActionType]>
+export type ClientAction<T extends ClientActionType = ClientActionType> = ReturnType<typeof clientActions[T]>

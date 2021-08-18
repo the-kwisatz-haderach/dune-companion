@@ -4,7 +4,7 @@ export const initialGameState: Game = {
   isFinished: false,
   players: {},
   playerOrder: [],
-  awaitingAction: [],
+  awaitingActions: [],
   conditions: {
     advancedMode: false,
     maxPlayers: 6,

@@ -1,21 +1,59 @@
-import { ActionReducerMapBuilder, createReducer } from '@reduxjs/toolkit'
+import { createReducer, Reducer } from '@reduxjs/toolkit'
 import { ClientAction, clientActions } from '../../actions'
-import { Game } from '../../models'
-import { append, pull } from '../../helpers'
+import { append } from '../../helpers'
+import { AwaitingAction, Game } from '../../models'
 import { initialGameState } from '../initialGameState'
 
-const pushToList = (state: string[], action: ClientAction) =>
-  append(state, action.payload.playerId)
+const removeCompleted: Reducer<Game['awaitingActions'], ClientAction> = (
+  state = initialGameState.awaitingActions,
+  action
+) => {
+  if (
+    action.type === 'RESPOND_TO_ALLIANCE_REQUEST' &&
+    action.payload.response === 'decline'
+  ) {
+    return state.filter(
+      waitingAction =>
+        !(
+          waitingAction.type === 'RESPOND_TO_ALLIANCE_REQUEST' &&
+          waitingAction.relatedPlayers?.includes(waitingAction.playerId)
+        )
+    )
+  }
+  return state.filter(
+    waitingAction =>
+      !(
+        waitingAction.playerId === action.payload.playerId &&
+        waitingAction.type === action.type
+      )
+  )
+}
 
-const pullFromList = (state: string[], action: ClientAction) =>
-  pull(state, action.payload.playerId)
-
-export const awaitingActionReducer = createReducer(
-  initialGameState.awaitingAction,
-  (builder: ActionReducerMapBuilder<Game['awaitingAction']>) =>
-    builder
-      .addCase(clientActions.JOIN_GAME, pushToList)
-      .addCase(clientActions.LEAVE_GAME, pullFromList)
-      .addCase(clientActions.SET_IS_READY, pullFromList)
-      .addCase(clientActions.SET_IS_NOT_READY, pushToList)
+const addReaction = createReducer(initialGameState.awaitingActions, builder =>
+  builder
+    .addCase(clientActions.JOIN_GAME, (state, action) =>
+      append(state, {
+        playerId: action.payload.playerId,
+        type: 'SELECT_FACTION'
+      })
+    )
+    .addCase(clientActions.SET_IS_NOT_READY, (state, action) =>
+      append(state, {
+        playerId: action.payload.playerId,
+        type: 'SET_IS_READY'
+      })
+    )
+    .addCase(clientActions.REQUEST_ALLIANCE, (state, action) => [
+      ...state,
+      ...action.payload.responders.map<AwaitingAction>(responder => ({
+        playerId: responder,
+        type: 'RESPOND_TO_ALLIANCE_REQUEST',
+        relatedPlayers: action.payload.responders
+      }))
+    ])
 )
+
+export const awaitingActionReducer: Reducer<
+  Game['awaitingActions'],
+  ClientAction
+> = (state, action) => addReaction(removeCompleted(state, action), action)

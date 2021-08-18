@@ -12,7 +12,7 @@ describe('rootReducer', () => {
       )
     ).toEqual({
       ...initialGameState,
-      awaitingAction: ['test'],
+      awaitingActions: [{ playerId: 'test', type: 'SELECT_FACTION' }],
       players: {
         test: {
           ...playerFixture,
