@@ -46,6 +46,7 @@ describe('awaitingActionReducer', () => {
         [],
         clientActions.REQUEST_ALLIANCE({
           playerId: 'somePlayer',
+          requester: 'somePlayer',
           responders: ['anotherPlayer', 'yetAnotherPlayer']
         })
       )

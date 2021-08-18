@@ -11,6 +11,7 @@ describe('actionSideEffectsReducer', () => {
         ...initialGameState,
         players: {
           somePlayer: {
+            ...playerFixture,
             isAdmin: true,
             id: 'somePlayer',
             name: 'somePlayer',
@@ -19,6 +20,7 @@ describe('actionSideEffectsReducer', () => {
             faction: Factions.FREMEN
           },
           anotherPlayer: {
+            ...playerFixture,
             isAdmin: false,
             id: 'anotherPlayer',
             name: 'anotherPlayer',
@@ -66,6 +68,7 @@ describe('actionSideEffectsReducer', () => {
         },
         players: {
           somePlayer: {
+            ...playerFixture,
             isAdmin: true,
             id: 'somePlayer',
             name: 'somePlayer',
@@ -74,6 +77,7 @@ describe('actionSideEffectsReducer', () => {
             faction: Factions.FREMEN
           },
           anotherPlayer: {
+            ...playerFixture,
             isAdmin: false,
             id: 'anotherPlayer',
             name: 'anotherPlayer',
@@ -118,6 +122,7 @@ describe('actionSideEffectsReducer', () => {
         },
         players: {
           somePlayer: {
+            ...playerFixture,
             isAdmin: true,
             id: 'somePlayer',
             name: 'somePlayer',
@@ -126,6 +131,7 @@ describe('actionSideEffectsReducer', () => {
             faction: Factions.FREMEN
           },
           anotherPlayer: {
+            ...playerFixture,
             isAdmin: false,
             id: 'anotherPlayer',
             name: 'anotherPlayer',
