@@ -1,7 +1,7 @@
 import { ClientActionType } from '../actions'
 
 export const actionLabels: Record<ClientActionType, string> = {
-  CONFIRM_ALLIANCE: 'Confirm',
+  RESPOND_TO_ALLIANCE_REQUEST: 'Respond',
   CREATE_GAME: 'Create game',
   JOIN_GAME: 'Join game',
   LEAVE_GAME: 'Leave game',

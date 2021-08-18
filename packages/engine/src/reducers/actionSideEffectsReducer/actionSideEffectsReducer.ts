@@ -1,30 +1,37 @@
 import { ClientActionType } from '../../actions'
 import { factions, phaseOrder } from '../../dictionaries'
-import { AwaitingAction, Game, Phases } from '../../models'
+import { AwaitingAction, Game, Phases, Player } from '../../models'
 import { initialGameState } from '../initialGameState'
 
-const initialPhaseActions: Record<Phases, ClientActionType> = {
-  STORM: 'SET_IS_READY',
-  SPICE_BLOW_AND_NEXUS: 'SET_IS_READY',
-  CHOAM_CHARITY: 'SET_IS_READY',
-  BIDDING: 'SET_IS_READY',
-  REVIVAL: 'SET_IS_READY',
-  SHIPMENT_AND_MOVEMENT: 'SET_IS_READY',
-  BATTLE: 'SET_IS_READY',
-  SPICE_HARVEST: 'SET_IS_READY',
-  MENTAT_PAUSE: 'SET_IS_READY'
+const requiredPhaseActions: Record<Phases, ClientActionType[]> = {
+  STORM: ['SET_IS_READY'],
+  SPICE_BLOW_AND_NEXUS: ['SET_IS_READY'],
+  CHOAM_CHARITY: ['SET_IS_READY'],
+  BIDDING: ['SET_IS_READY'],
+  REVIVAL: ['SET_IS_READY'],
+  SHIPMENT_AND_MOVEMENT: ['SET_IS_READY'],
+  BATTLE: ['SET_IS_READY'],
+  SPICE_HARVEST: ['SET_IS_READY'],
+  MENTAT_PAUSE: ['SET_IS_READY']
 }
 
+const createRequiredPhaseActions = (phase: Phases) => (
+  playerIds: Player['id'][]
+): AwaitingAction[] =>
+  playerIds.flatMap<AwaitingAction>(playerId =>
+    requiredPhaseActions[phase].map(type => ({
+      type,
+      playerId
+    }))
+  )
+
 const createInitialGameState = (players: Game['players']): Game => {
-  const playerKeys = Object.keys(players)
+  const playerIds = Object.keys(players)
   return {
     ...initialGameState,
     currentTurn: 1,
-    awaitingActions: Object.keys(players).map<AwaitingAction>(playerId => ({
-      playerId,
-      type: initialPhaseActions.STORM
-    })),
-    players: playerKeys.reduce<Game['players']>((acc, playerId) => {
+    awaitingActions: createRequiredPhaseActions('STORM')(playerIds),
+    players: playerIds.reduce<Game['players']>((acc, playerId) => {
       const player = players[playerId]
       return {
         ...acc,
@@ -52,11 +59,8 @@ const createNextPhaseState = (state: Game): Game => {
   return {
     ...state,
     currentPhase: nextPhase,
-    awaitingActions: Object.keys(state.players).map<AwaitingAction>(
-      playerId => ({
-        playerId,
-        type: initialPhaseActions[nextPhase]
-      })
+    awaitingActions: createRequiredPhaseActions(nextPhase)(
+      Object.keys(state.players)
     )
   }
 }
@@ -66,10 +70,9 @@ const createNextTurnState = (state: Game): Game => ({
   phaseStates: initialGameState.phaseStates,
   currentTurn: state.currentTurn + 1,
   currentPhase: 'STORM',
-  awaitingActions: Object.keys(state.players).map<AwaitingAction>(playerId => ({
-    playerId,
-    type: initialPhaseActions.STORM
-  }))
+  awaitingActions: createRequiredPhaseActions('STORM')(
+    Object.keys(state.players)
+  )
 })
 
 const isInProgress = (state: Game) => state.awaitingActions.length !== 0

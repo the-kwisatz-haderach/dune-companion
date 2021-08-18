@@ -7,17 +7,17 @@ describe('allianceRequestsReducer', () => {
       allianceRequestsReducer(
         [],
         clientActions.REQUEST_ALLIANCE({
-          playerId: 'test',
+          playerId: 'atreides',
           requester: 'atreides',
-          responder: 'fremen'
+          responders: ['fremen']
         })
       )
-    ).toEqual([{ requester: 'atreides', responder: 'fremen' }])
+    ).toEqual([{ requester: 'atreides', responders: ['fremen'] }])
   })
   test('leaveGame', () => {
     expect(
       allianceRequestsReducer(
-        [{ requester: 'test', responder: 'someone' }],
+        [{ requester: 'test', responders: ['someone'] }],
         clientActions.LEAVE_GAME({ playerId: 'test' })
       )
     ).toEqual([])

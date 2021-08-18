@@ -15,7 +15,7 @@ export const allianceRequestsReducer = createReducer(
         state.filter(
           request =>
             request.requester !== action.payload.playerId &&
-            request.responder !== action.payload.playerId
+            !request.responders.includes(action.payload.playerId)
         )
       )
 )

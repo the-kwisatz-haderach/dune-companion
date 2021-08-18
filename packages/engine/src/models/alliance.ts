@@ -5,6 +5,7 @@ export type Alliance = {
 }
 
 export type AllianceRequest = {
+  requester: Player['id']
   responders: Player['id'][]
 }
 
