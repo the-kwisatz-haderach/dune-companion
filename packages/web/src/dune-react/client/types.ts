@@ -1,12 +1,16 @@
-import { HostAction } from '@dune-companion/engine'
+import { HostAction, HostActionType } from '@dune-companion/engine'
 
 export type IClientEventHandlers = {
   ERROR: (message: string) => void
   CONNECTION_REOPENED: () => void
-  CONNECTION_OPENED: () => void
+  CONNECTION_OPENED: (clientId: string) => void
   CONNECTION_CLOSED_BY_HOST: (reason: string) => void
   CONNECTION_CLOSED_BY_CLIENT: () => void
-  INCOMING_MESSAGE: (action: HostAction) => void
+  INCOMING_MESSAGE: (
+    action: {
+      [K in Exclude<HostActionType, 'CLIENT_CONNECTED'>]: HostAction<K>
+    }[Exclude<HostActionType, 'CLIENT_CONNECTED'>]
+  ) => void
 }
 
 export interface IClientIdStore {

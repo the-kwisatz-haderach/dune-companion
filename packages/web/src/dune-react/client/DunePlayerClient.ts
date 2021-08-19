@@ -12,8 +12,13 @@ import {
 } from './types'
 
 export class DunePlayerClient {
-  private static readonly idQueryParam = 'clientId'
-  private readonly hostUrl: string
+  private static readonly MAXIMUM_RETRIES = 10
+  private static readonly DEFAULT_ERROR_MESSAGE =
+    'Failed to connect. Server might be down.'
+  private static readonly DEFAULT_CLOSE_CONNECTION_MESSAGE =
+    'Server closed connection.'
+  private static readonly ID_QUERY_PARAMETER = 'clientId'
+  private readonly HOST_URL: string
   private readonly clientIdStore: IClientIdStore
   private readonly websocket: ReconnectingWebSocket
   private readonly eventHandlers: IClientEventHandlers
@@ -23,15 +28,16 @@ export class DunePlayerClient {
     clientIdStore,
     eventHandlers
   }: IDunePlayerClientDependencies) {
-    this.hostUrl = hostUrl
+    this.HOST_URL = hostUrl
     this.clientIdStore = clientIdStore
     this.websocket = new ReconnectingWebSocket(
-      `${this.hostUrl}?${
-        DunePlayerClient.idQueryParam
+      `${this.HOST_URL}?${
+        DunePlayerClient.ID_QUERY_PARAMETER
       }=${this.clientIdStore.get()}`,
       undefined,
       {
-        startClosed: true
+        startClosed: true,
+        maxRetries: DunePlayerClient.MAXIMUM_RETRIES
       }
     )
     this.eventHandlers = eventHandlers
@@ -45,18 +51,21 @@ export class DunePlayerClient {
       if (this.websocket.retryCount > 0) {
         return this.eventHandlers.CONNECTION_REOPENED()
       }
-      this.eventHandlers.CONNECTION_OPENED()
     }
     this.websocket.onerror = event =>
       this.eventHandlers.ERROR(
-        event?.message || 'Failed to connect. Server might be down.'
+        event?.message || DunePlayerClient.DEFAULT_ERROR_MESSAGE
       )
     this.websocket.onclose = event =>
       this.eventHandlers.CONNECTION_CLOSED_BY_HOST(
-        event?.reason || 'Server closed connection.'
+        event?.reason || DunePlayerClient.DEFAULT_CLOSE_CONNECTION_MESSAGE
       )
     this.websocket.onmessage = event => {
       const action = DunePlayerClient.parseIncomingAction(event.data)
+      if (action.type === 'CLIENT_CONNECTED') {
+        this.clientIdStore.set(action.payload.clientId)
+        return this.eventHandlers.CONNECTION_OPENED(action.payload.clientId)
+      }
       this.eventHandlers.INCOMING_MESSAGE(action)
     }
   }

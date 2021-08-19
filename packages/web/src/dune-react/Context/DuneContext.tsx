@@ -1,11 +1,11 @@
 import { createContext, useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Provider, useDispatch } from 'react-redux'
-import useSnackBarContext from '../../contexts/SnackbarContext'
 import { hostActions } from '@dune-companion/engine'
 import { DunePlayerClient } from '../client/DunePlayerClient'
 import { createStore } from '../store'
 import { IClientIdStore } from '../client/types'
+import useSnackBarContext from '../../contexts/SnackbarContext'
 
 const store = createStore()
 
@@ -47,15 +47,12 @@ export const WebsocketProvider: React.FC<Props> = ({
           CONNECTION_CLOSED_BY_CLIENT: () =>
             showSnack('Disconnected from server.'),
           CONNECTION_REOPENED: () =>
-            showSnack('Reopened connection.', 'success'),
+            showSnack(`Reopened connection.`, 'success'),
           CONNECTION_CLOSED_BY_HOST: reason => showSnack(reason, 'info'),
           CONNECTION_OPENED: () => showSnack('Connected to server.', 'success'),
           ERROR: message => showSnack(message, 'error'),
           INCOMING_MESSAGE: action => {
             switch (action.type) {
-              case 'CLIENT_CONNECTED':
-                clientIdStore.set(action.payload.clientId)
-                break
               case 'GAME_CREATED':
                 history.push(`/game/${action.payload.roomId}`)
                 showSnack(
