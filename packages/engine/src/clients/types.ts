@@ -22,8 +22,5 @@ export interface ClientDependencies {
   hostUrl: string
   clientIdStore: ClientIdStore
   websocket: WebSocketLike
-  logger: (message: string) => void
-  onError: (event: Event) => void
-  onClose: (event?: CloseEvent) => void
   eventHandlers: ClientEventHandlers
 }

@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme =>
 
 export default function CreateGame(): ReactElement {
   const classes = useStyles()
-  const { connect, sendMessage } = useWebsocketContext()
+  const { connect, dispatchAction } = useWebsocketContext()
   const [roomId, setRoomId] = useState('')
   const [password, setPassword] = useState('')
   const [maxPlayers, setMaxPlayers] = useState(4)
@@ -66,7 +66,7 @@ export default function CreateGame(): ReactElement {
   const handleCreateGame = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     await connect()
-    await sendMessage('CREATE_GAME', {
+    await dispatchAction('CREATE_GAME', {
       roomId,
       password,
       conditions: {

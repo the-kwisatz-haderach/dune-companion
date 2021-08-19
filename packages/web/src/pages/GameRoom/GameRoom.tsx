@@ -12,36 +12,36 @@ export default function GameRoom(): ReactElement {
   const [isReady, setIsReady] = useState(false)
   const { id } = useParams<{ id: string }>()
   const { username } = useUserContext()
-  const { isConnected, sendMessage, getClientId } = useWebsocketContext()
+  const { isConnected, dispatchAction, getClientId } = useWebsocketContext()
   const player = useSelector((state: Game) => state.players[getClientId()])
   const requiredActions = useSelector((state: Game) => state.requiredActions)
   const playersTable = useSelector((state: Game) => state.players)
 
   const updateName = useCallback(
     (name: string) => {
-      sendMessage('UPDATE_PLAYER_NAME', {
+      dispatchAction('UPDATE_PLAYER_NAME', {
         name
       })
     },
-    [sendMessage]
+    [dispatchAction]
   )
 
   const onSelectFaction = useCallback(
     (faction: Factions | null) => {
-      sendMessage('SELECT_FACTION', {
+      dispatchAction('SELECT_FACTION', {
         faction
       })
     },
-    [sendMessage]
+    [dispatchAction]
   )
 
   const onToggleReady = useCallback(() => {
     setIsReady(curr => !curr)
     if (isReady) {
-      return sendMessage('SET_IS_NOT_READY', {})
+      return dispatchAction('SET_IS_NOT_READY', {})
     }
-    sendMessage('SET_IS_READY', {})
-  }, [sendMessage, isReady])
+    dispatchAction('SET_IS_READY', {})
+  }, [dispatchAction, isReady])
 
   if (!isConnected()) {
     return <Redirect to="/" />

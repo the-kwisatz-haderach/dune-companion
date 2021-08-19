@@ -40,14 +40,14 @@ const useStyles = makeStyles(theme =>
 
 export default function Home(): ReactElement {
   const classes = useStyles()
-  const { connect, sendMessage } = useWebsocketContext()
+  const { connect, dispatchAction } = useWebsocketContext()
   const [roomId, setRoomId] = useState('')
   const [password, setPassword] = useState('')
 
   const handleJoinGame = async (e: FormEvent) => {
     e.preventDefault()
     await connect()
-    await sendMessage('JOIN_GAME', {
+    await dispatchAction('JOIN_GAME', {
       roomId,
       password
     })
