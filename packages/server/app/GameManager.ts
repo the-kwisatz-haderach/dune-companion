@@ -129,10 +129,6 @@ export class GameManager {
   }
 
   async leave(roomId: string, clientId: string): Promise<void> {
-    if (!this.has(roomId)) {
-      return console.error(`No room exists with id: ${roomId}.`)
-    }
-
     console.log(`Client connection ${clientId} removed from room ${roomId}.`)
     this.rooms[roomId].removeClient(clientId)
 

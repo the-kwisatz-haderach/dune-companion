@@ -41,6 +41,7 @@ export class GameRoom {
   }: GameRoomDependencies) {
     this.clients = {}
     this.password = password
+
     this.store = createStore(
       rootReducer,
       initialGameState,

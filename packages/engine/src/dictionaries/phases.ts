@@ -13,7 +13,11 @@ export const phaseOrder: Phases[] = [
   'MENTAT_PAUSE'
 ]
 
-export const requiredPhaseActions: Record<Phases, ClientActionType[]> = {
+export const requiredPhaseActions: Record<
+  Phases | 'SETUP',
+  ClientActionType[]
+> = {
+  SETUP: ['UPDATE_PLAYER_NAME', 'SELECT_FACTION', 'SET_IS_READY'],
   STORM: ['SET_IS_READY'],
   SPICE_BLOW_AND_NEXUS: ['SET_IS_READY'],
   CHOAM_CHARITY: ['SET_IS_READY'],

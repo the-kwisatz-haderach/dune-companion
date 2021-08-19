@@ -4,14 +4,7 @@ import BlockIcon from '@material-ui/icons/Block'
 import { Factions, factions } from '@dune-companion/engine'
 import { ReactElement } from 'react'
 import { FactionCard } from './FactionCard'
-
-interface Props {
-  onSelectFaction: (faction: Factions | null) => void
-  selectedFactions: Factions[]
-  playerSelection: Factions | null
-  onToggleReady: () => void
-  isReady: boolean
-}
+import { useGame, useGameDispatch, usePlayer } from '../../../dune-react'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -32,47 +25,66 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export default function CharacterSelect({
-  onSelectFaction,
-  selectedFactions,
-  playerSelection,
-  onToggleReady,
-  isReady
-}: Props): ReactElement {
+export default function CharacterSelect(): ReactElement {
   const classes = useStyles()
+  const dispatch = useGameDispatch()
+  const game = useGame()
+  const player = usePlayer()
+
+  const selectedFactions = Object.values(game.players)
+    .map(player => player.faction)
+    .filter(Boolean) as Factions[]
+
+  const isPlayerReady = !game.requiredActions.some(
+    action => action.type === 'SET_IS_READY' && action.playerId === player.id
+  )
+
+  const onToggleReady = () => {
+    if (isPlayerReady) {
+      return dispatch('SET_IS_NOT_READY', {})
+    }
+    dispatch('SET_IS_READY', {})
+  }
+
+  const onSelectFaction = (faction: Factions | null) => {
+    dispatch('SELECT_FACTION', {
+      faction
+    })
+  }
+
   return (
     <Box className={classes.container}>
       {Object.entries(factions).map(([factionId, faction]) => (
         <FactionCard
           {...faction}
           key={factionId}
-          isSelected={playerSelection === factionId}
+          isSelected={player.faction === factionId}
           disabled={
-            playerSelection !== factionId &&
+            player.faction !== factionId &&
             selectedFactions.includes(factionId as Factions)
           }
           onSelectFaction={() =>
-            playerSelection === factionId
+            player.faction === factionId
               ? onSelectFaction(null)
               : onSelectFaction(factionId as Factions)
           }
         />
       ))}
-      <Zoom in={playerSelection !== null}>
+      <Zoom in={player.faction !== null}>
         <Fab
           onClick={onToggleReady}
           variant="extended"
           size="large"
-          color={isReady ? 'default' : 'primary'}
+          color={isPlayerReady ? 'default' : 'primary'}
           aria-label="ready"
           className={classes.floatingButton}
         >
-          {isReady ? (
+          {isPlayerReady ? (
             <BlockIcon className={classes.extendedIcon} />
           ) : (
             <CheckIcon className={classes.extendedIcon} />
           )}
-          {isReady ? 'Not ready' : 'Ready'}
+          {isPlayerReady ? 'Not ready' : 'Ready'}
         </Fab>
       </Zoom>
     </Box>

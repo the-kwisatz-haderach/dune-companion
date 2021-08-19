@@ -1,5 +1,6 @@
 import { createReducer, Reducer } from '@reduxjs/toolkit'
 import { ClientAction, clientActions } from '../../actions'
+import { createRequiredSetupActions } from '../../factories/createRequiredSetupActions'
 import { append } from '../../helpers'
 import { AwaitingAction, Game } from '../../models'
 import { initialGameState } from '../initialGameState'
@@ -37,33 +38,17 @@ const removeCompleted: Reducer<
 
 const addReaction = createReducer(initialGameState.requiredActions, builder =>
   builder
-    .addCase(clientActions.JOIN_GAME, (state, action) =>
-      append(state, {
-        playerId: action.payload.playerId,
-        type: 'SELECT_FACTION'
-      })
-    )
-    .addCase(clientActions.SELECT_FACTION, (state, action) =>
-      action.payload.faction !== null
-        ? append(state, {
+    .addCase(clientActions.SELECT_FACTION, (state, action) => {
+      if (action.payload.faction === null) {
+        return [
+          ...state,
+          {
             playerId: action.payload.playerId,
-            type: 'SET_IS_READY'
-          })
-        : append(
-            state.filter(
-              requiredAction =>
-                !(
-                  requiredAction.type === 'SET_IS_READY' &&
-                  requiredAction.playerId === action.payload.playerId
-                )
-            ),
-            { type: 'SELECT_FACTION', playerId: action.payload.playerId }
-          )
-    )
-    .addCase(clientActions.CREATE_GAME, (state, action) => [
-      ...state,
-      { type: 'SELECT_FACTION', playerId: action.payload.playerId }
-    ])
+            type: 'SELECT_FACTION'
+          }
+        ]
+      }
+    })
     .addCase(clientActions.SET_IS_NOT_READY, (state, action) =>
       append(state, {
         playerId: action.payload.playerId,
@@ -78,6 +63,13 @@ const addReaction = createReducer(initialGameState.requiredActions, builder =>
         relatedPlayers: action.payload.responders
       }))
     ])
+    .addMatcher(
+      action => ['JOIN_GAME', 'CREATE_GAME'].includes(action.type),
+      (state, action) => [
+        ...state,
+        ...createRequiredSetupActions([action.payload.playerId])
+      ]
+    )
 )
 
 export const requiredActionsReducer: Reducer<

@@ -1,10 +1,7 @@
 import { Button, createStyles, makeStyles, TextField } from '@material-ui/core'
 import { ReactElement, useState } from 'react'
-
-interface Props {
-  defaultName?: string
-  updateName: (name: string) => void
-}
+import useUserContext from '../../../contexts/UserContext'
+import { useGameDispatch } from '../../../dune-react'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -21,12 +18,18 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export default function PlayerSetup({
-  updateName,
-  defaultName = ''
-}: Props): ReactElement {
+export default function PlayerSetup(): ReactElement {
   const classes = useStyles()
-  const [name, setName] = useState(defaultName)
+  const { username } = useUserContext()
+  const [name, setName] = useState(username)
+  const dispatch = useGameDispatch()
+
+  const updateName = (name: string) => {
+    dispatch('UPDATE_PLAYER_NAME', {
+      name
+    })
+  }
+
   return (
     <form
       className={classes.container}

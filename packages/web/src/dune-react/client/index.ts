@@ -1,1 +1,1 @@
-export { DunePlayerClient } from '@dune-companion/engine'
+export { DunePlayerClient } from './DunePlayerClient'

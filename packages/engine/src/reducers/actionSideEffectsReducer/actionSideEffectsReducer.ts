@@ -6,6 +6,7 @@ import { Game } from '../../models'
 import { initialGameState } from '../initialGameState'
 
 const isInProgress = (state: Game) => state.requiredActions.length !== 0
+const isNotStarted = (state: Game) => Object.keys(state.players).length === 0
 const isLastPhase = (state: Game) => state.currentPhase === 'MENTAT_PAUSE'
 const isLastTurn = (state: Game) =>
   state.currentTurn === state.conditions.maxTurns
@@ -15,7 +16,7 @@ export const actionSideEffectsReducer = (
   state: Game = initialGameState
 ): Game => {
   switch (true) {
-    case isInProgress(state):
+    case isInProgress(state) || isNotStarted(state):
       return state
     case isLastPhase(state) && isLastTurn(state):
       return createFinishedGameState(state)

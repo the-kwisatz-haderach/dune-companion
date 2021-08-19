@@ -17,7 +17,11 @@ describe('requiredActionsReducer', () => {
           conditions: initialGameState.conditions
         })
       )
-    ).toEqual([{ playerId: 'test', type: 'SELECT_FACTION' }])
+    ).toEqual([
+      { playerId: 'test', type: 'UPDATE_PLAYER_NAME' },
+      { playerId: 'test', type: 'SELECT_FACTION' },
+      { playerId: 'test', type: 'SET_IS_READY' }
+    ])
   })
   test('JOIN_GAME', () => {
     expect(
@@ -25,7 +29,11 @@ describe('requiredActionsReducer', () => {
         [],
         clientActions.JOIN_GAME({ playerId: 'test', roomId: 'test' })
       )
-    ).toEqual([{ playerId: 'test', type: 'SELECT_FACTION' }])
+    ).toEqual([
+      { playerId: 'test', type: 'UPDATE_PLAYER_NAME' },
+      { playerId: 'test', type: 'SELECT_FACTION' },
+      { playerId: 'test', type: 'SET_IS_READY' }
+    ])
   })
   test('LEAVE_GAME', () => {
     expect(
@@ -36,7 +44,7 @@ describe('requiredActionsReducer', () => {
     ).toEqual([])
   })
   describe('SELECT_FACTION', () => {
-    it('adds set is ready to required actions', () => {
+    it('removes select faction from required actions', () => {
       expect(
         requiredActionsReducer(
           [{ playerId: 'test', type: 'SELECT_FACTION' }],
@@ -45,7 +53,7 @@ describe('requiredActionsReducer', () => {
             faction: Factions.EMPEROR
           })
         )
-      ).toEqual([{ playerId: 'test', type: 'SET_IS_READY' }])
+      ).toEqual([])
     })
     it('re-adds select faction to required actions if faction is set to null', () => {
       expect(
@@ -53,7 +61,10 @@ describe('requiredActionsReducer', () => {
           [{ playerId: 'test', type: 'SET_IS_READY' }],
           clientActions.SELECT_FACTION({ playerId: 'test', faction: null })
         )
-      ).toEqual([{ playerId: 'test', type: 'SELECT_FACTION' }])
+      ).toEqual([
+        { playerId: 'test', type: 'SET_IS_READY' },
+        { playerId: 'test', type: 'SELECT_FACTION' }
+      ])
     })
   })
   test('SET_IS_READY', () => {

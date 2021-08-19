@@ -12,7 +12,11 @@ describe('rootReducer', () => {
       )
     ).toEqual({
       ...initialGameState,
-      requiredActions: [{ playerId: 'test', type: 'SELECT_FACTION' }],
+      requiredActions: [
+        { playerId: 'test', type: 'UPDATE_PLAYER_NAME' },
+        { playerId: 'test', type: 'SELECT_FACTION' },
+        { playerId: 'test', type: 'SET_IS_READY' }
+      ],
       players: {
         test: {
           ...playerFixture,
