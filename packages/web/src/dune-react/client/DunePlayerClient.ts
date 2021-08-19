@@ -1,40 +1,28 @@
 import {
-  ClientAction,
   clientActions,
-  ClientActionType,
-  HostAction
+  HostAction,
+  ClientAction,
+  ClientActionType
 } from '@dune-companion/engine'
-import { ClientIdStore } from '@dune-companion/engine/lib/clients/types'
-import ReconnectingWebSocket, {
-  Event,
-  ErrorEvent,
-  CloseEvent
-} from 'reconnecting-websocket'
-
-type ClientEventHandlers = {
-  ERROR: (event: ErrorEvent) => void
-  CONNECTION_OPENED: (event: Event) => void
-  CONNECTION_CLOSED_BY_HOST: (event: CloseEvent) => void
-  CONNECTION_CLOSED_BY_CLIENT: () => void
-  INCOMING_MESSAGE: (action: HostAction) => void
-}
+import ReconnectingWebSocket from 'reconnecting-websocket'
+import {
+  IClientEventHandlers,
+  IClientIdStore,
+  IDunePlayerClientDependencies
+} from './types'
 
 export class DunePlayerClient {
   private static readonly idQueryParam = 'clientId'
   private readonly hostUrl: string
-  private readonly clientIdStore: ClientIdStore
+  private readonly clientIdStore: IClientIdStore
   private readonly websocket: ReconnectingWebSocket
-  private readonly eventHandlers: ClientEventHandlers
+  private readonly eventHandlers: IClientEventHandlers
 
   constructor({
     hostUrl,
     clientIdStore,
     eventHandlers
-  }: {
-    hostUrl: string
-    clientIdStore: ClientIdStore
-    eventHandlers: ClientEventHandlers
-  }) {
+  }: IDunePlayerClientDependencies) {
     this.hostUrl = hostUrl
     this.clientIdStore = clientIdStore
     this.websocket = new ReconnectingWebSocket(
@@ -69,18 +57,18 @@ export class DunePlayerClient {
     this.eventHandlers.CONNECTION_CLOSED_BY_CLIENT()
   }
 
-  dispatchAction<
-    T extends ClientActionType,
-    P extends Omit<ClientAction<T>['payload'], 'playerId'>
-  >(type: T, payload: P) {
+  async dispatchAction<T extends ClientActionType>(
+    type: T,
+    payload: Omit<ClientAction<T>['payload'], 'playerId'>
+  ): Promise<void> {
     const playerId = this.clientIdStore.get()
     if (playerId !== '') {
       this.websocket.send(
         JSON.stringify(
           clientActions[type]({
-            ...payload,
+            ...(payload as any),
             playerId
-          } as any)
+          })
         )
       )
     }
@@ -90,6 +78,7 @@ export class DunePlayerClient {
     return this.websocket.readyState === WebSocket.OPEN
   }
 
+  // TODO: Add some type checking for safety...
   private static parseIncomingAction(data: any): HostAction {
     return JSON.parse(data)
   }

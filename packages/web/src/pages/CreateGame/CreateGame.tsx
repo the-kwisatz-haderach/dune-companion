@@ -9,7 +9,7 @@ import {
   Typography
 } from '@material-ui/core'
 import { FormEvent, ReactElement, useState } from 'react'
-import useWebsocketContext from '../../contexts/WebsocketContext'
+import { useGameDispatch } from '../../dune-react'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme =>
 
 export default function CreateGame(): ReactElement {
   const classes = useStyles()
-  const { connect, dispatchAction } = useWebsocketContext()
+  const dispatch = useGameDispatch()
   const [roomId, setRoomId] = useState('')
   const [password, setPassword] = useState('')
   const [maxPlayers, setMaxPlayers] = useState(4)
@@ -65,8 +65,7 @@ export default function CreateGame(): ReactElement {
 
   const handleCreateGame = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    await connect()
-    await dispatchAction('CREATE_GAME', {
+    await dispatch('CREATE_GAME', {
       roomId,
       password,
       conditions: {

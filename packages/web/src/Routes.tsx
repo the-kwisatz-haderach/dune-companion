@@ -1,16 +1,21 @@
-import { Switch, Route, Redirect } from 'react-router-dom'
+import React from 'react'
+import { Switch, Route, Redirect, RouteProps } from 'react-router-dom'
+import { useGameConnection } from './dune-react'
 import { MainLayout } from './layouts/MainLayout'
 import { CreateGame } from './pages/CreateGame'
 import { GameRoom } from './pages/GameRoom'
 import Home from './pages/Home'
+
+const ConnectedRoute: React.FC<RouteProps> = props =>
+  useGameConnection().isConnected() ? <Route {...props} /> : <Redirect to="/" />
 
 export const Routes = () => {
   return (
     <MainLayout>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/game" component={CreateGame} />
-        <Route path="/game/:id" component={GameRoom} />
+        <ConnectedRoute exact path="/game" component={CreateGame} />
+        <ConnectedRoute path="/game/:id" component={GameRoom} />
         <Redirect to="/" />
       </Switch>
     </MainLayout>

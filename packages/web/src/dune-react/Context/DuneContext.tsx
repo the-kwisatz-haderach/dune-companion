@@ -1,11 +1,13 @@
 import { createContext, useMemo } from 'react'
-import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import useSnackBarContext from '../SnackbarContext'
+import { Provider, useDispatch } from 'react-redux'
+import useSnackBarContext from '../../contexts/SnackbarContext'
 import { hostActions } from '@dune-companion/engine'
-import { DunePlayerClient } from '../../DunePlayerClient'
+import { DunePlayerClient } from '../client/DunePlayerClient'
+import { createStore } from '../store'
+import { IClientIdStore } from '../client/types'
 
-const CONNECTION_URL = `ws://localhost:8000`
+const store = createStore()
 
 export type IWebsocketContext = Pick<
   DunePlayerClient,
@@ -22,11 +24,16 @@ export const WebsocketContext = createContext<IWebsocketContext>({
   dispatchAction: async () => {}
 })
 
-const getClientId = () => window.sessionStorage.getItem('clientId') ?? ''
-const setClientId = (clientId: string) =>
-  window.sessionStorage.setItem('clientId', clientId)
+type Props = {
+  hostUrl: string
+  clientIdStore: IClientIdStore
+}
 
-export const WebsocketProvider: React.FC = ({ children }) => {
+export const WebsocketProvider: React.FC<Props> = ({
+  children,
+  hostUrl,
+  clientIdStore
+}) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const { showSnack } = useSnackBarContext()
@@ -34,13 +41,8 @@ export const WebsocketProvider: React.FC = ({ children }) => {
   const duneClient = useMemo(
     () =>
       new DunePlayerClient({
-        hostUrl: CONNECTION_URL,
-        clientIdStore: {
-          get: () => window.sessionStorage.getItem('clientId') ?? '',
-          set: (clientId: string) =>
-            window.sessionStorage.setItem('clientId', clientId),
-          clear: () => window.sessionStorage.removeItem('clientId')
-        },
+        hostUrl,
+        clientIdStore,
         eventHandlers: {
           CONNECTION_CLOSED_BY_CLIENT: () => {
             showSnack('Disconnected from server.')
@@ -49,7 +51,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
             showSnack(event.reason, 'info')
           },
           CONNECTION_OPENED: () => {
-            console.log(`Successfully connected to ${CONNECTION_URL}.`)
+            console.log(`Successfully connected to ${hostUrl}.`)
           },
           ERROR: event => {
             showSnack(event.message, 'error')
@@ -57,7 +59,7 @@ export const WebsocketProvider: React.FC = ({ children }) => {
           INCOMING_MESSAGE: action => {
             switch (action.type) {
               case 'CLIENT_CONNECTED':
-                setClientId(action.payload.clientId)
+                clientIdStore.set(action.payload.clientId)
                 break
               case 'GAME_CREATED':
                 history.push(`/game/${action.payload.roomId}`)
@@ -86,18 +88,18 @@ export const WebsocketProvider: React.FC = ({ children }) => {
           }
         }
       }),
-    [showSnack, dispatch, history]
+    [showSnack, dispatch, history, hostUrl, clientIdStore]
   )
 
   const value = useMemo(
     () => ({
-      getClientId,
+      getClientId: clientIdStore.get.bind(clientIdStore),
       disconnect: duneClient.disconnect.bind(duneClient),
       connect: duneClient.connect.bind(duneClient),
       dispatchAction: duneClient.dispatchAction.bind(duneClient),
       isConnected: duneClient.isConnected.bind(duneClient)
     }),
-    [duneClient]
+    [duneClient, clientIdStore]
   )
 
   return (
@@ -106,3 +108,9 @@ export const WebsocketProvider: React.FC = ({ children }) => {
     </WebsocketContext.Provider>
   )
 }
+
+export const DuneProvider: React.FC<Props> = ({ children, ...props }) => (
+  <Provider store={store}>
+    <WebsocketProvider {...props}>{children}</WebsocketProvider>
+  </Provider>
+)

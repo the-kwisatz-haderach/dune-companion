@@ -8,9 +8,10 @@ import {
   TextField,
   Typography
 } from '@material-ui/core'
+import { useEffect } from 'react'
 import { ReactElement, FormEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
-import useWebsocketContext from '../contexts/WebsocketContext'
+import { useGameConnection, useGameDispatch } from '../dune-react'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -40,14 +41,18 @@ const useStyles = makeStyles(theme =>
 
 export default function Home(): ReactElement {
   const classes = useStyles()
-  const { connect, dispatchAction } = useWebsocketContext()
+  const { connect } = useGameConnection()
+  const dispatch = useGameDispatch()
   const [roomId, setRoomId] = useState('')
   const [password, setPassword] = useState('')
 
+  useEffect(() => {
+    connect()
+  }, [connect])
+
   const handleJoinGame = async (e: FormEvent) => {
     e.preventDefault()
-    await connect()
-    await dispatchAction('JOIN_GAME', {
+    await dispatch('JOIN_GAME', {
       roomId,
       password
     })

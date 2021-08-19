@@ -1,9 +1,9 @@
 import { Box, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useCallback, ReactElement, useState } from 'react'
-import { Redirect, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import useUserContext from '../../contexts/UserContext'
-import useWebsocketContext from '../../contexts/WebsocketContext'
+import { usePlayer, useGameDispatch } from '../../dune-react'
 import PlayerSetup from './components/PlayerSetup'
 import { Factions, Game } from '@dune-companion/engine'
 import CharacterSelect from './components/CharacterSelect'
@@ -12,40 +12,36 @@ export default function GameRoom(): ReactElement {
   const [isReady, setIsReady] = useState(false)
   const { id } = useParams<{ id: string }>()
   const { username } = useUserContext()
-  const { isConnected, dispatchAction, getClientId } = useWebsocketContext()
-  const player = useSelector((state: Game) => state.players[getClientId()])
+  const dispatch = useGameDispatch()
+  const player = usePlayer()
   const requiredActions = useSelector((state: Game) => state.requiredActions)
   const playersTable = useSelector((state: Game) => state.players)
 
   const updateName = useCallback(
     (name: string) => {
-      dispatchAction('UPDATE_PLAYER_NAME', {
+      dispatch('UPDATE_PLAYER_NAME', {
         name
       })
     },
-    [dispatchAction]
+    [dispatch]
   )
 
   const onSelectFaction = useCallback(
     (faction: Factions | null) => {
-      dispatchAction('SELECT_FACTION', {
+      dispatch('SELECT_FACTION', {
         faction
       })
     },
-    [dispatchAction]
+    [dispatch]
   )
 
   const onToggleReady = useCallback(() => {
     setIsReady(curr => !curr)
     if (isReady) {
-      return dispatchAction('SET_IS_NOT_READY', {})
+      return dispatch('SET_IS_NOT_READY', {})
     }
-    dispatchAction('SET_IS_READY', {})
-  }, [dispatchAction, isReady])
-
-  if (!isConnected()) {
-    return <Redirect to="/" />
-  }
+    dispatch('SET_IS_READY', {})
+  }, [dispatch, isReady])
 
   if (player.name === '') {
     return <PlayerSetup updateName={updateName} defaultName={username} />
