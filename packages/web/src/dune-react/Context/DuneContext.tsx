@@ -44,18 +44,13 @@ export const WebsocketProvider: React.FC<Props> = ({
         hostUrl,
         clientIdStore,
         eventHandlers: {
-          CONNECTION_CLOSED_BY_CLIENT: () => {
-            showSnack('Disconnected from server.')
-          },
-          CONNECTION_CLOSED_BY_HOST: event => {
-            showSnack(event.reason, 'info')
-          },
-          CONNECTION_OPENED: () => {
-            console.log(`Successfully connected to ${hostUrl}.`)
-          },
-          ERROR: event => {
-            showSnack(event.message, 'error')
-          },
+          CONNECTION_CLOSED_BY_CLIENT: () =>
+            showSnack('Disconnected from server.'),
+          CONNECTION_REOPENED: () =>
+            showSnack('Reopened connection.', 'success'),
+          CONNECTION_CLOSED_BY_HOST: reason => showSnack(reason, 'info'),
+          CONNECTION_OPENED: () => showSnack('Connected to server.', 'success'),
+          ERROR: message => showSnack(message, 'error'),
           INCOMING_MESSAGE: action => {
             switch (action.type) {
               case 'CLIENT_CONNECTED':

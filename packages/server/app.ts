@@ -1,33 +1,44 @@
-import http from 'http'
-import express, { Application, Request, Response } from 'express'
-import connectRedis, { Client } from 'connect-redis'
-import session from 'express-session'
+import { config } from './config'
+import { createHttpServer } from './createHttpServer'
+import { GameManager } from './GameManager'
+import { IAppDependencies } from './types'
+import WebSocket from 'ws'
 
-export const createHttpServer = (redisClient: Client) => {
-  const app: Application = express()
-  const RedisStore = connectRedis(session)
+export const app = ({
+  idGenerator,
+  dataStore,
+  logger,
+  sessionStore,
+  authenticator
+}: IAppDependencies) => {
+  try {
+    const server = createHttpServer(sessionStore)
+    const wsServer = new WebSocket.Server({ server })
 
-  const sessionMiddleware = session({
-    store: new RedisStore({ client: redisClient }),
-    secret: 'keyboard cat',
-    saveUninitialized: true,
-    resave: true
-  })
+    const gameManager = new GameManager({
+      idGenerator,
+      dataStore
+    })
 
-  app.use(sessionMiddleware)
-  app.use(express.json())
-  app.use(express.urlencoded({ extended: true }))
+    // server.on('upgrade', async (req, socket, head) => {
+    //   if (!authenticator.authenticate(req)) {
+    //     socket.destroy()
+    //   }
+    //   wsServer.handleUpgrade(req, socket as any, head, function done(ws) {
+    //     wsServer.emit('connection', ws, req)
+    //   })
+    // })
 
-  app.get(
-    '/',
-    async (req: Request, res: Response): Promise<Response> => {
-      return res.status(200).send({
-        message: 'Hello World!'
-      })
-    }
-  )
+    server.listen(config.HTTP_PORT, () => {
+      logger.log(`HTTP server started at port: ${config.HTTP_PORT}.`)
+    })
 
-  const httpServer = new http.Server(app)
-
-  return httpServer
+    wsServer.on('close', () => logger.warn('Websocket server closed.'))
+    wsServer.on('error', error => logger.error(error.message))
+    wsServer.on('connection', (ws, req) =>
+      gameManager.handleConnection(ws, req.url)
+    )
+  } catch (error) {
+    logger.error(`Error occured: ${error.message}`)
+  }
 }

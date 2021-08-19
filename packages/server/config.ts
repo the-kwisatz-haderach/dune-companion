@@ -1,5 +1,7 @@
 export const config = {
-  API_PORT: 8000,
-  REDIS_SERVER: 'redis://localhost:6379',
-  HOST: 'localhost'
+  HTTP_PORT: 8000,
+  HTTP_HOST: 'localhost',
+  REDIS_PORT: 6379,
+  REDIS_HOST: 'localhost',
+  SESSION_SECRET: 'secrets'
 }

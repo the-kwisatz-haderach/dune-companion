@@ -70,7 +70,9 @@ export class GameRoom {
   async broadcastMessage<T extends Record<string, unknown>>(message: T) {
     await Promise.all(
       this.getClients().map(async socket => {
-        socket.send(JSON.stringify(message))
+        if (socket.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify(message))
+        }
       })
     )
   }

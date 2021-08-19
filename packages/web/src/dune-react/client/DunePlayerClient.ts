@@ -41,10 +41,18 @@ export class DunePlayerClient {
     if (!this.isConnected()) {
       this.websocket.reconnect()
     }
-    this.websocket.onopen = event => this.eventHandlers.CONNECTION_OPENED(event)
-    this.websocket.onerror = event => this.eventHandlers.ERROR(event)
+    this.websocket.onopen = () => {
+      if (this.websocket.retryCount > 0) {
+        return this.eventHandlers.CONNECTION_REOPENED()
+      }
+      this.eventHandlers.CONNECTION_OPENED()
+    }
+    this.websocket.onerror = event =>
+      this.eventHandlers.ERROR(event?.message || 'Unknown error occurred.')
     this.websocket.onclose = event =>
-      this.eventHandlers.CONNECTION_CLOSED_BY_HOST(event)
+      this.eventHandlers.CONNECTION_CLOSED_BY_HOST(
+        event?.reason || 'Server closed connection.'
+      )
     this.websocket.onmessage = event => {
       const action = DunePlayerClient.parseIncomingAction(event.data)
       this.eventHandlers.INCOMING_MESSAGE(action)

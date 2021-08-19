@@ -7,17 +7,17 @@ import {
 } from '@dune-companion/engine'
 import { GameRoom } from './GameRoom'
 import { createActionSender } from './utils/createActionSender'
-import { DataStore } from './types'
+import { IDataStore } from './types'
 
 type GameManagerDependencies = {
   idGenerator: () => string
-  dataStore: DataStore<Game>
+  dataStore: IDataStore<Game>
 }
 
 export class GameManager {
   private readonly rooms: Record<string, GameRoom> = {}
   private readonly idGenerator: () => string
-  private readonly dataStore: DataStore<Game>
+  private readonly dataStore: IDataStore<Game>
 
   constructor({ idGenerator, dataStore }: GameManagerDependencies) {
     this.idGenerator = idGenerator

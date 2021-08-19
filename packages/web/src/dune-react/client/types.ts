@@ -1,10 +1,10 @@
 import { HostAction } from '@dune-companion/engine'
-import { Event, ErrorEvent, CloseEvent } from 'reconnecting-websocket'
 
 export type IClientEventHandlers = {
-  ERROR: (event: ErrorEvent) => void
-  CONNECTION_OPENED: (event: Event) => void
-  CONNECTION_CLOSED_BY_HOST: (event: CloseEvent) => void
+  ERROR: (message: string) => void
+  CONNECTION_REOPENED: () => void
+  CONNECTION_OPENED: () => void
+  CONNECTION_CLOSED_BY_HOST: (reason: string) => void
   CONNECTION_CLOSED_BY_CLIENT: () => void
   INCOMING_MESSAGE: (action: HostAction) => void
 }
