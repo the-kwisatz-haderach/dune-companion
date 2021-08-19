@@ -1,7 +1,7 @@
 import http from 'http'
 import express from 'express'
 import session, { Store } from 'express-session'
-import { config } from './config'
+import { config } from '../config'
 
 export const createHttpServer = (sessionStore: Store) =>
   new http.Server(

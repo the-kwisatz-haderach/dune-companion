@@ -6,8 +6,8 @@ import {
   hostActions
 } from '@dune-companion/engine'
 import { GameRoom } from './GameRoom'
-import { createActionSender } from './utils/createActionSender'
-import { IDataStore } from './types'
+import { createActionSender } from '../utils/createActionSender'
+import { IDataStore } from '../types'
 
 type GameManagerDependencies = {
   idGenerator: () => string

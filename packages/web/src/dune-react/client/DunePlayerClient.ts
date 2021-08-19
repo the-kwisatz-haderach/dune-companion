@@ -48,7 +48,9 @@ export class DunePlayerClient {
       this.eventHandlers.CONNECTION_OPENED()
     }
     this.websocket.onerror = event =>
-      this.eventHandlers.ERROR(event?.message || 'Unknown error occurred.')
+      this.eventHandlers.ERROR(
+        event?.message || 'Failed to connect. Server might be down.'
+      )
     this.websocket.onclose = event =>
       this.eventHandlers.CONNECTION_CLOSED_BY_HOST(
         event?.reason || 'Server closed connection.'

@@ -13,7 +13,7 @@ import {
   ClientAction,
   HostAction
 } from '@dune-companion/engine'
-import { createActionSender } from './utils/createActionSender'
+import { createActionSender } from '../utils/createActionSender'
 
 const createPersistStateMiddleware = (
   persistGame: (game: Game) => Promise<void>

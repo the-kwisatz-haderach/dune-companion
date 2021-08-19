@@ -1,8 +1,8 @@
-import { config } from './config'
 import { createHttpServer } from './createHttpServer'
 import { GameManager } from './GameManager'
-import { IAppDependencies } from './types'
 import WebSocket from 'ws'
+import { IAppDependencies } from '../types'
+import { config } from '../config'
 
 export const app = ({
   idGenerator,
