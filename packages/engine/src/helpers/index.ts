@@ -11,13 +11,3 @@ export const omit = <T extends Record<string, unknown>>(
   delete cloned[property]
   return cloned
 }
-
-export const createReplacer = <T extends string>(
-  toReplace: T,
-  substitute: T
-) => (items: T[]): T[] =>
-  items.map(value => {
-    if (value === toReplace) return substitute
-    if (substitute === value) return toReplace
-    return value
-  })

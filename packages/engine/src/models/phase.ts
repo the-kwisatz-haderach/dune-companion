@@ -1,4 +1,5 @@
 export type Phases =
+  | 'SETUP'
   | 'STORM'
   | 'SPICE_BLOW_AND_NEXUS'
   | 'CHOAM_CHARITY'
@@ -8,9 +9,18 @@ export type Phases =
   | 'BATTLE'
   | 'SPICE_HARVEST'
   | 'MENTAT_PAUSE'
+  | 'FINISHED'
 
 // Can be used for checklist. Warn before proceeding if something is not completed.
 export type PhaseStates = {
+  SETUP: {
+    isFactionsSelected: boolean
+    isPositioningDone: boolean
+    isTraitorsDistributed: boolean
+    isSpiceDistributed: boolean
+    isForcesPlaced: boolean
+    isTreacheryCardsDealt: boolean
+  }
   STORM: {
     isStormMarkerMoved: boolean
     isDamageDealt: boolean

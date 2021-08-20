@@ -1,19 +1,20 @@
+import { requiredPhaseActions } from '../dictionaries'
 import { Player } from '../models'
+import { createPlayerAction } from './createPlayerAction'
 
-export function createPlayer({
-  id,
-  isAdmin = false
-}: {
-  id: string
+type ICreatePlayerOptions = {
   isAdmin?: boolean
-}): Player {
-  return {
-    id,
-    name: '',
-    isAdmin,
-    faction: null,
-    spice: 0,
-    treacheryCards: 0,
-    actions: []
-  }
 }
+
+export const createPlayer = (
+  id: string,
+  options?: ICreatePlayerOptions
+): Player => ({
+  id,
+  name: '',
+  isAdmin: options?.isAdmin ?? false,
+  faction: null,
+  spice: 0,
+  treacheryCards: 0,
+  actions: requiredPhaseActions.SETUP.map(type => createPlayerAction(type))
+})

@@ -1,6 +1,11 @@
 import { allianceRequestsReducer } from './allianceRequestsReducer'
 import { clientActions } from '../../actions'
 
+jest.mock('@reduxjs/toolkit', () => ({
+  ...jest.requireActual('@reduxjs/toolkit'),
+  nanoid: () => 'mockNanoId'
+}))
+
 describe('allianceRequestsReducer', () => {
   test('requestAlliance', () => {
     expect(
@@ -8,16 +13,17 @@ describe('allianceRequestsReducer', () => {
         [],
         clientActions.REQUEST_ALLIANCE({
           playerId: 'atreides',
-          requester: 'atreides',
           responders: ['fremen']
         })
       )
-    ).toEqual([{ requester: 'atreides', responders: ['fremen'] }])
+    ).toEqual([
+      { id: 'mockNanoId', requester: 'atreides', responders: ['fremen'] }
+    ])
   })
   test('leaveGame', () => {
     expect(
       allianceRequestsReducer(
-        [{ requester: 'test', responders: ['someone'] }],
+        [{ id: 'mockNanoId', requester: 'test', responders: ['someone'] }],
         clientActions.LEAVE_GAME({ playerId: 'test' })
       )
     ).toEqual([])

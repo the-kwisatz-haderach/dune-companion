@@ -6,7 +6,6 @@ import {
   Reducer
 } from '@reduxjs/toolkit'
 import { conditionsReducer } from './conditionsReducer/conditionsReducer'
-import { requiredActionsReducer } from './requiredActionsReducer/requiredActionsReducer'
 import { playerOrderReducer } from './playerOrderReducer/playerOrderReducer'
 import { playersReducer } from './playersReducer/playersReducer'
 import { auctionsReducer } from './auctionsReducer/auctionsReducer'
@@ -26,7 +25,6 @@ const combinedReducer: Reducer<
   ClientAction | HostAction
 > = combineReducers({
   conditions: conditionsReducer,
-  requiredActions: requiredActionsReducer,
   playerOrder: playerOrderReducer,
   auctions: auctionsReducer,
   allianceRequests: allianceRequestsReducer,
@@ -37,7 +35,6 @@ const combinedReducer: Reducer<
     Below are states not affected by specific actions.
     Adding with defaultBuilder to include in composed reducer output below.
   */
-  isFinished: createReducer(initialGameState.isFinished, defaultBuilder),
   currentPhase: createReducer(initialGameState.currentPhase, defaultBuilder),
   currentTurn: createReducer(initialGameState.currentTurn, defaultBuilder),
   currentFirstPlayer: createReducer(

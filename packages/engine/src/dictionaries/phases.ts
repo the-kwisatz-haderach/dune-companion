@@ -1,4 +1,3 @@
-import { ClientActionType } from '../actions'
 import { Phase, Phases } from '../models/phase'
 
 export const phaseOrder: Phases[] = [
@@ -13,10 +12,7 @@ export const phaseOrder: Phases[] = [
   'MENTAT_PAUSE'
 ]
 
-export const requiredPhaseActions: Record<
-  Phases | 'SETUP',
-  ClientActionType[]
-> = {
+export const requiredPhaseActions = {
   SETUP: ['UPDATE_PLAYER_NAME', 'SELECT_FACTION', 'SET_IS_READY'],
   STORM: ['SET_IS_READY'],
   SPICE_BLOW_AND_NEXUS: ['SET_IS_READY'],
@@ -26,10 +22,15 @@ export const requiredPhaseActions: Record<
   SHIPMENT_AND_MOVEMENT: ['SET_IS_READY'],
   BATTLE: ['SET_IS_READY'],
   SPICE_HARVEST: ['SET_IS_READY'],
-  MENTAT_PAUSE: ['SET_IS_READY']
-}
+  MENTAT_PAUSE: ['SET_IS_READY'],
+  FINISHED: []
+} as const
 
 export const phases: Record<Phases, Phase> = {
+  SETUP: {
+    name: 'Setup',
+    description: ''
+  },
   STORM: {
     name: 'Storm',
     description: ''
@@ -64,6 +65,10 @@ export const phases: Record<Phases, Phase> = {
   },
   MENTAT_PAUSE: {
     name: 'Mentat pause',
+    description: ''
+  },
+  FINISHED: {
+    name: 'Finished',
     description: ''
   }
 }

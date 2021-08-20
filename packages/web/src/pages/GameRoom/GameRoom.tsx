@@ -16,7 +16,7 @@ export default function GameRoom(): ReactElement {
   const player = usePlayer()
   const game = useGame()
 
-  if (game.currentTurn === 0) {
+  if (game.currentPhase === 'SETUP') {
     return <SetupPhase />
   }
 

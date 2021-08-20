@@ -1,14 +1,38 @@
-import { factions } from '../../dictionaries'
+import { factions, requiredPhaseActions } from '../../dictionaries'
+import { createPlayerAction } from '../../factories/createPlayerAction'
 import { Factions, Game } from '../../models'
 import { playerFixture } from '../../models/__fixtures__'
 import { initialGameState } from '../initialGameState'
 import { actionSideEffectsReducer } from './actionSideEffectsReducer'
 
 describe('actionSideEffectsReducer', () => {
-  describe('when setup is completed and there are no awaiting actions', () => {
+  describe('when there are required actions remaining', () => {
+    it('returns the input state', () => {
+      const state: Game = {
+        ...initialGameState,
+        currentPhase: 'REVIVAL',
+        players: {
+          somePlayer: {
+            ...playerFixture,
+            actions: [createPlayerAction('SELECT_FACTION')]
+          }
+        }
+      }
+      expect(actionSideEffectsReducer(state)).toEqual(state)
+    })
+  })
+  describe('when there are no players', () => {
+    it('returns the input state', () => {
+      expect(actionSideEffectsReducer(initialGameState)).toEqual(
+        initialGameState
+      )
+    })
+  })
+  describe('when setup is completed and there are no required actions left', () => {
     it("sets up the game's starting conditions", () => {
       const state: Game = {
         ...initialGameState,
+        currentPhase: 'SETUP',
         players: {
           somePlayer: {
             ...playerFixture,
@@ -17,7 +41,8 @@ describe('actionSideEffectsReducer', () => {
             name: 'somePlayer',
             spice: 0,
             treacheryCards: 0,
-            faction: Factions.FREMEN
+            faction: Factions.FREMEN,
+            actions: [createPlayerAction('MARK_PHASE_STEP_NOT_COMPLETED')]
           },
           anotherPlayer: {
             ...playerFixture,
@@ -26,40 +51,43 @@ describe('actionSideEffectsReducer', () => {
             name: 'anotherPlayer',
             spice: 0,
             treacheryCards: 0,
-            faction: Factions.HOUSE_ATREIDES
+            faction: Factions.HOUSE_ATREIDES,
+            actions: []
           }
         }
       }
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
         currentTurn: 1,
-        requiredActions: [
-          { playerId: 'somePlayer', type: 'SET_IS_READY' },
-          { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
-        ],
+        currentPhase: 'STORM',
         players: {
           ...state.players,
           somePlayer: {
             ...state.players.somePlayer,
             spice: factions.FREMEN.startingSpice,
-            treacheryCards: factions.FREMEN.startingItems
+            treacheryCards: factions.FREMEN.startingItems,
+            actions: requiredPhaseActions.STORM.map(type =>
+              createPlayerAction(type)
+            )
           },
           anotherPlayer: {
             ...state.players.anotherPlayer,
             spice: factions.HOUSE_ATREIDES.startingSpice,
-            treacheryCards: factions.HOUSE_ATREIDES.startingItems
+            treacheryCards: factions.HOUSE_ATREIDES.startingItems,
+            actions: requiredPhaseActions.STORM.map(type =>
+              createPlayerAction(type)
+            )
           }
         }
       })
     })
   })
   describe('when the game is ongoing and there are no awaiting actions', () => {
-    it('increments the currentPhase and adds all players to the awaiting action queue', () => {
+    it('increments the currentPhase and updates player actions according to the new phase', () => {
       const state: Game = {
         ...initialGameState,
         currentTurn: 3,
         currentPhase: 'CHOAM_CHARITY',
-        requiredActions: [],
         phaseStates: {
           ...initialGameState.phaseStates,
           CHOAM_CHARITY: {
@@ -89,11 +117,33 @@ describe('actionSideEffectsReducer', () => {
       }
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
+        players: {
+          somePlayer: {
+            ...playerFixture,
+            isAdmin: true,
+            id: 'somePlayer',
+            name: 'somePlayer',
+            spice: 0,
+            treacheryCards: 0,
+            faction: Factions.FREMEN,
+            actions: requiredPhaseActions.BIDDING.map(type =>
+              createPlayerAction(type)
+            )
+          },
+          anotherPlayer: {
+            ...playerFixture,
+            isAdmin: false,
+            id: 'anotherPlayer',
+            name: 'anotherPlayer',
+            spice: 0,
+            treacheryCards: 0,
+            faction: Factions.HOUSE_ATREIDES,
+            actions: requiredPhaseActions.BIDDING.map(type =>
+              createPlayerAction(type)
+            )
+          }
+        },
         currentTurn: 3,
-        requiredActions: [
-          { playerId: 'somePlayer', type: 'SET_IS_READY' },
-          { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
-        ],
         currentPhase: 'BIDDING',
         phaseStates: {
           ...initialGameState.phaseStates,
@@ -108,7 +158,6 @@ describe('actionSideEffectsReducer', () => {
         ...initialGameState,
         currentTurn: 3,
         currentPhase: 'MENTAT_PAUSE', // Mentat pause is the last phase of the game.
-        requiredActions: [],
         phaseStates: {
           ...initialGameState.phaseStates,
           BIDDING: {
@@ -143,16 +192,27 @@ describe('actionSideEffectsReducer', () => {
       }
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
+        players: {
+          ...state.players,
+          somePlayer: {
+            ...state.players.somePlayer,
+            actions: requiredPhaseActions.STORM.map(type =>
+              createPlayerAction(type)
+            )
+          },
+          anotherPlayer: {
+            ...state.players.anotherPlayer,
+            actions: requiredPhaseActions.STORM.map(type =>
+              createPlayerAction(type)
+            )
+          }
+        },
         currentTurn: 4,
-        requiredActions: [
-          { playerId: 'somePlayer', type: 'SET_IS_READY' },
-          { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
-        ],
         phaseStates: initialGameState.phaseStates,
         currentPhase: 'STORM' // Storm is the first phase of the game.
       })
     })
-    it('sets the finished status to true if the last turn was completed', () => {
+    it('sets the phase to FINISHED if the last turn was completed', () => {
       const state: Game = {
         ...initialGameState,
         conditions: {
@@ -161,7 +221,6 @@ describe('actionSideEffectsReducer', () => {
         },
         currentTurn: 3,
         currentPhase: 'MENTAT_PAUSE',
-        requiredActions: [],
         players: {
           somePlayer: {
             ...playerFixture
@@ -173,10 +232,8 @@ describe('actionSideEffectsReducer', () => {
       }
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
-        isFinished: true,
         currentTurn: 3,
-        requiredActions: [],
-        currentPhase: 'MENTAT_PAUSE'
+        currentPhase: 'FINISHED'
       })
     })
     it('only sets the finished status to true if the last phase of the last turn was completed', () => {
@@ -188,7 +245,6 @@ describe('actionSideEffectsReducer', () => {
         },
         currentTurn: 3,
         currentPhase: 'BATTLE',
-        requiredActions: [],
         players: {
           somePlayer: {
             ...playerFixture
@@ -200,13 +256,22 @@ describe('actionSideEffectsReducer', () => {
       }
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
-        isFinished: false,
         currentTurn: 3,
-        requiredActions: [
-          { playerId: 'somePlayer', type: 'SET_IS_READY' },
-          { playerId: 'anotherPlayer', type: 'SET_IS_READY' }
-        ],
-        currentPhase: 'SPICE_HARVEST'
+        currentPhase: 'SPICE_HARVEST',
+        players: {
+          somePlayer: {
+            ...playerFixture,
+            actions: requiredPhaseActions.SPICE_HARVEST.map(type =>
+              createPlayerAction(type)
+            )
+          },
+          anotherPlayer: {
+            ...playerFixture,
+            actions: requiredPhaseActions.SPICE_HARVEST.map(type =>
+              createPlayerAction(type)
+            )
+          }
+        }
       })
     })
   })

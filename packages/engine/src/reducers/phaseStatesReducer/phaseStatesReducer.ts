@@ -9,15 +9,23 @@ export const phaseStatesReducer = createReducer(
     builder
       .addCase(clientActions.MARK_PHASE_STEP_NOT_COMPLETED, (state, action) => {
         Object.keys(state).forEach(phase => {
-          if (action.payload.step in state[phase as Phases]) {
-            ;(state[phase as Phases] as any)[action.payload.step] = false
+          if (
+            action.payload.step in state[phase as Exclude<Phases, 'FINISHED'>]
+          ) {
+            ;(state[phase as Exclude<Phases, 'FINISHED'>] as any)[
+              action.payload.step
+            ] = false
           }
         })
       })
       .addCase(clientActions.MARK_PHASE_STEP_COMPLETED, (state, action) => {
         Object.keys(state).forEach(phase => {
-          if (action.payload.step in state[phase as Phases]) {
-            ;(state[phase as Phases] as any)[action.payload.step] = true
+          if (
+            action.payload.step in state[phase as Exclude<Phases, 'FINISHED'>]
+          ) {
+            ;(state[phase as Exclude<Phases, 'FINISHED'>] as any)[
+              action.payload.step
+            ] = true
           }
         })
       })

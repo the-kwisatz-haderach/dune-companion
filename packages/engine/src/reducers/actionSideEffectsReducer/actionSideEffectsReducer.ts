@@ -5,24 +5,21 @@ import { createNextPhaseState } from '../../factories/createNextPhaseState'
 import { Game } from '../../models'
 import { initialGameState } from '../initialGameState'
 
-const isInProgress = (state: Game) => state.requiredActions.length !== 0
-const isNotStarted = (state: Game) => Object.keys(state.players).length === 0
-const isLastPhase = (state: Game) => state.currentPhase === 'MENTAT_PAUSE'
-const isLastTurn = (state: Game) =>
-  state.currentTurn === state.conditions.maxTurns
-const isFirstTurn = (state: Game) => state.currentTurn === 0
-
 export const actionSideEffectsReducer = (
   state: Game = initialGameState
 ): Game => {
+  const players = Object.values(state.players)
   switch (true) {
-    case isInProgress(state) || isNotStarted(state):
+    case players.some(player =>
+      player.actions.some(action => action.isRequired)
+    ) || players.length === 0:
       return state
-    case isLastPhase(state) && isLastTurn(state):
+    case state.currentPhase === 'MENTAT_PAUSE' &&
+      state.currentTurn === state.conditions.maxTurns:
       return createFinishedGameState(state)
-    case isLastPhase(state):
+    case state.currentPhase === 'MENTAT_PAUSE':
       return createNewTurnState(state)
-    case isFirstTurn(state):
+    case state.currentPhase === 'SETUP':
       return createInitialGameState(state)
     default:
       return createNextPhaseState(state)

@@ -1,4 +1,4 @@
-import { createAction } from '@reduxjs/toolkit'
+import { createAction, nanoid } from '@reduxjs/toolkit'
 import  { Conditions, Phases, PhaseStates } from '../models'
 import type { AllianceRequest, AllianceRequestResponse } from '../models/alliance'
 import type { Factions } from '../models/faction'
@@ -20,7 +20,7 @@ export const MARK_PHASE_STEP_COMPLETED = 'MARK_PHASE_STEP_COMPLETED'
 export const MARK_PHASE_STEP_NOT_COMPLETED = 'MARK_PHASE_STEP_NOT_COMPLETED'
 
 const createClientAction = <P extends Record<string ,unknown> | void = void, T extends string = string>(
-  type: T
+  type: T,
 ) => {
   return createAction<P extends void ? { playerId: string } : { playerId: string } & P, T>(type)
 }
@@ -38,9 +38,15 @@ export const selectFaction = createClientAction<{ faction: Factions | null }, ty
   SELECT_FACTION
 )
 export const setAdmin = createClientAction<{ id: string }, typeof SET_ADMIN>(SET_ADMIN)
-export const requestAlliance = createClientAction<AllianceRequest, typeof REQUEST_ALLIANCE>(
-  REQUEST_ALLIANCE
-)
+
+export const requestAlliance = createAction(REQUEST_ALLIANCE, (payload: Omit<AllianceRequest, 'id' | 'requester'> & { playerId: string}) => ({
+  payload: {
+    ...payload,
+    requester: payload.playerId,
+    id: nanoid(),
+  }
+}))
+
 export const respondToAllianceRequest = createClientAction<AllianceRequestResponse, typeof RESPOND_TO_ALLIANCE_REQUEST>(
   RESPOND_TO_ALLIANCE_REQUEST
 )
@@ -53,14 +59,14 @@ export const confirmWinner = createClientAction<void, typeof CONFIRM_WINNER>(CON
 
 export const markPhaseStepCompleted = createClientAction<{
   step: {
-    [K in Phases]: keyof PhaseStates[K]
-  }[Phases]
+    [K in Exclude<Phases, 'FINISHED'>]: keyof PhaseStates[K]
+  }[Exclude<Phases, 'FINISHED'>]
 }, typeof MARK_PHASE_STEP_COMPLETED>(MARK_PHASE_STEP_COMPLETED)
 
 export const markPhaseStepNotCompleted = createClientAction<{
   step: {
-    [K in Phases]: keyof PhaseStates[K]
-  }[Phases]
+    [K in Exclude<Phases, 'FINISHED'>]: keyof PhaseStates[K]
+  }[Exclude<Phases, 'FINISHED'>]
 }, typeof MARK_PHASE_STEP_NOT_COMPLETED>(MARK_PHASE_STEP_NOT_COMPLETED)
 
 

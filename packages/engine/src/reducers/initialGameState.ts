@@ -1,10 +1,8 @@
 import { Game } from '../models'
 
 export const initialGameState: Game = {
-  isFinished: false,
   players: {},
   playerOrder: [],
-  requiredActions: [],
   conditions: {
     advancedMode: false,
     maxPlayers: 6,
@@ -12,11 +10,19 @@ export const initialGameState: Game = {
   },
   currentTurn: 0,
   currentFirstPlayer: 0,
-  currentPhase: 'STORM',
+  currentPhase: 'SETUP',
   auctions: [],
   allianceRequests: [],
   alliances: [],
   phaseStates: {
+    SETUP: {
+      isFactionsSelected: false,
+      isForcesPlaced: false,
+      isPositioningDone: false,
+      isSpiceDistributed: false,
+      isTraitorsDistributed: false,
+      isTreacheryCardsDealt: false
+    },
     STORM: {
       isStormMarkerMoved: false,
       isDamageDealt: false,

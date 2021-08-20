@@ -5,8 +5,12 @@ export type Alliance = {
 }
 
 export type AllianceRequest = {
+  id: string
   requester: Player['id']
   responders: Player['id'][]
 }
 
-export type AllianceRequestResponse = { response: 'accept' | 'decline' }
+export type AllianceRequestResponse = {
+  id: AllianceRequest['id']
+  response: 'accept' | 'decline'
+}
