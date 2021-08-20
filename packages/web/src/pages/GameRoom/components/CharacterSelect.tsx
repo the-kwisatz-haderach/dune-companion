@@ -35,8 +35,8 @@ export default function CharacterSelect(): ReactElement {
     .map(player => player.faction)
     .filter(Boolean) as Factions[]
 
-  const isPlayerReady = !game.requiredActions.some(
-    action => action.type === 'SET_IS_READY' && action.playerId === player.id
+  const isPlayerReady = !player.actions.some(
+    action => action.type === 'SET_IS_READY'
   )
 
   const onToggleReady = () => {

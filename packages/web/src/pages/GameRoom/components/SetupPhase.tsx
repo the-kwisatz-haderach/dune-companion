@@ -1,9 +1,4 @@
-import {
-  RequiredAction,
-  ClientActionType,
-  Game,
-  Player
-} from '@dune-companion/engine'
+import { ClientActionType, Game, Player } from '@dune-companion/engine'
 import { ReactElement } from 'react'
 import { useGame, usePlayer } from '../../../dune-react'
 import CharacterSelect from './CharacterSelect'
@@ -12,10 +7,7 @@ import PlayerSetup from './PlayerSetup'
 const createPendingActionsChecker = (game: Game) => {
   const checker = (playerIds: string[], actionType: ClientActionType) =>
     playerIds.every(id =>
-      game.requiredActions.some(
-        (action: RequiredAction) =>
-          action.type === actionType && action.playerId === id
-      )
+      game.players[id].actions.some(action => action.type === actionType)
     )
   return (actionType: ClientActionType) => ({
     forPlayer: (playerId: Player['id']) => checker([playerId], actionType),
