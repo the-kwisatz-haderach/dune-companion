@@ -2,12 +2,15 @@ import { ClientActionType, Game, Player } from '@dune-companion/engine'
 import { ReactElement } from 'react'
 import { useGame, usePlayer } from '../../../dune-react'
 import CharacterSelect from './CharacterSelect'
+import Instructions from './Instructions'
 import PlayerSetup from './PlayerSetup'
 
 const createPendingActionsChecker = (game: Game) => {
   const checker = (playerIds: string[], actionType: ClientActionType) =>
-    playerIds.every(id =>
-      game.players[id].actions.some(action => action.type === actionType)
+    playerIds.some(id =>
+      game.players[id].actions.some(
+        action => action.type === actionType && action.isRequired
+      )
     )
   return (actionType: ClientActionType) => ({
     forPlayer: (playerId: Player['id']) => checker([playerId], actionType),
@@ -29,5 +32,5 @@ export default function SetupPhase(): ReactElement {
     return <CharacterSelect />
   }
 
-  return <CharacterSelect />
+  return <Instructions />
 }
