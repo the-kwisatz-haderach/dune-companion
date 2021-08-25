@@ -1,28 +1,28 @@
 import React from 'react'
 import { Box, createStyles, makeStyles } from '@material-ui/core'
 import { ActionMenu } from '../components/ActionMenu'
+import { Factions } from '@dune-companion/engine'
+import { usePlayer } from '../dune-react'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles(() =>
   createStyles({
     fixedBottom: {
-      boxShadow: theme.shadows[20]
+      position: 'fixed',
+      bottom: 0,
+      left: 0,
+      width: '100%'
     }
   })
 )
 
 export const GameLayout: React.FC = ({ children }) => {
   const classes = useStyles()
+  const player = usePlayer()
   return (
     <Box>
-      {children}
-      <Box
-        className={classes.fixedBottom}
-        position="fixed"
-        bottom={0}
-        left={0}
-        width="100%"
-      >
-        <ActionMenu />
+      <Box mb={2}>{children}</Box>
+      <Box className={classes.fixedBottom}>
+        <ActionMenu faction={player.faction} />
       </Box>
     </Box>
   )

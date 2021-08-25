@@ -1,0 +1,1 @@
+export { FactionHeader } from './FactionHeader'

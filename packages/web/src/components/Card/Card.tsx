@@ -27,15 +27,13 @@ const useStyles = makeStyles<Theme, { faction?: Factions }>(theme =>
     root: {
       ...createFactionStyles(theme),
       padding: theme.spacing(3),
-      borderRadius: 10
+      borderRadius: 5,
+      WebkitFontSmoothing: 'antialiased'
     },
     header: {
       width: '100%',
       display: 'flex',
       marginBottom: theme.spacing(1.5)
-    },
-    small: {
-      fontSize: theme.typography.pxToRem(10)
     },
     icon: {
       fontSize: theme.typography.pxToRem(16),

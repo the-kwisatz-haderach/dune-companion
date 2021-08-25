@@ -1,19 +1,32 @@
 import { ReactElement } from 'react'
-import { Box, createStyles, IconButton, makeStyles } from '@material-ui/core'
+import {
+  Theme,
+  Box,
+  createStyles,
+  IconButton,
+  makeStyles
+} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import HomeIcon from '@material-ui/icons/Home'
 import SearchIcon from '@material-ui/icons/Search'
+import { Player } from '@dune-companion/engine'
 
-const useStyles = makeStyles(theme =>
+type Props = {
+  faction?: Player['faction']
+}
+
+const useStyles = makeStyles<Theme, Props>(theme =>
   createStyles({
     root: {
       width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      backgroundColor: theme.palette.common.white,
+      color: theme.palette.common.black,
       height: 50,
-      position: 'relative'
+      position: 'relative',
+      borderTop: `1px solid ${theme.palette.grey[300]}`,
+      boxShadow: theme.shadows[24]
     },
     item: {
       flex: 1,
@@ -22,22 +35,29 @@ const useStyles = makeStyles(theme =>
       alignItems: 'center'
     },
     centerItem: {
-      color: theme.palette.common.white,
+      color: ({ faction }) =>
+        faction
+          ? theme.palette[faction].contrastText
+          : theme.palette.common.white,
       width: 70,
       height: 70,
-      backgroundImage:
-        'radial-gradient(circle at bottom center, #00d01a 15px, #b7ff08)',
+      backgroundImage: ({ faction }) =>
+        `radial-gradient(circle at top left, ${
+          faction ? theme.palette[faction].light : theme.palette.grey[400]
+        } 10px, ${
+          faction ? theme.palette[faction].dark : theme.palette.common.black
+        })`,
       borderRadius: '50%',
       position: 'absolute',
-      bottom: 30,
+      bottom: 15,
       left: 'calc(50% - 35px)',
       zIndex: 1
     }
   })
 )
 
-export default function ActionMenu(): ReactElement {
-  const classes = useStyles()
+export default function ActionMenu({ faction }: Props): ReactElement {
+  const classes = useStyles({ faction })
   return (
     <Box className={classes.root}>
       <Box className={classes.item}>

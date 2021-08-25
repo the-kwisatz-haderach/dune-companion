@@ -11,14 +11,16 @@ import { MetaText } from '../Typography/MetaText'
 interface Props {
   title: string
   type?: string
-  imgSrc: string
-  subtitle: string
+  img?: string
+  subtitle?: string
+  Icon?: ReactElement
 }
 
 const useStyles = makeStyles<Theme, {}>(theme =>
   createStyles({
     container: {
-      display: 'flex'
+      display: 'flex',
+      WebkitFontSmoothing: 'antialiased'
     },
     textContainer: {
       marginLeft: theme.spacing(2),
@@ -37,23 +39,30 @@ const useStyles = makeStyles<Theme, {}>(theme =>
 export default function Header({
   title,
   type,
-  imgSrc,
-  subtitle
+  img,
+  subtitle,
+  Icon
 }: Props): ReactElement {
   const classes = useStyles()
   return (
     <Box className={classes.container}>
-      <img
-        className={classes.img}
-        width={80}
-        height={80}
-        src={imgSrc}
-        alt={title}
-      />
+      {Icon ? (
+        Icon
+      ) : img ? (
+        <img
+          className={classes.img}
+          width={80}
+          height={80}
+          src={img}
+          alt={title}
+        />
+      ) : (
+        <></>
+      )}
       <Box className={classes.textContainer}>
         {type && <MetaText>{type}</MetaText>}
         <Typography variant="h3">{title}</Typography>
-        <Typography variant="subtitle1">{subtitle}</Typography>
+        {subtitle && <Typography variant="subtitle1">{subtitle}</Typography>}
       </Box>
     </Box>
   )

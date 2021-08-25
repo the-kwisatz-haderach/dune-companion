@@ -5,6 +5,7 @@ type Props = { size?: 'small' | 'medium' }
 const useStyles = makeStyles<Theme, Props>(theme =>
   createStyles({
     root: {
+      fontWeight: 'bold',
       fontSize: ({ size }) =>
         size === 'small' ? theme.typography.pxToRem(10) : undefined
     }

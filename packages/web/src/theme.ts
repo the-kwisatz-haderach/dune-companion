@@ -54,40 +54,40 @@ export const theme = createTheme({
       dark: '#BDAC75'
     },
     [Factions.HOUSE_ATREIDES]: {
-      main: 'hsl(75, 40%, 55%)',
-      light: 'hsl(75, 40%, 70%)',
-      dark: 'hsl(75, 40%, 30%)',
-      contrastText: 'white'
+      main: 'hsl(80, 40%, 60%)',
+      light: 'hsl(80, 40%, 70%)',
+      dark: 'hsl(80, 40%, 25%)',
+      contrastText: 'hsl(80, 100%, 93%)'
     },
     [Factions.HOUSE_HARKONNEN]: {
-      main: 'hsl(240, 2%, 40%)',
-      light: 'hsl(240, 2%, 50%)',
+      main: 'hsl(240, 2%, 50%)',
+      light: 'hsl(240, 2%, 60%)',
       dark: 'hsl(240, 2%, 10%)',
-      contrastText: 'white'
+      contrastText: 'hsl(240, 25%, 92%)'
     },
     [Factions.FREMEN]: {
       main: 'hsl(42, 95%, 65%)',
       light: 'hsl(42, 95%, 80%)',
       dark: 'hsl(42, 95%, 30%)',
-      contrastText: 'white'
+      contrastText: 'hsl(42, 100%, 95%)'
     },
     [Factions.BENE_GESSERIT]: {
       main: 'hsl(215, 50%, 65%)',
       light: 'hsl(215, 50%, 70%)',
       dark: 'hsl(215, 50%, 30%)',
-      contrastText: 'white'
+      contrastText: 'hsl(215, 100%, 93%)'
     },
     [Factions.EMPEROR]: {
-      main: 'hsl(4, 70%, 60%)',
+      main: 'hsl(4, 70%, 65%)',
       light: 'hsl(4, 70%, 70%)',
-      dark: 'hsl(4, 70%, 35%)',
-      contrastText: 'white'
+      dark: 'hsl(4, 70%, 30%)',
+      contrastText: 'hsl(4, 100%, 94%)'
     },
     [Factions.SPACING_GUILD]: {
-      main: 'hsl(22, 73%, 60%)',
+      main: 'hsl(22, 73%, 63%)',
       light: 'hsl(22, 73%, 70%)',
       dark: 'hsl(22, 73%, 30%)',
-      contrastText: 'white'
+      contrastText: 'hsl(22, 100%, 94%)'
     }
   }
 })
