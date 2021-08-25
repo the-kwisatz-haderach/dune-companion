@@ -1,8 +1,16 @@
 import { ReactElement } from 'react'
-import { Box, createStyles, makeStyles, Typography } from '@material-ui/core'
+import {
+  Theme,
+  Box,
+  createStyles,
+  makeStyles,
+  Typography
+} from '@material-ui/core'
 import StarIcon from '@material-ui/icons/Star'
 import hawk from '../../images/hawk.jpeg'
 import { MetaText } from '../Typography/MetaText'
+import { Factions } from '@dune-companion/engine'
+import { createFactionStyles } from '../../theme'
 
 type CardType = 'phase' | 'faction'
 
@@ -10,17 +18,16 @@ interface Props {
   title: string
   body: string
   type: 'phase' | 'faction'
+  faction?: Factions
   advanced?: boolean
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles<Theme, { faction?: Factions }>(theme =>
   createStyles({
     root: {
-      padding: theme.spacing(2.5),
-      borderRadius: 10,
-      border: `1px solid ${theme.palette.grey[200]}`,
-      backgroundImage: 'linear-gradient(175deg, white, #ffffff, #f3f3f3)',
-      boxShadow: '0px 17px 15px -15px #80808087'
+      ...createFactionStyles(theme),
+      padding: theme.spacing(3),
+      borderRadius: 10
     },
     header: {
       width: '100%',
@@ -61,9 +68,10 @@ export default function Card({
   title,
   body,
   type,
+  faction,
   advanced = false
 }: Props): ReactElement {
-  const classes = useStyles()
+  const classes = useStyles({ faction })
   const imgSrc = getImageSrc(type)
   return (
     <Box className={classes.root}>

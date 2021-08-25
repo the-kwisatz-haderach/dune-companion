@@ -4,6 +4,8 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import 'normalize.css'
+import './fonts/OrthodoxHerbertarian-Normal.ttf'
+import './index.css'
 
 ReactDOM.render(
   <React.StrictMode>

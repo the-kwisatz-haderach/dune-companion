@@ -42,15 +42,18 @@ export default function CharacterSelect(): ReactElement {
           subtitle="You have limited prescience."
           imgSrc={hawk}
         />
-        <Box>
-          <Card
-            title="Storm Rule"
-            type="phase"
-            advanced
-            body={
-              'Move the Storm Marker normally using the Battle Wheels on the first turn of the game. Subsequent storm movement is determined by you using your Storm Cards. You randomly select a card from the Storm Deck, secretly look at it, and place it face down on the margin of the game board.\nIn the next Storm Phase the number on that Storm Card is revealed; the storm is moved counterclockwise that number of sectors and your Storm Card is returned to the Storm Card Deck. You then shuffle the Storm Deck, randomly select a Storm Card and look at it for the next turns storm movement, and place it face down on the margin of the game board.'
-            }
-          />
+        <Box marginY={2}>
+          <Box>
+            <Card
+              title="Storm Rule"
+              faction={Factions.BENE_GESSERIT}
+              type="phase"
+              advanced
+              body={
+                'Move the Storm Marker normally using the Battle Wheels on the first turn of the game. Subsequent storm movement is determined by you using your Storm Cards. You randomly select a card from the Storm Deck, secretly look at it, and place it face down on the margin of the game board.\nIn the next Storm Phase the number on that Storm Card is revealed; the storm is moved counterclockwise that number of sectors and your Storm Card is returned to the Storm Card Deck. You then shuffle the Storm Deck, randomly select a Storm Card and look at it for the next turns storm movement, and place it face down on the margin of the game board.'
+              }
+            />
+          </Box>
         </Box>
       </RoundedContainer>
     </Box>
