@@ -13,7 +13,6 @@ export const Routes = () => {
   return (
     <Switch>
       <Route exact path="/" component={Home} />
-
       <ConnectedRoute exact path="/game" component={CreateGame} />
       <GameLayout>
         <ConnectedRoute path="/game/:id" component={GameRoom} />

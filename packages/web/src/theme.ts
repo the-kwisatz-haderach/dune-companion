@@ -27,19 +27,34 @@ declare module '@material-ui/core/styles/createPalette' {
 export const theme = createTheme({
   typography: {
     h1: {
+      fontSize: '3rem',
       fontFamily: 'OrthodoxHerbertarian'
     },
+    h2: {
+      fontSize: '2rem',
+      fontWeight: 'bold'
+    },
     h3: {
-      fontSize: 24,
-      fontWeight: 500
+      fontSize: '1.5rem',
+      fontWeight: 'bold'
     },
     h4: {
-      fontSize: 20,
-      fontWeight: 500
+      fontSize: '1.4rem',
+      fontWeight: 'bold'
+    },
+    h5: {
+      fontSize: '1.2rem',
+      fontWeight: 'bold'
+    },
+    h6: {
+      fontSize: '1rem',
+      fontWeight: 'bold'
     },
     caption: {
       color: '#a7a7a7',
-      textTransform: 'uppercase'
+      textTransform: 'uppercase',
+      fontWeight: 'bold',
+      WebkitFontSmoothing: 'antialiased'
     }
   },
   palette: {

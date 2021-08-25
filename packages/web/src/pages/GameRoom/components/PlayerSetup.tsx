@@ -40,6 +40,7 @@ export default function PlayerSetup(): ReactElement {
     >
       <TextField
         label="Name"
+        autoFocus
         fullWidth
         value={name}
         required

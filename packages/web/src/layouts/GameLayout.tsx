@@ -22,7 +22,7 @@ export const GameLayout: React.FC = ({ children }) => {
     <Box>
       <Box mb={2}>{children}</Box>
       <Box className={classes.fixedBottom}>
-        <ActionMenu faction={player.faction} />
+        <ActionMenu faction={player?.faction} />
       </Box>
     </Box>
   )

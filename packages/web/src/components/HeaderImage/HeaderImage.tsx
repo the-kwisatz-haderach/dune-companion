@@ -8,13 +8,15 @@ import {
 } from '@material-ui/core'
 
 interface Props {
-  src: string
-  text?: string
+  src?: string
   size?: 'small' | 'medium' | 'large'
+  color?: string
   glow?: string
+  title: string
+  preamble?: string
 }
 
-const useStyles = makeStyles<Theme, Omit<Props, 'text'>>(() =>
+const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(theme =>
   createStyles({
     root: {
       width: '100%',
@@ -23,23 +25,52 @@ const useStyles = makeStyles<Theme, Omit<Props, 'text'>>(() =>
       backgroundSize: 'contain',
       backgroundRepeat: 'no-repeat',
       backgroundAttachment: 'fixed',
-      backgroundImage: ({ src, glow }) =>
-        `linear-gradient(to bottom, black, transparent 10%, transparent, ${glow ??
-          'black'} 43%), url(${src})`
+      backgroundColor: ({ color }) => color,
+      backgroundImage: ({ src, glow, color }) =>
+        `linear-gradient(to bottom, ${
+          color ? 'transparent' : 'black'
+        }, transparent 6%, transparent, ${glow ?? 'black'} 40%)${
+          src ? `, url(${src})` : ''
+        }`
+    },
+    textContainer: {
+      display: 'flex',
+      padding: theme.spacing(2),
+      flexDirection: 'column',
+      justifyContent: 'flex-end',
+      color: theme.palette.common.white,
+      height: '75%'
     }
   })
 )
 
 export default function HeaderImage({
   src,
-  text,
   glow,
+  color,
+  title,
+  preamble,
   size = 'medium'
 }: Props): ReactElement {
-  const classes = useStyles({ src, size, glow })
+  const classes = useStyles({ src, size, glow, color })
   return (
     <Box className={classes.root}>
-      {text && <Typography>{text}</Typography>}
+      <Box className={classes.textContainer}>
+        {preamble && (
+          <Typography
+            variant="caption"
+            color="inherit"
+            style={{ opacity: 0.7 }}
+          >
+            {preamble}
+          </Typography>
+        )}
+        {title && (
+          <Typography variant="h1" color="inherit">
+            {title}
+          </Typography>
+        )}
+      </Box>
     </Box>
   )
 }

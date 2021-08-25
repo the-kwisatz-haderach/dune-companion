@@ -1,5 +1,5 @@
 import { Box, createStyles, makeStyles, useTheme } from '@material-ui/core'
-import { Factions } from '@dune-companion/engine'
+import { factions, Factions } from '@dune-companion/engine'
 import { ReactElement, useState } from 'react'
 import { useGame, useGameDispatch, usePlayer } from '../../../dune-react'
 import { HeaderImage } from '../../../components/HeaderImage'
@@ -7,6 +7,7 @@ import { RoundedContainer } from '../../../components/RoundedContainer'
 import { Card } from '../../../components/Card'
 import { FactionHeader } from '../../../components/FactionHeader'
 import { factionImages } from '../../../lib/factionImages'
+import { Section } from '../../../components/Section'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -32,13 +33,19 @@ export default function CharacterSelect(): ReactElement {
     })
   }
 
-  const faction = Factions.EMPEROR
+  const faction = Factions.SPACING_GUILD
 
   return (
     <Box className={classes.container}>
-      <HeaderImage src={factionImages[faction]} glow={palette[faction].light} />
+      <HeaderImage
+        title={factions[faction].name}
+        preamble="Faction"
+        color={palette[faction].dark}
+        glow={palette[faction].light}
+      />
       <RoundedContainer>
         <FactionHeader faction={faction} />
+        <Section heading="Advantages">Test</Section>
         <Box marginY={4}>
           <Card
             title="Storm Rule"
