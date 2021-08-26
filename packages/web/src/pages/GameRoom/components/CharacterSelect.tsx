@@ -33,7 +33,7 @@ export default function CharacterSelect(): ReactElement {
     })
   }
 
-  const faction = Factions.SPACING_GUILD
+  const faction = Factions.HOUSE_ATREIDES
 
   return (
     <Box className={classes.container}>
@@ -45,8 +45,11 @@ export default function CharacterSelect(): ReactElement {
       />
       <RoundedContainer>
         <FactionHeader faction={faction} />
-        <Section heading="Advantages">Test</Section>
-        <Box marginY={4}>
+        <Section heading="Summary">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam,
+          tenetur.
+        </Section>
+        <Section heading="Advantages">
           <Card
             title="Storm Rule"
             faction={faction}
@@ -56,7 +59,11 @@ export default function CharacterSelect(): ReactElement {
               'Move the Storm Marker normally using the Battle Wheels on the first turn of the game. Subsequent storm movement is determined by you using your Storm Cards. You randomly select a card from the Storm Deck, secretly look at it, and place it face down on the margin of the game board.\nIn the next Storm Phase the number on that Storm Card is revealed; the storm is moved counterclockwise that number of sectors and your Storm Card is returned to the Storm Card Deck. You then shuffle the Storm Deck, randomly select a Storm Card and look at it for the next turns storm movement, and place it face down on the margin of the game board.'
             }
           />
-        </Box>
+        </Section>
+        <Section heading="Alliances">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam,
+          tenetur.
+        </Section>
       </RoundedContainer>
     </Box>
   )

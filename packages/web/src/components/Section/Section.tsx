@@ -7,8 +7,15 @@ interface Props {
 
 export const Section: React.FC<Props> = ({ children, heading }) => {
   return (
-    <Box component="section">
-      <Typography variant="h5">{heading}</Typography>
+    <Box component="section" my={4}>
+      <Typography
+        variant="h6"
+        style={{
+          textTransform: 'uppercase'
+        }}
+      >
+        {heading}
+      </Typography>
       <Box mt={1}>{children}</Box>
     </Box>
   )
