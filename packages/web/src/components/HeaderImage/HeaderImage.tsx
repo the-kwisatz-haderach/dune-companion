@@ -16,12 +16,20 @@ interface Props {
   preamble?: string
 }
 
+const sizeTable = {
+  small: 200,
+  medium: 280,
+  large: 350
+} as const
+
 const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(theme =>
   createStyles({
     root: {
       width: '100%',
-      height: ({ size }) =>
-        size === 'small' ? 200 : size === 'large' ? 400 : 300,
+      display: 'flex',
+      alignItems: 'flex-end',
+      paddingBottom: theme.spacing(5),
+      height: ({ size = 'medium' }) => sizeTable[size],
       backgroundSize: 'contain',
       backgroundRepeat: 'no-repeat',
       backgroundAttachment: 'fixed',
@@ -39,7 +47,7 @@ const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(theme =>
       flexDirection: 'column',
       justifyContent: 'flex-end',
       color: theme.palette.common.white,
-      height: '75%'
+      height: 'fit-content'
     }
   })
 )

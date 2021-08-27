@@ -1,4 +1,12 @@
-import { Box, createStyles, makeStyles, useTheme } from '@material-ui/core'
+import {
+  Box,
+  createStyles,
+  Grid,
+  makeStyles,
+  useTheme
+} from '@material-ui/core'
+import SpiceIcon from '@material-ui/icons/MonetizationOn'
+import TreacheryCardIcon from '@material-ui/icons/SimCard'
 import { factions, Factions } from '@dune-companion/engine'
 import { ReactElement, useState } from 'react'
 import { useGame, useGameDispatch, usePlayer } from '../../../dune-react'
@@ -8,6 +16,7 @@ import { Card } from '../../../components/Card'
 import { FactionHeader } from '../../../components/FactionHeader'
 import { factionImages } from '../../../lib/factionImages'
 import { Section } from '../../../components/Section'
+import { Showcase } from '../../../components/Showcase'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -33,7 +42,7 @@ export default function CharacterSelect(): ReactElement {
     })
   }
 
-  const faction = Factions.HOUSE_ATREIDES
+  const faction = Factions.SPACING_GUILD
 
   return (
     <Box className={classes.container}>
@@ -45,6 +54,58 @@ export default function CharacterSelect(): ReactElement {
       />
       <RoundedContainer>
         <FactionHeader faction={faction} />
+        <Grid
+          container
+          spacing={2}
+          justifyContent="space-between"
+          style={{
+            marginTop: '2rem',
+            marginBottom: '2rem'
+          }}
+        >
+          <Grid item xs={6}>
+            <Showcase
+              title="Starting spice"
+              body="5"
+              Icon={
+                <SpiceIcon
+                  fontSize="large"
+                  style={{
+                    color: 'rgb(255 170 40 / 35%)'
+                  }}
+                />
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Showcase
+              title="Starting spice"
+              body="5"
+              Icon={
+                <SpiceIcon
+                  fontSize="large"
+                  style={{
+                    color: 'rgb(255 170 40 / 35%)'
+                  }}
+                />
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Showcase
+              title="Treachery cards"
+              body="2"
+              Icon={
+                <TreacheryCardIcon
+                  fontSize="large"
+                  style={{
+                    color: 'rgb(255 170 40 / 35%)'
+                  }}
+                />
+              }
+            />
+          </Grid>
+        </Grid>
         <Section heading="Summary">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam,
           tenetur.
