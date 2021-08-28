@@ -4,23 +4,31 @@ import {
   Container,
   createStyles,
   makeStyles,
-  Paper,
-  TextField,
   Typography
 } from '@material-ui/core'
-import { useEffect } from 'react'
-import { ReactElement, FormEvent, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useGameConnection, useGameDispatch } from '../dune-react'
+import { ReactElement } from 'react'
+import { useHistory } from 'react-router-dom'
+import dune from '../images/dune.jpeg'
 
 const useStyles = makeStyles(theme =>
   createStyles({
     container: {
-      height: '100%',
+      height: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      backgroundColor: theme.palette.grey[100],
-      padding: 15
+      padding: 15,
+      position: 'relative',
+      overflow: 'hidden',
+      backgroundImage: `linear-gradient(to bottom, transparent, transparent, ${theme.palette.primary.main} 80%)`
+    },
+    image: {
+      zIndex: -1,
+      position: 'absolute',
+      right: 0,
+      bottom: 0,
+      top: 0,
+      left: 0,
+      transform: 'translate(-58%, -300px) scale(1)'
     },
     link: {
       height: '100%',
@@ -29,6 +37,14 @@ const useStyles = makeStyles(theme =>
       '&:first-child': {
         marginBottom: 15
       }
+    },
+    headingContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      height: '50%',
+      color: theme.palette.common.white
     },
     playContainer: {
       height: '100%',
@@ -41,52 +57,24 @@ const useStyles = makeStyles(theme =>
 
 export default function Home(): ReactElement {
   const classes = useStyles()
-  const { connect } = useGameConnection()
-  const dispatch = useGameDispatch()
-  const [roomId, setRoomId] = useState('')
-  const [password, setPassword] = useState('')
-
-  useEffect(() => {
-    connect()
-  }, [connect])
-
-  const handleJoinGame = async (e: FormEvent) => {
-    e.preventDefault()
-    await dispatch('JOIN_GAME', {
-      roomId,
-      password
-    })
-  }
-
+  const history = useHistory()
   return (
     <Container className={classes.container}>
-      <Box height="50%" p={1}>
-        <Link className={classes.link} to="/game">
-          <Paper elevation={8} className={classes.playContainer}>
-            <Typography variant="h5">Create Game</Typography>
-          </Paper>
-        </Link>
+      <img className={classes.image} src={dune} />
+      <Box className={classes.headingContainer}>
+        <Typography>Welcome to the</Typography>
+        <Typography variant="h1">Dune Companion</Typography>
       </Box>
-      <Box height="50%" p={1}>
-        <Typography variant="h5">Join Game</Typography>
-        <form onSubmit={handleJoinGame}>
-          <TextField
-            label="Room ID"
-            fullWidth
-            value={roomId}
-            required
-            onChange={e => setRoomId(e.target.value)}
-          />
-          <TextField
-            label="Password"
-            fullWidth
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-          <Button type="submit" variant="contained" color="primary">
-            Connect
-          </Button>
-        </form>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="50%"
+        p={1}
+      >
+        <Button onClick={() => history.push('/game')} variant="contained">
+          Play as guest
+        </Button>
       </Box>
     </Container>
   )
