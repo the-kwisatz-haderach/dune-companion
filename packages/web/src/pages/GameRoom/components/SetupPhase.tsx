@@ -1,7 +1,7 @@
 import { ClientActionType, Game, Player } from '@dune-companion/engine'
 import { ReactElement } from 'react'
 import { useGame, usePlayer } from '../../../dune-react'
-import CharacterSelect from './CharacterSelect'
+import FactionSelect from './FactionSelect'
 import Instructions from './Instructions'
 import PlayerSetup from './PlayerSetup'
 
@@ -28,8 +28,8 @@ export default function SetupPhase(): ReactElement {
     return <PlayerSetup />
   }
 
-  if (isPending('SET_IS_READY').forAnyPlayer()) {
-    return <CharacterSelect />
+  if (isPending('SELECT_FACTION').forAnyPlayer()) {
+    return <FactionSelect />
   }
 
   return <Instructions />

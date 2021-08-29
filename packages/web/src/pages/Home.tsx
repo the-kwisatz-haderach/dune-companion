@@ -42,6 +42,7 @@ const useStyles = makeStyles(theme =>
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'flex-end',
+      textAlign: 'center',
       alignItems: 'center',
       height: '50%',
       color: theme.palette.common.white
@@ -60,7 +61,7 @@ export default function Home(): ReactElement {
   const history = useHistory()
   return (
     <Container className={classes.container}>
-      <img className={classes.image} src={dune} />
+      <img className={classes.image} src={dune} alt="dune" />
       <Box className={classes.headingContainer}>
         <Typography>Welcome to the</Typography>
         <Typography variant="h1">Dune Companion</Typography>

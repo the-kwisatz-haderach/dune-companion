@@ -10,7 +10,6 @@ import {
   cities,
   factions,
   Factions,
-  combinedRuleSet,
   factionRuleSets,
   Phases,
   phases
@@ -66,7 +65,7 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export default function CharacterSelect(): ReactElement {
+export default function FactionSelect(): ReactElement {
   const classes = useStyles()
   const factionKeys = Object.keys(factions)
   const [factionIndex, setFactionIndex] = useState(0)
