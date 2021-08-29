@@ -6,7 +6,15 @@ export const emperorRules: Record<Phases, RuleSet[]> = {
   STORM: [],
   SPICE_BLOW_AND_NEXUS: [],
   CHOAM_CHARITY: [],
-  BIDDING: [],
+  BIDDING: [
+    {
+      name: 'Bidding',
+      description:
+        'Whenever any other faction pays spice for a Treachery Card, they pay it to you instead of the Spice Bank. You may not discount the price of Treachery Cards; the full price must be paid.',
+      isAdvanced: false,
+      faction: Factions.EMPEROR
+    }
+  ],
   REVIVAL: [],
   SHIPMENT_AND_MOVEMENT: [],
   BATTLE: [],

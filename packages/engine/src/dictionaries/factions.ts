@@ -50,7 +50,14 @@ export const factions: Record<Factions, Faction> = {
   HOUSE_ATREIDES: {
     name: 'House Atreides',
     shorthand: 'ATR',
-    advantages: [],
+    advantages: [
+      {
+        name: 'Kwisatz Haderach',
+        description:
+          'The Kwisatz Haderach card starts out inactive and may not be used. Use the Kwisatz Haderach card and counter token to secretly keep track of force losses. Once you have lost 7 or more forces in a battle or battles, the Kwisatz Haderach card becomes active for the rest of the game and may be used as follows:\nIt cannot be used alone in battle, but may add its +2 strength to leaders or cheap heroes in one territory per turn. If the leader or cheap hero is killed, the Kwisatz Haderach has no effect in the battle.\nA leader accompanied by Kwisatz Haderach cannot turn traitor.\nThe Kwisatz Haderach can only be killed if blown up by a lasgun/shield explosion. If killed, the Kwisatz Haderach must be revived like any other leader.\nAlive or dead, the Kwisatz Haderach has no effect on the rule governing revival of Atreides leaders.',
+        isAdvanced: true
+      }
+    ],
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
     itemsAllowed: 4,
@@ -84,7 +91,14 @@ export const factions: Record<Factions, Faction> = {
   HOUSE_HARKONNEN: {
     name: 'House Harkonnen',
     shorthand: 'HAR',
-    advantages: [],
+    advantages: [
+      {
+        name: 'Treachery',
+        description:
+          'You may hold up to 8 Treachery Cards. When you have 8 cards you must pass during bidding. At the beginning of the game you are dealt 2 cards instead of 1, and every time you buy a card you get an extra card for free from the Treachery Deck (unless you are at 7 cards, because you can never have more than 8 total Treachery Cards in hand).',
+        isAdvanced: false
+      }
+    ],
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
     itemsAllowed: 8,
@@ -118,7 +132,14 @@ export const factions: Record<Factions, Faction> = {
   FREMEN: {
     name: 'Fremen',
     shorthand: 'FRE',
-    advantages: [],
+    advantages: [
+      {
+        name: 'Fedaykin',
+        description:
+          'Your three starred forces, Fedaykin, have a special fighting capability. They are worth two normal forces in battle and in taking losses. They are each treated as one force in revival. Only one Fedaykin force can be revived per turn.',
+        isAdvanced: true
+      }
+    ],
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
     itemsAllowed: 4,
@@ -186,7 +207,14 @@ export const factions: Record<Factions, Faction> = {
   EMPEROR: {
     name: 'Emperor',
     shorthand: 'EMP',
-    advantages: [],
+    advantages: [
+      {
+        name: 'Sardaukar',
+        isAdvanced: true,
+        description:
+          'Your five starred forces, elite Sardaukar, have a special fighting capability. They are worth two normal forces in battle and in taking losses against all opponents except Fremen. Your starred forces are worth just one force against Fremen. They are treated as one force in revival. Only one Sardaukar force can be revived per turn.'
+      }
+    ],
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, soluta.',
     itemsAllowed: 4,
