@@ -7,10 +7,10 @@ import {
   Typography
 } from '@material-ui/core'
 import StarIcon from '@material-ui/icons/Star'
-import hawk from '../../images/hawk.jpeg'
 import { MetaText } from '../Typography/MetaText'
 import { Factions, Phases } from '@dune-companion/engine'
 import { createFactionStyles } from '../../theme'
+import { factionIcons } from '../../lib/factionIcons'
 
 interface Props {
   title: string
@@ -25,6 +25,8 @@ const useStyles = makeStyles<Theme, { faction?: Factions }>(theme =>
   createStyles({
     root: {
       ...createFactionStyles(theme),
+      position: 'relative',
+      overflow: 'hidden',
       padding: theme.spacing(3),
       borderRadius: 5,
       WebkitFontSmoothing: 'antialiased'
@@ -40,10 +42,20 @@ const useStyles = makeStyles<Theme, { faction?: Factions }>(theme =>
       bottom: 2,
       marginLeft: theme.spacing(0.3)
     },
-    img: {
-      marginRight: theme.spacing(1.5)
+    watermark: {
+      marginRight: theme.spacing(1.5),
+      position: 'absolute',
+      right: '15%',
+      top: '15%',
+      fillOpacity: 0.2,
+      width: 60,
+      height: 60,
+      transform: 'scale(10)',
+      fill: ({ faction }) =>
+        faction ? theme.palette[faction].dark : theme.palette.common.black
     },
     bodyContainer: {
+      position: 'relative',
       '& > *:not(:last-child)': {
         marginBottom: theme.spacing(1)
       },
@@ -54,13 +66,6 @@ const useStyles = makeStyles<Theme, { faction?: Factions }>(theme =>
   })
 )
 
-const getImageSrc = (phase?: Phases): string => {
-  switch (phase) {
-    default:
-      return hawk
-  }
-}
-
 export default function Card({
   title,
   body,
@@ -70,18 +75,13 @@ export default function Card({
   advanced = false
 }: Props): ReactElement {
   const classes = useStyles({ faction })
-  const imgSrc = getImageSrc(phase)
+  const Icon = faction ? factionIcons[faction] : undefined
   return (
     <Box className={classes.root}>
+      {Icon && <Icon className={classes.watermark} />}
       <Box className={classes.header}>
-        <img
-          width={45}
-          height={45}
-          src={imgSrc}
-          alt={title}
-          className={classes.img}
-        />
         <Box
+          zIndex={1}
           flex={1}
           display="flex"
           flexDirection="column"
@@ -89,6 +89,7 @@ export default function Card({
         >
           <Box
             flex={1}
+            mb={1}
             width="100%"
             display="flex"
             justifyContent="space-between"
@@ -101,7 +102,9 @@ export default function Card({
               </Box>
             )}
           </Box>
-          <Typography variant="h4">{title}</Typography>
+          <Box display="flex">
+            <Typography variant="h4">{title}</Typography>
+          </Box>
         </Box>
       </Box>
       <Box className={classes.bodyContainer}>

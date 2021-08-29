@@ -11,7 +11,9 @@ import {
   factions,
   Factions,
   combinedRuleSet,
-  Phases
+  factionRuleSets,
+  Phases,
+  phases
 } from '@dune-companion/engine'
 import { ReactElement, useState } from 'react'
 import { useGame, useGameDispatch, usePlayer } from '../../../dune-react'
@@ -55,7 +57,7 @@ const useStyles = makeStyles(theme =>
       }
     },
     cardContainer: {
-      marginTop: theme.spacing(2),
+      marginTop: theme.spacing(3),
       marginBottom: theme.spacing(2),
       '& > *:not(:last-child)': {
         marginBottom: theme.spacing(3)
@@ -106,6 +108,13 @@ export default function CharacterSelect(): ReactElement {
       faction
     })
   }
+
+  const filteredPhases = Object.keys(phases).filter(
+    phase =>
+      factionRuleSets[currentFactionKey as Factions][phase as Phases].filter(
+        rule => game.conditions.advancedMode || !rule.isAdvanced
+      ).length > 0
+  )
 
   return (
     <Box className={classes.container}>
@@ -196,23 +205,25 @@ export default function CharacterSelect(): ReactElement {
             ))}
           </Box>
         </Section>
-        <Section heading="Advantages">
+        <Section heading="Phase Advantages">
           <Tabs
+            resetDependency={currentFactionKey}
             sticky
-            tabs={Object.keys(combinedRuleSet).map(phase => ({
-              label: phase,
+            tabs={filteredPhases.map(phase => ({
+              label: phases[phase as Phases].name,
               content: (
                 <Box className={classes.cardContainer}>
-                  {combinedRuleSet[phase as Phases]
+                  {factionRuleSets[currentFactionKey as Factions][
+                    phase as Phases
+                  ]
                     .filter(
-                      rule =>
-                        rule.faction === currentFactionKey &&
-                        (rule.isAdvanced ? game.conditions.advancedMode : true)
+                      rule => game.conditions.advancedMode || !rule.isAdvanced
                     )
                     .map(rule => (
                       <Card
                         title={rule.name}
                         meta="Faction rule"
+                        phase={phase as Phases}
                         faction={currentFactionKey}
                         advanced={rule.isAdvanced}
                         body={rule.description}
@@ -222,6 +233,36 @@ export default function CharacterSelect(): ReactElement {
               )
             }))}
           />
+        </Section>
+        <Section heading="Common Advantages">
+          <Box className={classes.cardContainer}>
+            {currentFaction.advantages
+              .filter(rule => !game.conditions.advancedMode || rule.isAdvanced)
+              .map(rule => (
+                <Card
+                  title={rule.name}
+                  meta="Faction rule"
+                  faction={currentFactionKey}
+                  advanced={rule.isAdvanced}
+                  body={rule.description}
+                />
+              ))}
+            {game.conditions.advancedMode && (
+              <Card
+                title="Karama Power"
+                meta="Faction rule"
+                faction={currentFactionKey}
+                advanced
+                body={currentFaction.karamaPower}
+              />
+            )}
+            <Card
+              title="Alliance Power"
+              meta="Faction rule"
+              faction={currentFactionKey}
+              body={currentFaction.alliancePower}
+            />
+          </Box>
         </Section>
         <Section heading="Strategy">
           <Typography variant="body2">{currentFaction.strategy}</Typography>

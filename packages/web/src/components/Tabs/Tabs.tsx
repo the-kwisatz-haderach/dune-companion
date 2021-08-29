@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import { Box } from '@material-ui/core'
+import { useEffect } from 'react'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -11,7 +11,7 @@ interface TabPanelProps {
 }
 
 function TabPanel({ children, value, index, ...other }: TabPanelProps) {
-  return (
+  return children !== index ? (
     <div
       role="tabpanel"
       hidden={value !== index}
@@ -21,6 +21,8 @@ function TabPanel({ children, value, index, ...other }: TabPanelProps) {
     >
       {children}
     </div>
+  ) : (
+    <></>
   )
 }
 
@@ -38,6 +40,7 @@ const useStyles = makeStyles<Theme, Pick<Props, 'sticky'>>(theme =>
     },
     tabsContainer: {
       position: ({ sticky }) => (sticky ? 'sticky' : undefined),
+      zIndex: 10,
       top: 0,
       backgroundColor: theme.palette.background.paper,
       borderTop: `1px solid ${theme.palette.grey[200]}`,
@@ -60,11 +63,20 @@ type Props = {
     content: ReactElement
   }>
   sticky?: boolean
+  resetDependency?: any
 }
 
-export default function ScrollableTabsButtonAuto({ tabs, sticky }: Props) {
+export default function ScrollableTabsButtonAuto({
+  tabs,
+  sticky,
+  resetDependency
+}: Props) {
   const classes = useStyles({ sticky })
   const [tabIndex, setTabIndex] = React.useState(0)
+
+  useEffect(() => {
+    setTabIndex(0)
+  }, [resetDependency])
 
   const handleChange = (_: React.ChangeEvent<{}>, newValue: number) => {
     setTabIndex(newValue)
@@ -84,6 +96,7 @@ export default function ScrollableTabsButtonAuto({ tabs, sticky }: Props) {
       >
         {tabs.map((tab, index) => (
           <Tab
+            key={index}
             className={classes.tab}
             label={tab.label}
             {...a11yProps(index)}
@@ -91,7 +104,7 @@ export default function ScrollableTabsButtonAuto({ tabs, sticky }: Props) {
         ))}
       </Tabs>
       {tabs.map((tab, index) => (
-        <TabPanel value={index} index={tabIndex}>
+        <TabPanel key={index} value={index} index={tabIndex}>
           {tab.content}
         </TabPanel>
       ))}
