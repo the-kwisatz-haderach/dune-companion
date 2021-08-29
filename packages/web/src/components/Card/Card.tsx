@@ -9,15 +9,14 @@ import {
 import StarIcon from '@material-ui/icons/Star'
 import hawk from '../../images/hawk.jpeg'
 import { MetaText } from '../Typography/MetaText'
-import { Factions } from '@dune-companion/engine'
+import { Factions, Phases } from '@dune-companion/engine'
 import { createFactionStyles } from '../../theme'
-
-type CardType = 'phase' | 'faction'
 
 interface Props {
   title: string
   body: string
-  type: 'phase' | 'faction'
+  meta: string
+  phase?: Phases
   faction?: Factions
   advanced?: boolean
 }
@@ -55,8 +54,8 @@ const useStyles = makeStyles<Theme, { faction?: Factions }>(theme =>
   })
 )
 
-const getImageSrc = (type: CardType): string => {
-  switch (type) {
+const getImageSrc = (phase?: Phases): string => {
+  switch (phase) {
     default:
       return hawk
   }
@@ -65,12 +64,13 @@ const getImageSrc = (type: CardType): string => {
 export default function Card({
   title,
   body,
-  type,
+  meta,
+  phase,
   faction,
   advanced = false
 }: Props): ReactElement {
   const classes = useStyles({ faction })
-  const imgSrc = getImageSrc(type)
+  const imgSrc = getImageSrc(phase)
   return (
     <Box className={classes.root}>
       <Box className={classes.header}>
@@ -93,7 +93,7 @@ export default function Card({
             display="flex"
             justifyContent="space-between"
           >
-            <MetaText size="small">{type} rule</MetaText>
+            <MetaText size="small">{meta}</MetaText>
             {advanced && (
               <Box display="flex" position="relative">
                 <MetaText size="small">Advanced</MetaText>
@@ -105,8 +105,10 @@ export default function Card({
         </Box>
       </Box>
       <Box className={classes.bodyContainer}>
-        {body.split('\n').map(paragraph => (
-          <Typography variant="body2">{paragraph}</Typography>
+        {body.split('\n').map((paragraph, index) => (
+          <Typography key={index} variant="body2">
+            {paragraph}
+          </Typography>
         ))}
       </Box>
     </Box>

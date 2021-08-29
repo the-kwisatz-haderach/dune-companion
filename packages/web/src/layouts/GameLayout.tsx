@@ -21,9 +21,9 @@ export const GameLayout: React.FC = ({ children }) => {
   return (
     <Box>
       <Box mb={2}>{children}</Box>
-      <Box className={classes.fixedBottom}>
-        <ActionMenu faction={player?.faction} />
-      </Box>
+      {/* <Box className={classes.fixedBottom}>
+        <ActionMenu primaryActionLabel="Select" />
+      </Box> */}
     </Box>
   )
 }

@@ -14,6 +14,8 @@ interface Props {
   glow?: string
   title: string
   preamble?: string
+  subtitle?: string
+  BackdropImage?: React.ComponentType<{ className?: string }>
 }
 
 const sizeTable = {
@@ -26,6 +28,7 @@ const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(theme =>
   createStyles({
     root: {
       width: '100%',
+      position: 'relative',
       display: 'flex',
       alignItems: 'flex-end',
       paddingBottom: theme.spacing(5),
@@ -47,7 +50,18 @@ const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(theme =>
       flexDirection: 'column',
       justifyContent: 'flex-end',
       color: theme.palette.common.white,
-      height: 'fit-content'
+      height: 'fit-content',
+      zIndex: 1
+    },
+    icon: {
+      position: 'fixed',
+      width: 400,
+      height: 400,
+      zIndex: 0,
+      top: -50,
+      left: 'calc(50% - 200px)',
+      fill: 'white',
+      opacity: 0.2
     }
   })
 )
@@ -58,11 +72,14 @@ export default function HeaderImage({
   color,
   title,
   preamble,
+  subtitle,
+  BackdropImage,
   size = 'medium'
 }: Props): ReactElement {
   const classes = useStyles({ src, size, glow, color })
   return (
     <Box className={classes.root}>
+      {BackdropImage && <BackdropImage className={classes.icon} />}
       <Box className={classes.textContainer}>
         {preamble && (
           <Typography
@@ -76,6 +93,11 @@ export default function HeaderImage({
         {title && (
           <Typography variant="h1" color="inherit">
             {title}
+          </Typography>
+        )}
+        {subtitle && (
+          <Typography variant="subtitle1" color="inherit">
+            {subtitle}
           </Typography>
         )}
       </Box>

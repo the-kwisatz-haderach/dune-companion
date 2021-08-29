@@ -28,7 +28,7 @@ export default function SetupPhase(): ReactElement {
     return <PlayerSetup />
   }
 
-  if (isPending('SELECT_FACTION').forAnyPlayer()) {
+  if (isPending('SET_IS_READY').forAnyPlayer()) {
     return <CharacterSelect />
   }
 

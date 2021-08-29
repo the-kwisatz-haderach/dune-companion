@@ -50,6 +50,9 @@ export const theme = createTheme({
       fontSize: '1rem',
       fontWeight: 'bold'
     },
+    subtitle1: {
+      fontWeight: 'lighter'
+    },
     caption: {
       color: '#a7a7a7',
       textTransform: 'uppercase',

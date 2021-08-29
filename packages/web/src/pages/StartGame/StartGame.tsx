@@ -53,6 +53,17 @@ const useStyles = makeStyles(theme =>
     },
     title: {
       marginBottom: '1rem'
+    },
+    fieldRow: {
+      display: 'flex',
+      '& > *:not(:last-child)': {
+        marginRight: theme.spacing(2)
+      }
+    },
+    fieldGroup: {
+      backgroundColor: theme.palette.grey[100],
+      borderRadius: 5,
+      padding: theme.spacing(2)
     }
   })
 )
@@ -89,8 +100,8 @@ export default function StartGame(): ReactElement {
   const handleJoinGame = async (e: FormEvent) => {
     e.preventDefault()
     await dispatch('JOIN_GAME', {
-      roomId,
-      password
+      roomId: joinRoomId,
+      password: joinPassword
     })
   }
 
@@ -105,54 +116,70 @@ export default function StartGame(): ReactElement {
           onSubmit={handleCreateGame}
           autoComplete="off"
         >
-          <TextField
-            className={classes.formField}
-            value={roomId}
-            onChange={e => {
-              setRoomId(e.target.value)
-            }}
-            required
-            label="Room ID"
-          />
-          <TextField
-            className={classes.formField}
-            value={password}
-            onChange={e => {
-              setPassword(e.target.value)
-            }}
-            label="Password"
-          />
-          <TextField
-            InputProps={{
-              endAdornment: 'Players',
-              inputProps: { max: 6, min: 2 }
-            }}
-            type="number"
-            value={maxPlayers}
-            onChange={e =>
-              setMaxPlayers(Number.parseInt(e.target.value || '0', 10))
-            }
-            label="Max players"
-          />
-          <TextField
-            InputProps={{
-              endAdornment: 'Turns',
-              inputProps: { max: 10, min: 5 }
-            }}
-            type="number"
-            value={maxTurns}
-            onChange={e =>
-              setMaxTurns(Number.parseInt(e.target.value || '0', 10))
-            }
-            label="Max turns"
-          />
-          <InputLabel>
-            Advanced Mode
-            <Switch
-              checked={advancedMode}
-              onChange={e => setAdvancedMode(e.target.checked)}
+          <Box className={classes.fieldRow}>
+            <TextField
+              autoFocus
+              className={classes.formField}
+              value={roomId}
+              onChange={e => {
+                setRoomId(e.target.value)
+              }}
+              required
+              label="Room ID"
             />
-          </InputLabel>
+            <TextField
+              className={classes.formField}
+              value={password}
+              onChange={e => {
+                setPassword(e.target.value)
+              }}
+              label="Password"
+            />
+          </Box>
+          <Box className={classes.fieldRow}>
+            <TextField
+              fullWidth
+              InputProps={{
+                endAdornment: 'Players',
+                inputProps: { max: 6, min: 2 }
+              }}
+              type="number"
+              value={maxPlayers}
+              onChange={e =>
+                setMaxPlayers(Number.parseInt(e.target.value || '0', 10))
+              }
+              label="Max players"
+            />
+            <TextField
+              fullWidth
+              InputProps={{
+                endAdornment: 'Turns',
+                inputProps: { max: 10, min: 5 }
+              }}
+              type="number"
+              value={maxTurns}
+              onChange={e =>
+                setMaxTurns(Number.parseInt(e.target.value || '0', 10))
+              }
+              label="Max turns"
+            />
+          </Box>
+          <Box className={classes.fieldGroup}>
+            <InputLabel>
+              Advanced Mode
+              <Switch
+                color="primary"
+                checked={advancedMode}
+                onChange={e => setAdvancedMode(e.target.checked)}
+              />
+            </InputLabel>
+            <Typography variant="body2">
+              The Basic Game is changed by increasing the number of Spice Blows,
+              adding a spice advantage for holding a city or Tuek’s Sietch, (the
+              smuggler stronghold), an enhanced Karama Card, and an advanced
+              battle system.
+            </Typography>
+          </Box>
           <Button type="submit" variant="contained" color="primary">
             Create Game
           </Button>

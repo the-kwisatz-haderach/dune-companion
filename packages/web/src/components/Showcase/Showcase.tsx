@@ -7,14 +7,6 @@ interface Props {
   body: string
 }
 
-/*
-starting city
-starting spice
-starting treachery cards
-free revivals
-starting forces
-*/
-
 const useStyles = makeStyles(theme =>
   createStyles({
     root: {
@@ -25,17 +17,18 @@ const useStyles = makeStyles(theme =>
       border: `1px solid ${theme.palette.grey[200]}`,
       padding: theme.spacing(2.5),
       boxShadow: '0px 15px 20px -10px rgb(0 0 0 / 20%)',
-      paddingBottom: theme.spacing(1),
+      paddingBottom: theme.spacing(2),
       borderRadius: 20,
       textAlign: 'center'
     },
     iconContainer: {
       position: 'relative',
-      marginLeft: theme.spacing(0.5)
+      marginLeft: theme.spacing(0.8)
     },
     body: {
       fontWeight: 'bold',
-      fontSize: theme.typography.pxToRem(36)
+      fontSize: '1.5rem',
+      lineHeight: 1
     }
   })
 )

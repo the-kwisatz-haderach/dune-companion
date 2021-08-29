@@ -1,7 +1,7 @@
 import { factions, Factions } from '@dune-companion/engine'
 import { Theme, createStyles, makeStyles } from '@material-ui/core'
 import { ReactElement } from 'react'
-import { getFactionIcon } from '../../lib/getFactionIcon'
+import { factionIcons } from '../../lib/factionIcons'
 import { Header } from '../Header'
 
 interface Props {
@@ -22,12 +22,12 @@ const useStyles = makeStyles<Theme, Props>(theme =>
 
 export function FactionHeader({ faction }: Props): ReactElement {
   const classes = useStyles({ faction })
-  const Icon = getFactionIcon(faction)
+  const Icon = factionIcons[faction]
   const { name, shorthand } = factions[faction]
   return (
     <Header
       title={name}
-      subtitle={shorthand}
+      description={shorthand}
       type="Faction"
       Icon={<Icon className={classes.icon} />}
     />

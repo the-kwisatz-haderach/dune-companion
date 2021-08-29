@@ -29,43 +29,51 @@ export const requiredPhaseActions = {
 export const phases: Record<Phases, Phase> = {
   SETUP: {
     name: 'Setup',
-    description: ''
+    description:
+      'Players take their Player Shields and player sheets and set up their factions as follows.'
   },
   STORM: {
     name: 'Storm',
-    description: ''
+    description:
+      'The Storm Marker is moved around the map. The faction whose Player Marker the storm next approaches will be the First Player for this turn.'
   },
   SPICE_BLOW_AND_NEXUS: {
     name: 'Spice blow and nexus',
-    description: ''
+    description:
+      'The top card of the Spice Deck is turned over and the amount of spice shown on the card is placed in the highlighted territory. If Shai-Hulud appears during the Spice Blow Phase, a Nexus occurs and the players have the opportunity to make and break Alliances.'
   },
   CHOAM_CHARITY: {
     name: 'Choam charity',
-    description: ''
+    description: 'Players with 0 or 1 spice may claim CHOAM Charity.'
   },
   BIDDING: {
     name: 'Bidding',
-    description: ''
+    description: 'Players bid spice to acquire Treachery Cards'
   },
   REVIVAL: {
     name: 'Revival',
-    description: ''
+    description:
+      'All players are allowed to reclaim forces and leaders from the Tleilaxu Tanks.'
   },
   SHIPMENT_AND_MOVEMENT: {
     name: 'Shipment and movement',
-    description: ''
+    description:
+      'Starting with the First Player and proceeding counterclockwise, each player in turn ships forces down to the planet or brings in forces from the southern hemisphere (Fremen) and then moves their forces on the game board.'
   },
   BATTLE: {
     name: 'Battle',
-    description: ''
+    description:
+      'Players must resolve battles in every territory that is occupied by forces from two or more factions.'
   },
   SPICE_HARVEST: {
     name: 'Spice harvest',
-    description: ''
+    description:
+      'Forces in territories that contain spice may collect the spice.'
   },
   MENTAT_PAUSE: {
     name: 'Mentat pause',
-    description: ''
+    description:
+      'Factions either declare a winner (or winners) or take some time to evaluate their positions on the map and then move the Turn Counter to the next position on the Turn Track to begin the next turn.'
   },
   FINISHED: {
     name: 'Finished',

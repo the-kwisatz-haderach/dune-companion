@@ -1,6 +1,6 @@
 {
   "name": "@dune-companion/engine",
-  "version": "0.1.57",
+  "version": "0.1.60",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "module": "lib-esm/index.js",

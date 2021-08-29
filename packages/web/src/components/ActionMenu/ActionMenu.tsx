@@ -1,80 +1,85 @@
 import { ReactElement } from 'react'
 import {
-  Theme,
   Box,
   createStyles,
-  IconButton,
-  makeStyles
+  makeStyles,
+  Button,
+  Typography
 } from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu'
-import HomeIcon from '@material-ui/icons/Home'
-import SearchIcon from '@material-ui/icons/Search'
-import { Player } from '@dune-companion/engine'
 
 type Props = {
-  faction?: Player['faction']
+  primaryActionLabel: string
+  primaryActionPreamble?: string
+  primaryActionType?: 'positive' | 'negative' | 'neutral'
+  primaryActionIsDisabled?: boolean
+  onPrimaryAction: () => void
+  secondaryActionLeftLabel?: string
+  onSecondaryActionLeft?: () => void
+  secondaryActionRightLabel?: string
+  onSecondaryActionRight?: () => void
 }
 
-const useStyles = makeStyles<Theme, Props>(theme =>
+const useStyles = makeStyles(theme =>
   createStyles({
     root: {
+      position: 'fixed',
+      zIndex: 2,
+      bottom: 0,
       width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
-      backgroundColor: theme.palette.common.white,
-      color: theme.palette.common.black,
-      height: 50,
-      position: 'relative',
-      borderTop: `1px solid ${theme.palette.grey[300]}`,
-      boxShadow: theme.shadows[24]
+      color: theme.palette.common.white
     },
-    item: {
-      flex: 1,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    centerItem: {
-      color: ({ faction }) =>
-        faction
-          ? theme.palette[faction].contrastText
-          : theme.palette.common.white,
-      width: 70,
-      height: 70,
-      backgroundImage: ({ faction }) =>
-        `radial-gradient(circle at top left, ${
-          faction ? theme.palette[faction].light : theme.palette.grey[400]
-        } 10px, ${
-          faction ? theme.palette[faction].dark : theme.palette.common.black
-        })`,
-      borderRadius: '50%',
+    preamble: {
       position: 'absolute',
-      bottom: 15,
-      left: 'calc(50% - 35px)',
-      zIndex: 1
+      bottom: 50,
+      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      padding: theme.spacing(1),
+      borderRadius: 5
     }
   })
 )
 
-export default function ActionMenu({ faction }: Props): ReactElement {
-  const classes = useStyles({ faction })
+export default function ActionMenu({
+  primaryActionLabel,
+  primaryActionPreamble,
+  onPrimaryAction,
+  secondaryActionLeftLabel,
+  onSecondaryActionLeft,
+  secondaryActionRightLabel,
+  onSecondaryActionRight,
+  primaryActionIsDisabled = false,
+  primaryActionType = 'neutral'
+}: Props): ReactElement {
+  const classes = useStyles()
   return (
     <Box className={classes.root}>
-      <Box className={classes.item}>
-        <IconButton color="inherit">
-          <MenuIcon />
-        </IconButton>
+      {onSecondaryActionLeft && secondaryActionLeftLabel && (
+        <Button variant="contained" onClick={onSecondaryActionLeft}>
+          {secondaryActionLeftLabel}
+        </Button>
+      )}
+      <Box position="relative" flex={1} display="flex" justifyContent="center">
+        {primaryActionPreamble && (
+          <Typography variant="body2" className={classes.preamble}>
+            {primaryActionPreamble}
+          </Typography>
+        )}
+        <Button
+          size="large"
+          variant="contained"
+          disabled={primaryActionIsDisabled}
+          color={primaryActionType === 'positive' ? 'primary' : 'default'}
+          onClick={onPrimaryAction}
+        >
+          {primaryActionLabel}
+        </Button>
       </Box>
-      <Box className={`${classes.item} ${classes.centerItem}`}>
-        <IconButton color="inherit">
-          <HomeIcon fontSize="large" />
-        </IconButton>
-      </Box>
-      <Box className={classes.item}>
-        <IconButton color="inherit">
-          <SearchIcon />
-        </IconButton>
-      </Box>
+      {onSecondaryActionRight && secondaryActionRightLabel && (
+        <Button variant="contained" onClick={onSecondaryActionRight}>
+          {secondaryActionRightLabel}
+        </Button>
+      )}
     </Box>
   )
 }

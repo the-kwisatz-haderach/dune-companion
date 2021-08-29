@@ -1,17 +1,35 @@
 import { Cities } from './city'
+import { RuleSet } from './ruleSet'
 
-type FactionPower = {}
+type Leader = {
+  name: string
+  strength: number
+  backstory: string
+}
+
+type Commander = {
+  name: string
+  backstory: string
+}
 
 export type Faction = {
   name: string
+  backstory: string
+  commander: Commander
+  leaders: Leader[]
   shorthand: string
   description: string
-  powers: FactionPower[]
+  alliancePower: string
+  advantages: Pick<RuleSet, 'name' | 'description' | 'isAdvanced'>[]
+  keyAdvantage: string
+  strategy: string
+  karamaPower: string
   itemsAllowed: number
   freeRevivals: number
+  startingPlanetaryForces: number
+  startingReserveForces: number
   startingSpice: number
   startingItems: number
-  strategyHint: string
   startingCity: Cities | null
 }
 
