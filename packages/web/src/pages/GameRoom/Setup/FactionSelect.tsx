@@ -1,33 +1,24 @@
+import { ReactElement, useState } from 'react'
 import {
   Box,
   createStyles,
-  Grid,
   makeStyles,
   Typography,
   useTheme
 } from '@material-ui/core'
-import {
-  cities,
-  factions,
-  Factions,
-  factionRuleSets,
-  Phases,
-  phases
-} from '@dune-companion/engine'
-import { ReactElement, useState } from 'react'
+import { factions, Factions } from '@dune-companion/engine'
 import { useGame, useGameDispatch, usePlayer } from '../../../dune-react'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
 import { Card } from '../../../components/Card'
 import { Section } from '../../../components/Section'
-import { Showcase } from '../../../components/Showcase'
-import { Icon } from '../../../components/Icon'
 import dune from '../../../images/dune.jpeg'
 import { factionIcons } from '../../../lib/factionIcons'
 import { ActionMenu } from '../../../components/ActionMenu'
 import { Header } from '../../../components/Header'
-import { Tabs } from '../../../components/Tabs'
 import { Leader } from '../../../components/Leader'
+import { FactionSummary } from './FactionSummary'
+import { FactionAdvantages } from './FactionAdvantages'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -108,13 +99,6 @@ export default function FactionSelect(): ReactElement {
     })
   }
 
-  const filteredPhases = Object.keys(phases).filter(
-    phase =>
-      factionRuleSets[currentFactionKey as Factions][phase as Phases].filter(
-        rule => game.conditions.advancedMode || !rule.isAdvanced
-      ).length > 0
-  )
-
   return (
     <Box className={classes.container}>
       <ActionMenu
@@ -151,45 +135,7 @@ export default function FactionSelect(): ReactElement {
           img={dune}
         />
         <Section heading="Summary">
-          <Grid container spacing={2} justifyContent="space-between">
-            <Grid item xs={6}>
-              <Showcase
-                title="Free revivals"
-                body={currentFaction.freeRevivals.toString()}
-                Icon={<Icon icon="revival" />}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Showcase
-                title="Starting spice"
-                body={currentFaction.startingSpice.toString()}
-                Icon={<Icon icon="spice" />}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Showcase
-                title="Starting items"
-                body={currentFaction.startingItems.toString()}
-                Icon={<Icon icon="treachery-card" />}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <Showcase
-                title="Starting forces"
-                body={`${currentFaction.startingPlanetaryForces} + ${currentFaction.startingReserveForces}`}
-                Icon={<Icon icon="force" />}
-              />
-            </Grid>
-            {currentFaction.startingCity && (
-              <Grid item xs={12}>
-                <Showcase
-                  title="Starting city"
-                  body={cities[currentFaction.startingCity].name}
-                  Icon={<Icon icon="city" />}
-                />
-              </Grid>
-            )}
-          </Grid>
+          <FactionSummary faction={currentFaction} />
         </Section>
         <Section heading="Leaders">
           <Box className={classes.sideScrollContainer}>
@@ -205,32 +151,9 @@ export default function FactionSelect(): ReactElement {
           </Box>
         </Section>
         <Section heading="Phase Advantages">
-          <Tabs
-            resetDependency={currentFactionKey}
-            sticky
-            tabs={filteredPhases.map(phase => ({
-              label: phases[phase as Phases].name,
-              content: (
-                <Box className={classes.cardContainer}>
-                  {factionRuleSets[currentFactionKey as Factions][
-                    phase as Phases
-                  ]
-                    .filter(
-                      rule => game.conditions.advancedMode || !rule.isAdvanced
-                    )
-                    .map(rule => (
-                      <Card
-                        title={rule.name}
-                        meta="Faction rule"
-                        phase={phase as Phases}
-                        faction={currentFactionKey}
-                        advanced={rule.isAdvanced}
-                        body={rule.description}
-                      />
-                    ))}
-                </Box>
-              )
-            }))}
+          <FactionAdvantages
+            faction={currentFactionKey}
+            isAdvancedMode={game.conditions.advancedMode}
           />
         </Section>
         <Section heading="Common Advantages">
