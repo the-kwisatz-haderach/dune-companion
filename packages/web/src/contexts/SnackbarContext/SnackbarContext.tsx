@@ -68,7 +68,7 @@ export const SnackbarProvider: React.FC = ({ children }) => {
             key={messageInfo.key}
             anchorOrigin={{
               vertical: 'top',
-              horizontal: 'left'
+              horizontal: 'center'
             }}
             open={open}
             autoHideDuration={5000}
