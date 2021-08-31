@@ -3,9 +3,10 @@ import {
   Box,
   createStyles,
   makeStyles,
-  Button,
-  Typography
+  Typography,
+  Fab
 } from '@material-ui/core'
+import { NavigateBefore, NavigateNext } from '@material-ui/icons'
 
 type Props = {
   primaryActionLabel: string
@@ -23,9 +24,10 @@ const useStyles = makeStyles(theme =>
   createStyles({
     root: {
       position: 'fixed',
-      zIndex: 2,
-      bottom: 0,
-      width: '100%',
+      zIndex: 11,
+      bottom: theme.spacing(1),
+      left: 10,
+      width: 'calc(100% - 20px)',
       display: 'flex',
       justifyContent: 'space-between',
       color: theme.palette.common.white
@@ -55,9 +57,9 @@ export default function ActionMenu({
   return (
     <Box className={classes.root}>
       {onSecondaryActionLeft && secondaryActionLeftLabel && (
-        <Button variant="contained" onClick={onSecondaryActionLeft}>
-          {secondaryActionLeftLabel}
-        </Button>
+        <Fab variant="extended" onClick={onSecondaryActionLeft}>
+          <NavigateBefore />
+        </Fab>
       )}
       <Box position="relative" flex={1} display="flex" justifyContent="center">
         {primaryActionPreamble && (
@@ -65,20 +67,20 @@ export default function ActionMenu({
             {primaryActionPreamble}
           </Typography>
         )}
-        <Button
+        <Fab
           size="large"
-          variant="contained"
+          variant="extended"
           disabled={primaryActionIsDisabled}
           color={primaryActionType === 'positive' ? 'primary' : 'default'}
           onClick={onPrimaryAction}
         >
           {primaryActionLabel}
-        </Button>
+        </Fab>
       </Box>
       {onSecondaryActionRight && secondaryActionRightLabel && (
-        <Button variant="contained" onClick={onSecondaryActionRight}>
-          {secondaryActionRightLabel}
-        </Button>
+        <Fab variant="extended" onClick={onSecondaryActionRight}>
+          <NavigateNext />
+        </Fab>
       )}
     </Box>
   )

@@ -3,6 +3,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { useEffect } from 'react'
+import { Grow } from '@material-ui/core'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -11,18 +12,17 @@ interface TabPanelProps {
 }
 
 function TabPanel({ children, value, index, ...other }: TabPanelProps) {
-  return children !== index ? (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`scrollable-auto-tabpanel-${index}`}
-      aria-labelledby={`scrollable-auto-tab-${index}`}
-      {...other}
-    >
-      {children}
-    </div>
-  ) : (
-    <></>
+  return (
+    <Grow in={value === index} unmountOnExit exit={false} timeout={1000}>
+      <div
+        role="tabpanel"
+        id={`scrollable-auto-tabpanel-${index}`}
+        aria-labelledby={`scrollable-auto-tab-${index}`}
+        {...other}
+      >
+        {children}
+      </div>
+    </Grow>
   )
 }
 

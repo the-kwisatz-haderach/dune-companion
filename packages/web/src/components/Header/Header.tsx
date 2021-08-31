@@ -47,6 +47,7 @@ const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>(theme =>
         width: '100%',
         top: 10,
         height: 'calc(100% - 20px)',
+        transition: 'background-color 1s ease-in-out 0.5s',
         backgroundColor: ({ faction }) =>
           faction ? theme.palette[faction].main : theme.palette.grey[300],
         borderRadius: 50,
@@ -58,6 +59,7 @@ const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>(theme =>
       borderRadius: '50%',
       marginLeft: theme.spacing(2),
       padding: 7,
+      transition: 'background-color 1s ease-in-out 0.5s',
       backgroundColor: ({ faction }) =>
         faction ? theme.palette[faction].main : theme.palette.grey[300]
     },

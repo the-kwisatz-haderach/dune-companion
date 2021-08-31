@@ -19,16 +19,24 @@ const useStyles = makeStyles(theme =>
       padding: 15,
       position: 'relative',
       overflow: 'hidden',
-      backgroundImage: `linear-gradient(to bottom, transparent, transparent, ${theme.palette.primary.main} 80%)`
+      backgroundImage: `linear-gradient(to bottom, transparent, transparent, ${theme.palette.primary.main} 80%), url(${dune})`,
+      backgroundPosition: '0 0, 205% 160%',
+      [theme.breakpoints.up('sm')]: {
+        backgroundPosition: '0 0, 100% 150%'
+      },
+      [theme.breakpoints.up('md')]: {
+        backgroundPosition: '0 0, 100% 250%'
+      }
     },
     image: {
       zIndex: -1,
       position: 'absolute',
+      width: '100%',
       right: 0,
       bottom: 0,
       top: 0,
       left: 0,
-      transform: 'translate(-58%, -300px) scale(1)'
+      transform: 'translate(-58%, -300px)'
     },
     link: {
       height: '100%',
@@ -61,7 +69,7 @@ export default function Home(): ReactElement {
   const history = useHistory()
   return (
     <Container className={classes.container}>
-      <img className={classes.image} src={dune} alt="dune" />
+      {/* <img className={classes.image} src={dune} alt="dune" /> */}
       <Box className={classes.headingContainer}>
         <Typography>Welcome to the</Typography>
         <Typography variant="h1">Dune Companion</Typography>

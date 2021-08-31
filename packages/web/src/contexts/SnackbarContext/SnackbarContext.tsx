@@ -67,7 +67,7 @@ export const SnackbarProvider: React.FC = ({ children }) => {
           <Snackbar
             key={messageInfo.key}
             anchorOrigin={{
-              vertical: 'bottom',
+              vertical: 'top',
               horizontal: 'left'
             }}
             open={open}

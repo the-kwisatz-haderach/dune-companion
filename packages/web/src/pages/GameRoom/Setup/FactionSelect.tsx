@@ -74,10 +74,12 @@ export default function FactionSelect(): ReactElement {
   const isSelectedByPlayer = player.id === playerSelected?.id
 
   const getNextFaction = () => {
+    window.scrollTo({ top: 0 })
     setFactionIndex(curr => (curr + 1) % factionKeys.length)
   }
 
   const getPreviousFaction = () => {
+    window.scrollTo({ top: 0 })
     setFactionIndex(curr => {
       const prev = curr - 1
       if (prev < 0) {

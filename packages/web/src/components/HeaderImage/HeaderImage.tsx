@@ -4,8 +4,11 @@ import {
   Box,
   createStyles,
   makeStyles,
-  Typography
+  Typography,
+  Slide
 } from '@material-ui/core'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 interface Props {
   src?: string
@@ -37,6 +40,7 @@ const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(theme =>
       backgroundRepeat: 'no-repeat',
       backgroundAttachment: 'fixed',
       backgroundColor: ({ color }) => color,
+      transition: 'background 1s ease-in-out',
       backgroundImage: ({ src, glow, color }) =>
         `linear-gradient(to bottom, ${
           color ? 'transparent' : 'black'
@@ -80,27 +84,29 @@ export default function HeaderImage({
   return (
     <Box className={classes.root}>
       {BackdropImage && <BackdropImage className={classes.icon} />}
-      <Box className={classes.textContainer}>
-        {preamble && (
-          <Typography
-            variant="caption"
-            color="inherit"
-            style={{ opacity: 0.7 }}
-          >
-            {preamble}
-          </Typography>
-        )}
-        {title && (
-          <Typography variant="h1" color="inherit">
-            {title}
-          </Typography>
-        )}
-        {subtitle && (
-          <Typography variant="subtitle1" color="inherit">
-            {subtitle}
-          </Typography>
-        )}
-      </Box>
+      <Slide>
+        <Box className={classes.textContainer}>
+          {preamble && (
+            <Typography
+              variant="caption"
+              color="inherit"
+              style={{ opacity: 0.7 }}
+            >
+              {preamble}
+            </Typography>
+          )}
+          {title && (
+            <Typography variant="h1" color="inherit">
+              {title}
+            </Typography>
+          )}
+          {subtitle && (
+            <Typography variant="subtitle1" color="inherit">
+              {subtitle}
+            </Typography>
+          )}
+        </Box>
+      </Slide>
     </Box>
   )
 }
