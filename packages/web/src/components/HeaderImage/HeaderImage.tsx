@@ -7,8 +7,6 @@ import {
   Typography,
   Slide
 } from '@material-ui/core'
-import { useEffect } from 'react'
-import { useState } from 'react'
 
 interface Props {
   src?: string
@@ -39,7 +37,7 @@ const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(theme =>
       backgroundSize: 'contain',
       backgroundRepeat: 'no-repeat',
       backgroundAttachment: 'fixed',
-      backgroundColor: ({ color }) => color,
+      backgroundColor: ({ color }) => color ?? 'grey',
       transition: 'background 1s ease-in-out',
       backgroundImage: ({ src, glow, color }) =>
         `linear-gradient(to bottom, ${
@@ -53,7 +51,8 @@ const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(theme =>
       padding: theme.spacing(2),
       flexDirection: 'column',
       justifyContent: 'flex-end',
-      color: theme.palette.common.white,
+      color: ({ color }) =>
+        color ? theme.palette.getContrastText(color) : 'white',
       height: 'fit-content',
       zIndex: 1
     },
@@ -84,29 +83,27 @@ export default function HeaderImage({
   return (
     <Box className={classes.root}>
       {BackdropImage && <BackdropImage className={classes.icon} />}
-      <Slide>
-        <Box className={classes.textContainer}>
-          {preamble && (
-            <Typography
-              variant="caption"
-              color="inherit"
-              style={{ opacity: 0.7 }}
-            >
-              {preamble}
-            </Typography>
-          )}
-          {title && (
-            <Typography variant="h1" color="inherit">
-              {title}
-            </Typography>
-          )}
-          {subtitle && (
-            <Typography variant="subtitle1" color="inherit">
-              {subtitle}
-            </Typography>
-          )}
-        </Box>
-      </Slide>
+      <Box className={classes.textContainer}>
+        {preamble && (
+          <Typography
+            variant="caption"
+            color="inherit"
+            style={{ opacity: 0.7 }}
+          >
+            {preamble}
+          </Typography>
+        )}
+        {title && (
+          <Typography variant="h1" color="inherit">
+            {title}
+          </Typography>
+        )}
+        {subtitle && (
+          <Typography variant="subtitle1" color="inherit">
+            {subtitle}
+          </Typography>
+        )}
+      </Box>
     </Box>
   )
 }

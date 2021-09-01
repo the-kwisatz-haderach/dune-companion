@@ -19,6 +19,7 @@ interface Props {
   phase?: Phases
   faction?: Factions
   advanced?: boolean
+  inclusionReason?: string
 }
 
 const useStyles = makeStyles<Theme, { faction?: Factions }>(theme =>
@@ -72,6 +73,7 @@ export default function Card({
   meta,
   phase,
   faction,
+  inclusionReason,
   advanced = false
 }: Props): ReactElement {
   const classes = useStyles({ faction })

@@ -1680,21 +1680,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.61.tgz::locator=%40dune-companion%2Fserver%40workspace%3Apackages%2Fserver":
-  version: 0.1.61
-  resolution: "@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.61.tgz::locator=%40dune-companion%2Fserver%40workspace%3Apackages%2Fserver"
+"@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.63.tgz::locator=%40dune-companion%2Fserver%40workspace%3Apackages%2Fserver":
+  version: 0.1.63
+  resolution: "@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.63.tgz::locator=%40dune-companion%2Fserver%40workspace%3Apackages%2Fserver"
   dependencies:
     "@reduxjs/toolkit": ^1.5.0
-  checksum: c7864b49c70d75bfa0f116a637d824fdd0e8552d6ba206b6146a9c822da3fc42eaf650afdfdc632929c0d3f0cbf74784e9b813cbb7e63a14b67861dc8404b8d7
+  checksum: af08cea32b25ca3ce172a4a3f255040024c382a098c1dc55ec7645fca19b9b582522c11ba7e27519b0bdc91be9fe5388691a7a70622bbce6769426225ae87085
   languageName: node
   linkType: hard
 
-"@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.61.tgz::locator=%40dune-companion%2Fweb%40workspace%3Apackages%2Fweb":
-  version: 0.1.61
-  resolution: "@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.61.tgz::locator=%40dune-companion%2Fweb%40workspace%3Apackages%2Fweb"
+"@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.63.tgz::locator=%40dune-companion%2Fweb%40workspace%3Apackages%2Fweb":
+  version: 0.1.63
+  resolution: "@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.63.tgz::locator=%40dune-companion%2Fweb%40workspace%3Apackages%2Fweb"
   dependencies:
     "@reduxjs/toolkit": ^1.5.0
-  checksum: c7864b49c70d75bfa0f116a637d824fdd0e8552d6ba206b6146a9c822da3fc42eaf650afdfdc632929c0d3f0cbf74784e9b813cbb7e63a14b67861dc8404b8d7
+  checksum: af08cea32b25ca3ce172a4a3f255040024c382a098c1dc55ec7645fca19b9b582522c11ba7e27519b0bdc91be9fe5388691a7a70622bbce6769426225ae87085
   languageName: node
   linkType: hard
 
@@ -1735,7 +1735,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@dune-companion/server@workspace:packages/server"
   dependencies:
-    "@dune-companion/engine": "file:../engine/@dune-companion-engine-0.1.61.tgz"
+    "@dune-companion/engine": "file:../engine/@dune-companion-engine-0.1.63.tgz"
     "@reduxjs/toolkit": ^1.6.1
     "@types/connect-redis": ^0.0.17
     "@types/express": ^4.17.13
@@ -1771,7 +1771,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@dune-companion/web@workspace:packages/web"
   dependencies:
-    "@dune-companion/engine": "file:../engine/@dune-companion-engine-0.1.61.tgz"
+    "@dune-companion/engine": "file:../engine/@dune-companion-engine-0.1.63.tgz"
     "@material-ui/core": ^4.12.3
     "@material-ui/icons": ^4.11.2
     "@material-ui/lab": ^4.0.0-alpha.60

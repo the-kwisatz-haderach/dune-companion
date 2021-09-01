@@ -12,25 +12,16 @@ import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
 import { Card } from '../../../components/Card'
 import { Section } from '../../../components/Section'
-import dune from '../../../images/dune.jpeg'
 import { factionIcons } from '../../../lib/factionIcons'
 import { ActionMenu } from '../../../components/ActionMenu'
 import { Header } from '../../../components/Header'
 import { Leader } from '../../../components/Leader'
 import { FactionSummary } from './FactionSummary'
 import { FactionAdvantages } from './FactionAdvantages'
+import dune from '../../../images/dune.jpeg'
 
 const useStyles = makeStyles(theme =>
   createStyles({
-    container: {},
-    actionsContainer: {
-      position: 'fixed',
-      zIndex: 2,
-      bottom: 80,
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between'
-    },
     sideScrollContainer: {
       display: 'flex',
       flexWrap: 'nowrap',
@@ -74,12 +65,10 @@ export default function FactionSelect(): ReactElement {
   const isSelectedByPlayer = player.id === playerSelected?.id
 
   const getNextFaction = () => {
-    window.scrollTo({ top: 0 })
     setFactionIndex(curr => (curr + 1) % factionKeys.length)
   }
 
   const getPreviousFaction = () => {
-    window.scrollTo({ top: 0 })
     setFactionIndex(curr => {
       const prev = curr - 1
       if (prev < 0) {
@@ -102,7 +91,7 @@ export default function FactionSelect(): ReactElement {
   }
 
   return (
-    <Box className={classes.container}>
+    <Box>
       <ActionMenu
         primaryActionLabel={isSelectedByPlayer ? 'Deselect' : 'Select'}
         primaryActionType={isSelectedByPlayer ? 'negative' : 'positive'}

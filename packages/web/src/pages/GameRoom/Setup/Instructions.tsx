@@ -1,30 +1,45 @@
 import { ReactElement } from 'react'
-import CheckIcon from '@material-ui/icons/Check'
-import BlockIcon from '@material-ui/icons/Block'
-import { useGameDispatch, usePlayer } from '../../../dune-react'
-import { Box, createStyles, Fab, makeStyles, Zoom } from '@material-ui/core'
+import { useGame, useGameDispatch, usePlayer } from '../../../dune-react'
+import { Box, createStyles, makeStyles } from '@material-ui/core'
+import { ActionMenu } from '../../../components/ActionMenu'
+import { HeaderImage } from '../../../components/HeaderImage'
+import { RoundedContainer } from '../../../components/RoundedContainer'
+import {
+  commonRuleSet,
+  factionRuleSets,
+  factions,
+  Factions
+} from '@dune-companion/engine'
+import { MarginList } from '../../../components/MarginList'
+import { Card } from '../../../components/Card'
+import { factionIcons } from '../../../lib/factionIcons'
+import { Header } from '../../../components/Header'
+import { Section } from '../../../components/Section'
+import { Alert } from '@material-ui/lab'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    floatingButton: {
-      position: 'fixed',
-      bottom: theme.spacing(2),
-      right: theme.spacing(2)
-    },
-    extendedIcon: {
-      marginRight: theme.spacing(1)
-    }
-  })
-)
+const useStyles = makeStyles(theme => createStyles({}))
 
 export default function Instructions(): ReactElement {
   const classes = useStyles()
   const dispatch = useGameDispatch()
   const player = usePlayer()
+  const game = useGame()
 
   const isPlayerReady = !player.actions.some(
     action => action.type === 'SET_IS_READY'
   )
+
+  const phaseRules = Object.values(game.players)
+    .map(player => player.faction)
+    .filter((faction): faction is Factions => faction !== null)
+    .flatMap(faction => factionRuleSets[faction].SETUP)
+
+  const rules = [
+    ...commonRuleSet.SETUP.filter(
+      rule => !game.conditions.advancedMode || rule.isAdvanced
+    ),
+    ...phaseRules
+  ]
 
   const onToggleReady = () => {
     if (isPlayerReady) {
@@ -35,23 +50,48 @@ export default function Instructions(): ReactElement {
 
   return (
     <Box>
-      <Zoom in={player.faction !== null}>
-        <Fab
-          onClick={onToggleReady}
-          variant="extended"
-          size="large"
-          color={isPlayerReady ? 'default' : 'primary'}
-          aria-label="ready"
-          className={classes.floatingButton}
+      <ActionMenu
+        primaryActionLabel={isPlayerReady ? 'Not ready' : 'Ready'}
+        primaryActionType={isPlayerReady ? 'negative' : 'positive'}
+        onPrimaryAction={onToggleReady}
+      />
+      <HeaderImage
+        title="Setup for play"
+        preamble="Phase"
+        BackdropImage={factionIcons.BENE_GESSERIT}
+      />
+      <RoundedContainer>
+        <Header
+          title="Game Objective"
+          description="Each faction has a set of unique economic, military, strategic, or treacherous advantages. The object of the game is to use these advantages to gain control of Dune. The winner is the First Player to occupy at least 3 strongholds with at least one of their forces during the Mentat Pause Phase. A player may win alone or in an Alliance with other players."
+        />
+        <Section
+          heading="Setup Process"
+          description="Players take their Player Shields and player sheets and set up their factions as follows."
         >
-          {isPlayerReady ? (
-            <BlockIcon className={classes.extendedIcon} />
-          ) : (
-            <CheckIcon className={classes.extendedIcon} />
-          )}
-          {isPlayerReady ? 'Not ready' : 'Ready'}
-        </Fab>
-      </Zoom>
+          <Alert severity="info">
+            A faction has special advantages that may contradict the rules. A
+            faction’s particular advantages always have precedence over the
+            rules.
+          </Alert>
+          <MarginList>
+            {rules.map(rule => (
+              <Card
+                title={rule.name}
+                meta={
+                  rule.faction
+                    ? `${factions[rule.faction].name} rule`
+                    : 'Common rule'
+                }
+                phase="SETUP"
+                faction={rule.faction}
+                advanced={rule.isAdvanced}
+                body={rule.description}
+              />
+            ))}
+          </MarginList>
+        </Section>
+      </RoundedContainer>
     </Box>
   )
 }

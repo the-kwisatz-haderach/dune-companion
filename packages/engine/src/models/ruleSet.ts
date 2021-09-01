@@ -7,4 +7,5 @@ export type RuleSet = {
   isAdvanced: boolean
   faction?: Factions
   inclusionCondition?: (game: Game) => boolean
+  inclusionReason?: string
 }

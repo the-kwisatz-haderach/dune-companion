@@ -18,17 +18,20 @@ interface Props {
   faction?: Factions
 }
 
-const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>(theme =>
+const useStyles = makeStyles<Theme, Pick<Props, 'faction' | 'img'>>(theme =>
   createStyles({
     container: {
       display: 'flex',
       flexDirection: 'column',
-      WebkitFontSmoothing: 'antialiased'
+      WebkitFontSmoothing: 'antialiased',
+      marginBottom: theme.spacing(2)
     },
     textContainer: {
-      marginLeft: theme.spacing(2),
+      marginLeft: ({ img }) => img && theme.spacing(2.5),
+      minHeight: 100,
       flexDirection: 'column',
       display: 'flex',
+      alignItems: ({ img }) => (!img ? 'center' : undefined),
       flex: 1,
       justifyContent: 'center',
       '& *': {
@@ -40,30 +43,28 @@ const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>(theme =>
       position: 'relative',
       display: 'flex',
       zIndex: 0,
-      marginBottom: theme.spacing(2),
-      '&::after': {
-        content: '""',
-        position: 'absolute',
-        width: '100%',
-        top: 10,
-        height: 'calc(100% - 20px)',
-        transition: 'background-color 1s ease-in-out 0.5s',
-        backgroundColor: ({ faction }) =>
-          faction ? theme.palette[faction].main : theme.palette.grey[300],
-        borderRadius: 50,
-        opacity: 0.6,
-        zIndex: -1
-      }
+      marginBottom: theme.spacing(2)
     },
     img: {
       borderRadius: '50%',
-      marginLeft: theme.spacing(2),
       padding: 7,
       transition: 'background-color 1s ease-in-out 0.5s',
       backgroundColor: ({ faction }) =>
         faction ? theme.palette[faction].main : theme.palette.grey[300]
     },
-    title: {}
+    title: {},
+    backdrop: {
+      position: 'absolute',
+      width: '100%',
+      top: 0,
+      zIndex: -1,
+      height: '100%',
+      transition: 'background-color 1s ease-in-out 0.5s',
+      backgroundColor: ({ faction }) =>
+        faction ? theme.palette[faction].main : theme.palette.grey[900],
+      borderRadius: 100,
+      opacity: 0.6
+    }
   })
 )
 
@@ -75,10 +76,11 @@ export default function Header({
   description,
   Icon
 }: Props): ReactElement {
-  const classes = useStyles({ faction })
+  const classes = useStyles({ faction, img })
   return (
     <Box className={classes.container}>
       <Box className={classes.topContainer}>
+        <div className={classes.backdrop} />
         {Icon ? (
           Icon
         ) : img ? (

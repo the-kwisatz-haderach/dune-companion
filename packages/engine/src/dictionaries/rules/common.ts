@@ -44,7 +44,8 @@ export const commonRuleSet: Record<Phases, RuleSet[]> = {
       description:
         'The first time the storm is moved, the Storm Marker is placed at a random location along the map edge using the following procedure. The two players whose player circles are nearest on either side of the Storm Start Sector will secretly dial a number from 0 to 20 on the wheels. The two numbers are simultaneously revealed, totaled and the Storm Marker moved from the Storm Start sector counterclockwise around the map for the sum total of sectors.',
       isAdvanced: false,
-      inclusionCondition: game => game.currentTurn === 1
+      inclusionCondition: game => game.currentTurn === 1,
+      inclusionReason: 'First turn'
     },
     {
       name: 'Storm Movement',

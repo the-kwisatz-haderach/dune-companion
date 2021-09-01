@@ -53,6 +53,9 @@ export const theme = createTheme({
     subtitle1: {
       fontWeight: 'lighter'
     },
+    body2: {
+      WebkitFontSmoothing: 'antialiased'
+    },
     caption: {
       color: '#a7a7a7',
       textTransform: 'uppercase',
@@ -128,9 +131,9 @@ export const createFactionStyles = (
   backgroundImage: ({ faction }) =>
     faction
       ? `linear-gradient(175deg, ${theme.palette[faction].main}, ${theme.palette[faction].dark})`
-      : theme.palette.common.white,
+      : `linear-gradient(175deg, ${theme.palette.common.white}, ${theme.palette.grey[100]})`,
   '& *': {
     color: ({ faction }) =>
-      faction ? theme.palette[faction].contrastText : theme.palette.common.white
+      faction ? theme.palette[faction].contrastText : theme.palette.common.black
   }
 })
