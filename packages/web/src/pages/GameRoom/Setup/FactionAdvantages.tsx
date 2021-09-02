@@ -39,7 +39,6 @@ export const FactionAdvantages = ({ faction, isAdvancedMode }: Props) => {
                 <Card
                   title={rule.name}
                   meta="Faction rule"
-                  phase={phase as Phases}
                   faction={faction}
                   advanced={rule.isAdvanced}
                   body={rule.description}

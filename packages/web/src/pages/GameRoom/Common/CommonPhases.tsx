@@ -1,66 +1,46 @@
 import { ReactElement } from 'react'
-import { useGame, useGameDispatch, usePlayer } from '../../../dune-react'
 import { Box } from '@material-ui/core'
-import { ActionMenu } from '../../../components/ActionMenu'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
-import {
-  commonRuleSet,
-  factionRuleSets,
-  factions,
-  Factions,
-  phases
-} from '@dune-companion/engine'
+import { factions, Phases, phases, RuleSet } from '@dune-companion/engine'
 import { MarginList } from '../../../components/MarginList'
 import { Card } from '../../../components/Card'
 import { factionIcons } from '../../../lib/factionIcons'
 import { Section } from '../../../components/Section'
+import { Header } from '../../../components/Header'
+import { Alert } from '@material-ui/lab'
 
-export default function CommonPhases(): ReactElement {
-  const dispatch = useGameDispatch()
-  const player = usePlayer()
-  const game = useGame()
+type Props = {
+  phase: Phases
+  rules: RuleSet[]
+}
 
-  const isPlayerReady = !player.actions.some(
-    action => action.type === 'SET_IS_READY'
-  )
-
-  const phaseRules = Object.values(game.players)
-    .map(player => player.faction)
-    .filter((faction): faction is Factions => faction !== null)
-    .flatMap(faction => factionRuleSets[faction][game.currentPhase])
-
-  const rules = [
-    ...commonRuleSet[game.currentPhase].filter(
-      rule => !game.conditions.advancedMode || rule.isAdvanced
-    ),
-    ...phaseRules
-  ].filter(rule => !rule.inclusionCondition || rule.inclusionCondition(game))
-
-  const onToggleReady = () => {
-    if (isPlayerReady) {
-      return dispatch('SET_IS_NOT_READY', {})
-    }
-    dispatch('SET_IS_READY', {})
-  }
-
+export default function CommonPhases({ phase, rules }: Props): ReactElement {
   return (
-    <Box>
-      <ActionMenu
-        primaryActionLabel={isPlayerReady ? 'Not ready' : 'Ready'}
-        primaryActionType={isPlayerReady ? 'negative' : 'positive'}
-        onPrimaryAction={onToggleReady}
-      />
+    <Box bgcolor="white">
       <HeaderImage
-        title={phases[game.currentPhase].name}
+        title={phases[phase].name}
         preamble="Phase"
         BackdropImage={factionIcons.BENE_GESSERIT}
       />
       <RoundedContainer>
+        {phase === 'SETUP' && (
+          <Header
+            title="Game Objective"
+            description="Each faction has a set of unique economic, military, strategic, or treacherous advantages. The object of the game is to use these advantages to gain control of Dune. The winner is the First Player to occupy at least 3 strongholds with at least one of their forces during the Mentat Pause Phase. A player may win alone or in an Alliance with other players."
+          />
+        )}
         <Section
-          heading={`${phases[game.currentPhase].name} Process`}
-          description={phases[game.currentPhase].description}
+          heading={`${phases[phase].name} Process`}
+          description={phases[phase].description}
         >
+          {phase === 'SETUP' && (
+            <Alert severity="info">
+              A faction has special advantages that may contradict the rules. A
+              faction’s particular advantages always have precedence over the
+              rules.
+            </Alert>
+          )}
           <MarginList>
             {rules.map(rule => (
               <Card
@@ -72,7 +52,6 @@ export default function CommonPhases(): ReactElement {
                     ? 'Temporary rule'
                     : 'Common rule'
                 }
-                phase="SETUP"
                 inclusionReason={rule.inclusionReason}
                 faction={rule.faction}
                 advanced={rule.isAdvanced}

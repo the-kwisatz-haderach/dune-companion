@@ -8,14 +8,13 @@ import {
 } from '@material-ui/core'
 import StarIcon from '@material-ui/icons/Star'
 import { MetaText } from '../Typography/MetaText'
-import { Factions, Phases } from '@dune-companion/engine'
+import { Factions } from '@dune-companion/engine'
 import { factionIcons } from '../../lib/factionIcons'
 
 interface Props {
   title: string
   body: string
   meta: string
-  phase?: Phases
   faction?: Factions
   advanced?: boolean
   inclusionReason?: string
@@ -97,7 +96,6 @@ export default function Card({
   title,
   body,
   meta,
-  phase,
   faction,
   inclusionReason,
   advanced = false

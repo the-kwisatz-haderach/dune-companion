@@ -5,6 +5,9 @@ import { useGame } from '../../dune-react'
 const useStyles = makeStyles(theme =>
   createStyles({
     root: {
+      zIndex: 500,
+      position: 'sticky',
+      top: 0,
       display: 'flex',
       width: '100%',
       backgroundColor: theme.palette.common.white,

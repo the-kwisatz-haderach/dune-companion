@@ -4,8 +4,7 @@ import {
   Box,
   createStyles,
   makeStyles,
-  Typography,
-  Slide
+  Typography
 } from '@material-ui/core'
 
 interface Props {

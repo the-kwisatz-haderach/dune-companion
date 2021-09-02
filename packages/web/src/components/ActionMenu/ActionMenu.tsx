@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme =>
   createStyles({
     root: {
       position: 'fixed',
-      zIndex: 11,
+      zIndex: 500,
       bottom: theme.spacing(1),
       left: 10,
       width: 'calc(100% - 20px)',
