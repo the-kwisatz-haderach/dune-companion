@@ -1,7 +1,6 @@
 import { ReactElement } from 'react'
-import { useGame, useGameDispatch, usePlayer } from '../../../dune-react'
-import { Box, createStyles, makeStyles } from '@material-ui/core'
-import { ActionMenu } from '../../../components/ActionMenu'
+import { useGame } from '../../../dune-react'
+import { Box } from '@material-ui/core'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
 import {
@@ -17,17 +16,8 @@ import { Header } from '../../../components/Header'
 import { Section } from '../../../components/Section'
 import { Alert } from '@material-ui/lab'
 
-const useStyles = makeStyles(theme => createStyles({}))
-
 export default function Instructions(): ReactElement {
-  const classes = useStyles()
-  const dispatch = useGameDispatch()
-  const player = usePlayer()
   const game = useGame()
-
-  const isPlayerReady = !player.actions.some(
-    action => action.type === 'SET_IS_READY'
-  )
 
   const phaseRules = Object.values(game.players)
     .map(player => player.faction)
@@ -41,20 +31,8 @@ export default function Instructions(): ReactElement {
     ...phaseRules
   ]
 
-  const onToggleReady = () => {
-    if (isPlayerReady) {
-      return dispatch('SET_IS_NOT_READY', {})
-    }
-    dispatch('SET_IS_READY', {})
-  }
-
   return (
     <Box>
-      <ActionMenu
-        primaryActionLabel={isPlayerReady ? 'Not ready' : 'Ready'}
-        primaryActionType={isPlayerReady ? 'negative' : 'positive'}
-        onPrimaryAction={onToggleReady}
-      />
       <HeaderImage
         title="Setup for play"
         preamble="Phase"

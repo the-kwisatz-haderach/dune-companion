@@ -1,6 +1,6 @@
 import { ReactElement } from 'react'
 import { useGame, useGameDispatch, usePlayer } from '../../../dune-react'
-import { Box, createStyles, makeStyles } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { ActionMenu } from '../../../components/ActionMenu'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
@@ -16,10 +16,7 @@ import { Card } from '../../../components/Card'
 import { factionIcons } from '../../../lib/factionIcons'
 import { Section } from '../../../components/Section'
 
-const useStyles = makeStyles(theme => createStyles({}))
-
 export default function CommonPhases(): ReactElement {
-  const classes = useStyles()
   const dispatch = useGameDispatch()
   const player = usePlayer()
   const game = useGame()
@@ -71,6 +68,8 @@ export default function CommonPhases(): ReactElement {
                 meta={
                   rule.faction
                     ? `${factions[rule.faction].name} rule`
+                    : rule.inclusionReason
+                    ? 'Temporary rule'
                     : 'Common rule'
                 }
                 phase="SETUP"

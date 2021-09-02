@@ -1,9 +1,5 @@
 import { Factions } from '@dune-companion/engine'
-import { createTheme, Theme } from '@material-ui/core'
-import {
-  CreateCSSProperties,
-  CSSProperties
-} from '@material-ui/core/styles/withStyles'
+import { createTheme } from '@material-ui/core'
 
 declare module '@material-ui/core/styles/createPalette' {
   interface Palette {
@@ -65,14 +61,16 @@ export const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#335482',
-      light: '#93afd6',
-      dark: '#1F3A55'
+      main: 'hsl(219, 40%, 47%)',
+      light: 'hsl(219, 40%, 65%)',
+      dark: 'hsl(219, 40%, 30%)',
+      contrastText: 'white'
     },
     secondary: {
-      main: '#E9D597',
-      light: '#F3E7C4',
-      dark: '#BDAC75'
+      main: 'hsl(47, 55%, 65%)',
+      light: 'hsl(47, 55%, 75%)',
+      dark: 'hsl(47, 55%, 35%)',
+      contrastText: 'hsl(47, 100%, 95%)'
     },
     [Factions.HOUSE_ATREIDES]: {
       main: 'hsl(80, 40%, 60%)',
@@ -110,30 +108,5 @@ export const theme = createTheme({
       dark: 'hsl(22, 73%, 30%)',
       contrastText: 'hsl(22, 100%, 94%)'
     }
-  }
-})
-
-export const createFactionStyles = (
-  theme: Theme
-):
-  | CSSProperties
-  | CreateCSSProperties<{
-      faction?: Factions | undefined
-    }> => ({
-  border: ({ faction }) =>
-    `1px solid ${
-      faction ? theme.palette[faction].light : theme.palette.grey[100]
-    }`,
-  boxShadow: ({ faction }) =>
-    `0px 30px 15px -20px ${
-      faction ? theme.palette[faction].main : theme.palette.grey[200]
-    }`,
-  backgroundImage: ({ faction }) =>
-    faction
-      ? `linear-gradient(175deg, ${theme.palette[faction].main}, ${theme.palette[faction].dark})`
-      : `linear-gradient(175deg, ${theme.palette.common.white}, ${theme.palette.grey[100]})`,
-  '& *': {
-    color: ({ faction }) =>
-      faction ? theme.palette[faction].contrastText : theme.palette.common.black
   }
 })
