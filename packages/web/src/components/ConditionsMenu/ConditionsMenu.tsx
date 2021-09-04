@@ -1,6 +1,5 @@
-import { phases } from '@dune-companion/engine'
+import { Phases, phases } from '@dune-companion/engine'
 import { Box, createStyles, makeStyles, Typography } from '@material-ui/core'
-import { useGame } from '../../dune-react'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -28,9 +27,20 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export const ConditionsMenu: React.FC = () => {
+type Props = {
+  currentTurn: number
+  maxTurns: number
+  currentPhase: Phases
+  currentFirstPlayer: string
+}
+
+export const ConditionsMenu: React.FC<Props> = ({
+  currentFirstPlayer,
+  currentPhase,
+  currentTurn,
+  maxTurns
+}) => {
   const classes = useStyles()
-  const game = useGame()
   return (
     <Box className={classes.root}>
       <Box className={classes.item}>
@@ -39,7 +49,7 @@ export const ConditionsMenu: React.FC = () => {
         </Typography>
         <Typography variant="body1">
           <strong>
-            {game.currentTurn} / {game.conditions.maxTurns}
+            {currentTurn} / {maxTurns}
           </strong>
         </Typography>
       </Box>
@@ -48,7 +58,7 @@ export const ConditionsMenu: React.FC = () => {
           Phase
         </Typography>
         <Typography variant="body1">
-          <strong>{phases[game.currentPhase].name}</strong>
+          <strong>{phases[currentPhase].name}</strong>
         </Typography>
       </Box>
       <Box className={classes.item}>
@@ -56,8 +66,7 @@ export const ConditionsMenu: React.FC = () => {
           First player
         </Typography>
         <Typography variant="body1">
-          <strong>Atreides</strong>
-          {/* {game.players[game.playerOrder[game.currentFirstPlayer]].name} */}
+          <strong>{currentFirstPlayer}</strong>
         </Typography>
       </Box>
     </Box>

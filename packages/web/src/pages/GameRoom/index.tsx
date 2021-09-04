@@ -1,4 +1,4 @@
-import { ReactElement, useLayoutEffect, useState } from 'react'
+import { ReactElement } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useGame } from '../../dune-react'
 import CommonPhases from './Common/CommonPhases'
@@ -8,23 +8,16 @@ import PlayerSetupPrompt from './Prompts/PlayerSetupPrompt'
 import {
   commonRuleSet,
   factionRuleSets,
-  Factions,
-  Phases
+  Factions
 } from '@dune-companion/engine'
-import { Box, Fade } from '@material-ui/core'
 import { Loading } from '../Loading'
-import { useRef } from 'react'
+import { Transition } from './Transition'
 
-type Props = {
-  currentPhase: Phases
-}
-
-function GameRoom({ currentPhase }: Props): ReactElement {
+function GamePhase(): ReactElement {
   const game = useGame()
-
   const isPending = createPendingActionsChecker(game)
 
-  if (isPending('SELECT_FACTION').forAnyPlayer()) {
+  if (game.currentTurn === 0 && isPending('SELECT_FACTION').forAnyPlayer()) {
     return (
       <>
         <PlayerSetupPrompt />
@@ -36,16 +29,16 @@ function GameRoom({ currentPhase }: Props): ReactElement {
   const phaseRules = Object.values(game.players)
     .map(player => player.faction)
     .filter((faction): faction is Factions => faction !== null)
-    .flatMap(faction => factionRuleSets[faction][currentPhase])
+    .flatMap(faction => factionRuleSets[faction][game.currentPhase])
 
   const rules = [
-    ...commonRuleSet[currentPhase].filter(
+    ...commonRuleSet[game.currentPhase].filter(
       rule => !game.conditions.advancedMode || rule.isAdvanced
     ),
     ...phaseRules
   ].filter(rule => !rule.inclusionCondition || rule.inclusionCondition(game))
 
-  switch (currentPhase) {
+  switch (game.currentPhase) {
     case 'SETUP':
     case 'STORM':
     case 'SPICE_BLOW_AND_NEXUS':
@@ -56,7 +49,14 @@ function GameRoom({ currentPhase }: Props): ReactElement {
     case 'BATTLE':
     case 'SPICE_HARVEST':
     case 'MENTAT_PAUSE':
-      return <CommonPhases rules={rules} phase={currentPhase} />
+      return (
+        <Transition
+          Component={CommonPhases}
+          componentProps={{ phase: game.currentPhase, rules }}
+          trigger={game.currentPhase}
+          Loader={({ phase }) => <Loading nextPhase={phase} />}
+        />
+      )
     case 'FINISHED':
       return <p>FINISHED!</p>
     default:
@@ -64,36 +64,4 @@ function GameRoom({ currentPhase }: Props): ReactElement {
   }
 }
 
-const Game = () => {
-  const game = useGame()
-  const previousPhase = useRef(game.currentPhase)
-  const [transition, setTransition] = useState(false)
-
-  useLayoutEffect(() => {
-    setTransition(true)
-    const timer = setTimeout(() => {
-      previousPhase.current = game.currentPhase
-      setTransition(false)
-    }, 3500)
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [game.currentPhase])
-
-  return (
-    <>
-      <Fade in={!transition}>
-        <GameRoom
-          currentPhase={transition ? previousPhase.current : game.currentPhase}
-        />
-      </Fade>
-      <Fade in={transition} timeout={1000} unmountOnExit>
-        <Box position="relative" zIndex={1000}>
-          <Loading nextPhase={game.currentPhase} />
-        </Box>
-      </Fade>
-    </>
-  )
-}
-
-export default Game
+export default GamePhase
