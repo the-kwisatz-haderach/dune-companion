@@ -30,14 +30,19 @@ const useStyles = makeStyles(theme =>
       width: 'calc(100% - 20px)',
       display: 'flex',
       justifyContent: 'space-between',
-      color: theme.palette.common.white
+      color: theme.palette.common.white,
+      pointerEvents: 'none',
+      '& button': {
+        pointerEvents: 'initial'
+      }
     },
     preamble: {
       position: 'absolute',
-      bottom: 50,
+      bottom: 60,
       backgroundColor: 'rgba(0, 0, 0, 0.7)',
       padding: theme.spacing(1),
-      borderRadius: 5
+      borderRadius: 5,
+      whiteSpace: 'nowrap'
     }
   })
 )
@@ -61,7 +66,7 @@ export default function ActionMenu({
           <NavigateBefore />
         </Fab>
       )}
-      <Box position="relative" flex={1} display="flex" justifyContent="center">
+      <Box position="relative" display="flex" flex={1} justifyContent="center">
         {primaryActionPreamble && (
           <Typography variant="body2" className={classes.preamble}>
             {primaryActionPreamble}

@@ -2,7 +2,13 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { Button, createStyles, makeStyles, Typography } from '@material-ui/core'
+import {
+  Button,
+  createStyles,
+  makeStyles,
+  Theme,
+  Typography
+} from '@material-ui/core'
 import { DialogProps } from '@material-ui/core'
 
 type DialogAction = {
@@ -17,9 +23,8 @@ export interface Props extends DialogProps {
   actions: [DialogAction, ...DialogAction[]]
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles<Theme, { open: boolean }>(() =>
   createStyles({
-    container: {},
     titleBar: {
       textAlign: 'right'
     }
@@ -34,10 +39,10 @@ export default function Prompt({
   open,
   ...props
 }: Props) {
-  const classes = useStyles()
+  const classes = useStyles({ open })
   const [primaryAction, ...otherActions] = actions
   return (
-    <Dialog {...props} open={open} className={classes.container}>
+    <Dialog {...props} open={open}>
       <DialogTitle
         className={classes.titleBar}
         disableTypography

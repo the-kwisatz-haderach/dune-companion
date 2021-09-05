@@ -9,15 +9,28 @@ import { factionIcons } from '../../../lib/factionIcons'
 import { Section } from '../../../components/Section'
 import { Header } from '../../../components/Header'
 import { Alert } from '@material-ui/lab'
+import { ActionMenu } from '../../../components/ActionMenu'
 
 type Props = {
   phase: Phases
   rules: RuleSet[]
+  isReady: boolean
+  onToggleReady: () => void
 }
 
-export default function CommonPhases({ phase, rules }: Props): ReactElement {
+export default function CommonPhases({
+  phase,
+  rules,
+  isReady,
+  onToggleReady
+}: Props): ReactElement {
   return (
     <Box bgcolor="white">
+      <ActionMenu
+        primaryActionLabel={isReady ? 'Not ready' : 'Ready'}
+        primaryActionType={isReady ? 'negative' : 'positive'}
+        onPrimaryAction={onToggleReady}
+      />
       <HeaderImage
         title={phases[phase].name}
         preamble="Phase"

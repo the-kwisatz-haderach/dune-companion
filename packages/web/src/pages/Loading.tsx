@@ -2,7 +2,7 @@ import { phases, Phases } from '@dune-companion/engine'
 import { Box, createStyles, makeStyles, Typography } from '@material-ui/core'
 
 type Props = {
-  nextPhase: Phases
+  phase: Phases
 }
 
 const useStyles = makeStyles(theme =>
@@ -71,15 +71,21 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export const Loading: React.FC<Props> = ({ nextPhase }) => {
+export const Loading: React.FC<Props> = ({ phase }) => {
   const classes = useStyles()
   return (
     <Box className={classes.root}>
-      <Typography className={classes.meta} variant="caption">
-        Next phase
-      </Typography>
+      {phase !== 'SETUP' && (
+        <Typography className={classes.meta} variant="caption">
+          {phase === 'STORM' ? 'New turn' : 'New phase'}
+        </Typography>
+      )}
       <Typography className={classes.title} variant="subtitle2">
-        {phases[nextPhase].name}
+        {phase === 'STORM'
+          ? 'New Turn'
+          : phase === 'SETUP'
+          ? 'Setup'
+          : phases[phase].name}
       </Typography>
     </Box>
   )
