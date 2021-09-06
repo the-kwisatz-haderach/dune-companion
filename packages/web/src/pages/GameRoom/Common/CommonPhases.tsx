@@ -10,6 +10,8 @@ import { Section } from '../../../components/Section'
 import { Header } from '../../../components/Header'
 import { Alert } from '@material-ui/lab'
 import { ActionMenu } from '../../../components/ActionMenu'
+import { useState } from 'react'
+import SetPlayerOrderPrompt from '../Prompts/SetPlayerOrderPrompt/SetPlayerOrderPrompt'
 
 type Props = {
   phase: Phases
@@ -24,12 +26,24 @@ export default function CommonPhases({
   isReady,
   onToggleReady
 }: Props): ReactElement {
+  const [isPromptOpen, setIsPromptOpen] = useState(false)
+
+  const openPlayerOrderPrompt = () => {
+    setIsPromptOpen(true)
+  }
+
   return (
     <Box bgcolor="white">
+      <SetPlayerOrderPrompt
+        open={isPromptOpen}
+        onClose={() => setIsPromptOpen(false)}
+      />
       <ActionMenu
         primaryActionLabel={isReady ? 'Not ready' : 'Ready'}
         primaryActionType={isReady ? 'negative' : 'positive'}
         onPrimaryAction={onToggleReady}
+        secondaryActionLeftLabel="Set player order"
+        onSecondaryActionLeft={openPlayerOrderPrompt}
       />
       <HeaderImage
         title={phases[phase].name}

@@ -17,10 +17,6 @@ const CommonPhaseWithTransition = withTransition(CommonPhases, ({ phase }) => (
   <Loading phase={phase} />
 ))
 
-const SetupPhaseWithTransition = withTransition(CommonPhases, ({ phase }) => (
-  <Loading phase={phase} />
-))
-
 function GamePhase(): ReactElement {
   const game = useGame()
   const player = usePlayer()
@@ -61,7 +57,7 @@ function GamePhase(): ReactElement {
         )
       }
       return (
-        <SetupPhaseWithTransition
+        <CommonPhaseWithTransition
           phase={game.currentPhase}
           rules={rules}
           isReady={isReady}

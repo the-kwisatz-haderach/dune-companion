@@ -98,4 +98,10 @@ export const playersReducer = createReducer(
           )
         })
       })
+      .addCase(clientActions.SET_PLAYER_SPICE, (state, action) => {
+        state[action.payload.playerId].spice = action.payload.spice
+      })
+      .addCase(clientActions.SET_PLAYER_TREACHERY_CARDS, (state, action) => {
+        state[action.payload.playerId].treacheryCards = action.payload.cards
+      })
 )

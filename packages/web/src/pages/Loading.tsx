@@ -75,9 +75,9 @@ export const Loading: React.FC<Props> = ({ phase }) => {
   const classes = useStyles()
   return (
     <Box className={classes.root}>
-      {phase !== 'SETUP' && (
+      {phase !== 'SETUP' && phase !== 'STORM' && (
         <Typography className={classes.meta} variant="caption">
-          {phase === 'STORM' ? 'New turn' : 'New phase'}
+          New phase
         </Typography>
       )}
       <Typography className={classes.title} variant="subtitle2">

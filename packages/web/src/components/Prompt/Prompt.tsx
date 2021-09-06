@@ -52,8 +52,13 @@ export default function Prompt({
       </DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        {otherActions.map(({ disabled, onClick, label }) => (
-          <Button disabled={disabled} onClick={onClick} color="default">
+        {otherActions.map(({ disabled, onClick, label }, index) => (
+          <Button
+            key={index}
+            disabled={disabled}
+            onClick={onClick}
+            color="default"
+          >
             {label}
           </Button>
         ))}

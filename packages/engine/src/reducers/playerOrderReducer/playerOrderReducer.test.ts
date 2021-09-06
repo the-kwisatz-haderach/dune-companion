@@ -1,5 +1,6 @@
 import { playerOrderReducer } from './playerOrderReducer'
 import { clientActions } from '../../actions'
+import { initialGameState } from '../initialGameState'
 
 describe('playerOrderReducer', () => {
   test('setPlayerOrder', () => {
@@ -12,6 +13,26 @@ describe('playerOrderReducer', () => {
         })
       )
     ).toEqual(['one', 'two', 'three'])
+  })
+  test('CREATE_GAME', () => {
+    expect(
+      playerOrderReducer(
+        [],
+        clientActions.CREATE_GAME({
+          conditions: initialGameState.conditions,
+          roomId: 'someRoom',
+          playerId: 'test'
+        })
+      )
+    ).toEqual(['test'])
+  })
+  test('JOIN_GAME', () => {
+    expect(
+      playerOrderReducer(
+        ['other', 'third'],
+        clientActions.JOIN_GAME({ roomId: 'someRoom', playerId: 'test' })
+      )
+    ).toEqual(['other', 'third', 'test'])
   })
   test('leaveGame', () => {
     expect(

@@ -1680,21 +1680,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.63.tgz::locator=%40dune-companion%2Fserver%40workspace%3Apackages%2Fserver":
-  version: 0.1.63
-  resolution: "@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.63.tgz::locator=%40dune-companion%2Fserver%40workspace%3Apackages%2Fserver"
+"@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.66.tgz::locator=%40dune-companion%2Fserver%40workspace%3Apackages%2Fserver":
+  version: 0.1.66
+  resolution: "@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.66.tgz::locator=%40dune-companion%2Fserver%40workspace%3Apackages%2Fserver"
   dependencies:
     "@reduxjs/toolkit": ^1.5.0
-  checksum: af08cea32b25ca3ce172a4a3f255040024c382a098c1dc55ec7645fca19b9b582522c11ba7e27519b0bdc91be9fe5388691a7a70622bbce6769426225ae87085
+  checksum: aa4d476da175be4be95b69fd1288da5ac9f6677f554e2290d12eb47193178db671baa954bf4ef388718bab3a6b63dde369713feaa877649d1197f902aa517697
   languageName: node
   linkType: hard
 
-"@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.63.tgz::locator=%40dune-companion%2Fweb%40workspace%3Apackages%2Fweb":
-  version: 0.1.63
-  resolution: "@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.63.tgz::locator=%40dune-companion%2Fweb%40workspace%3Apackages%2Fweb"
+"@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.66.tgz::locator=%40dune-companion%2Fweb%40workspace%3Apackages%2Fweb":
+  version: 0.1.66
+  resolution: "@dune-companion/engine@file:../engine/@dune-companion-engine-0.1.66.tgz::locator=%40dune-companion%2Fweb%40workspace%3Apackages%2Fweb"
   dependencies:
     "@reduxjs/toolkit": ^1.5.0
-  checksum: af08cea32b25ca3ce172a4a3f255040024c382a098c1dc55ec7645fca19b9b582522c11ba7e27519b0bdc91be9fe5388691a7a70622bbce6769426225ae87085
+  checksum: aa4d476da175be4be95b69fd1288da5ac9f6677f554e2290d12eb47193178db671baa954bf4ef388718bab3a6b63dde369713feaa877649d1197f902aa517697
   languageName: node
   linkType: hard
 
@@ -1735,7 +1735,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@dune-companion/server@workspace:packages/server"
   dependencies:
-    "@dune-companion/engine": "file:../engine/@dune-companion-engine-0.1.63.tgz"
+    "@dune-companion/engine": "file:../engine/@dune-companion-engine-0.1.66.tgz"
     "@reduxjs/toolkit": ^1.6.1
     "@types/connect-redis": ^0.0.17
     "@types/express": ^4.17.13
@@ -1771,7 +1771,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@dune-companion/web@workspace:packages/web"
   dependencies:
-    "@dune-companion/engine": "file:../engine/@dune-companion-engine-0.1.63.tgz"
+    "@dune-companion/engine": "file:../engine/@dune-companion-engine-0.1.66.tgz"
     "@material-ui/core": ^4.12.3
     "@material-ui/icons": ^4.11.2
     "@material-ui/lab": ^4.0.0-alpha.60
@@ -1782,6 +1782,7 @@ __metadata:
     "@types/jest": ^26.0.15
     "@types/node": ^12.0.0
     "@types/react": ^17.0.15
+    "@types/react-beautiful-dnd": ^13.1.2
     "@types/react-dom": ^17.0.0
     "@types/react-redux": ^7.1.18
     "@types/react-router-dom": ^5.1.8
@@ -1790,6 +1791,7 @@ __metadata:
     jest: 26.6.0
     normalize.css: ^8.0.1
     react: ^17.0.2
+    react-beautiful-dnd: ^13.1.0
     react-dom: ^17.0.2
     react-hook-form: ^7.12.2
     react-redux: ^7.2.4
@@ -2938,6 +2940,15 @@ __metadata:
   version: 1.2.4
   resolution: "@types/range-parser@npm:1.2.4"
   checksum: b7c0dfd5080a989d6c8bb0b6750fc0933d9acabeb476da6fe71d8bdf1ab65e37c136169d84148034802f48378ab94e3c37bb4ef7656b2bec2cb9c0f8d4146a95
+  languageName: node
+  linkType: hard
+
+"@types/react-beautiful-dnd@npm:^13.1.2":
+  version: 13.1.2
+  resolution: "@types/react-beautiful-dnd@npm:13.1.2"
+  dependencies:
+    "@types/react": "*"
+  checksum: 28372854fcd4b7546aabe55ee6569da59fad10f117929cff8a9c6f928448e4dd08ed1139facca33232833b9de100edf017aab9a0ee34065f8fc0e2a7a1262b2c
   languageName: node
   linkType: hard
 
@@ -5693,6 +5704,15 @@ __metadata:
   bin:
     css-blank-pseudo: cli.js
   checksum: f995a6ca5dbb867af4b30c3dc872a8f0b27ad120442c34796eef7f9c4dcf014249522aaa0a2da3c101c4afa5d7d376436bb978ae1b2c02deddec283fad30c998
+  languageName: node
+  linkType: hard
+
+"css-box-model@npm:^1.2.0":
+  version: 1.2.1
+  resolution: "css-box-model@npm:1.2.1"
+  dependencies:
+    tiny-invariant: ^1.0.6
+  checksum: 4d113f26fed6b9150e2c314502d00dabe06f12ae43a01a7e9b6e57f3de49b4281dbb0dc46a1158a7349618f8f34d9250af57cb43d7337e9485e73e6b821e470e
   languageName: node
   linkType: hard
 
@@ -10846,6 +10866,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"memoize-one@npm:^5.1.1":
+  version: 5.2.1
+  resolution: "memoize-one@npm:5.2.1"
+  checksum: a3cba7b824ebcf24cdfcd234aa7f86f3ad6394b8d9be4c96ff756dafb8b51c7f71320785fbc2304f1af48a0467cbbd2a409efc9333025700ed523f254cb52e3d
+  languageName: node
+  linkType: hard
+
 "memory-fs@npm:^0.4.1":
   version: 0.4.1
   resolution: "memory-fs@npm:0.4.1"
@@ -13381,6 +13408,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"raf-schd@npm:^4.0.2":
+  version: 4.0.3
+  resolution: "raf-schd@npm:4.0.3"
+  checksum: 45514041c5ad31fa96aef3bb3c572a843b92da2f2cd1cb4a47c9ad58e48761d3a4126e18daa32b2bfa0bc2551a42d8f324a0e40e536cb656969929602b4e8b58
+  languageName: node
+  linkType: hard
+
 "raf@npm:^3.4.1":
   version: 3.4.1
   resolution: "raf@npm:3.4.1"
@@ -13446,6 +13480,24 @@ fsevents@^1.2.7:
     regenerator-runtime: ^0.13.7
     whatwg-fetch: ^3.4.1
   checksum: 99e52a6b2229c7ca730cfd44ac95640f955be71d144225bd6c24fa47922a742658a371d0a2f0876d732533f1055b7cd7e9d534c89c29f8ca889ecd1b8d15f065
+  languageName: node
+  linkType: hard
+
+"react-beautiful-dnd@npm:^13.1.0":
+  version: 13.1.0
+  resolution: "react-beautiful-dnd@npm:13.1.0"
+  dependencies:
+    "@babel/runtime": ^7.9.2
+    css-box-model: ^1.2.0
+    memoize-one: ^5.1.1
+    raf-schd: ^4.0.2
+    react-redux: ^7.2.0
+    redux: ^4.0.4
+    use-memo-one: ^1.1.1
+  peerDependencies:
+    react: ^16.8.5 || ^17.0.0
+    react-dom: ^16.8.5 || ^17.0.0
+  checksum: 12b7e9fbe872783e0f899e03f2e80deee085aa1e2cec3d556c1d06bdbafbda7a3c9cf7a3a6b26544617eb2e50d0e3518001bd8300370704bf5a8c9c21f54ec90
   languageName: node
   linkType: hard
 
@@ -13521,6 +13573,27 @@ fsevents@^1.2.7:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
+  languageName: node
+  linkType: hard
+
+"react-redux@npm:^7.2.0":
+  version: 7.2.5
+  resolution: "react-redux@npm:7.2.5"
+  dependencies:
+    "@babel/runtime": ^7.12.1
+    "@types/react-redux": ^7.1.16
+    hoist-non-react-statics: ^3.3.2
+    loose-envify: ^1.4.0
+    prop-types: ^15.7.2
+    react-is: ^16.13.1
+  peerDependencies:
+    react: ^16.8.3 || ^17
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: 04ac4a4178067cbcfc05506dfea9f7e01730093a5752f050567f7ae4a38c03c96da9d8fed051f8ab1ecede5ea8a15ee41c5f6c5eeb7f04f37e4d13e431ec7830
   languageName: node
   linkType: hard
 
@@ -13859,7 +13932,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.0.0, redux@npm:^4.1.0":
+"redux@npm:^4.0.0, redux@npm:^4.0.4, redux@npm:^4.1.0":
   version: 4.1.1
   resolution: "redux@npm:4.1.1"
   dependencies:
@@ -15731,7 +15804,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tiny-invariant@npm:^1.0.2":
+"tiny-invariant@npm:^1.0.2, tiny-invariant@npm:^1.0.6":
   version: 1.1.0
   resolution: "tiny-invariant@npm:1.1.0"
   checksum: 27d29bbb9e1d1d86e25766711c28ad91af6d67c87d561167077ac7fbce5212b97bbfe875e70bc369808e075748c825864c9b61f0e9f8652275ec86bcf4dcc924
@@ -16358,6 +16431,15 @@ resolve@^2.0.0-next.3:
     punycode: 1.3.2
     querystring: 0.2.0
   checksum: 50d100d3dd2d98b9fe3ada48cadb0b08aa6be6d3ac64112b867b56b19be4bfcba03c2a9a0d7922bfd7ac17d4834e88537749fe182430dfd9b68e520175900d90
+  languageName: node
+  linkType: hard
+
+"use-memo-one@npm:^1.1.1":
+  version: 1.1.2
+  resolution: "use-memo-one@npm:1.1.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+  checksum: 71f4598ce422b64a971dc93f45dc245158977f8882f56be82d4629c21577c22244959ac3aa99bd9559d64007b632d58aa43b256981afe56603c77ce3fdee165f
   languageName: node
   linkType: hard
 

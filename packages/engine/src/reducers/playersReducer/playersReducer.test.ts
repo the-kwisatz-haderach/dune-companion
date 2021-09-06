@@ -8,7 +8,7 @@ import { createPlayerAction } from '../../factories/createPlayerAction'
 import { createPlayer } from '../../factories'
 
 jest.mock('@reduxjs/toolkit', () => ({
-  ...jest.requireActual('@reduxjs/toolkit'),
+  ...(jest.requireActual('@reduxjs/toolkit') as object),
   nanoid: () => 'mockNanoId'
 }))
 
@@ -404,6 +404,49 @@ describe('playersReducer', () => {
             actions: []
           }
         })
+      })
+    })
+  })
+
+  describe('SET_PLAYER_SPICE', () => {
+    it('updates the player', () => {
+      expect(
+        playersReducer(
+          {
+            test: {
+              ...playerFixture
+            }
+          },
+          clientActions.SET_PLAYER_SPICE({ playerId: 'test', spice: 666 })
+        )
+      ).toEqual({
+        test: {
+          ...playerFixture,
+          spice: 666
+        }
+      })
+    })
+  })
+
+  describe('SET_PLAYER_TREACHERY_CARDS', () => {
+    it('updates the player', () => {
+      expect(
+        playersReducer(
+          {
+            test: {
+              ...playerFixture
+            }
+          },
+          clientActions.SET_PLAYER_TREACHERY_CARDS({
+            playerId: 'test',
+            cards: 3
+          })
+        )
+      ).toEqual({
+        test: {
+          ...playerFixture,
+          treacheryCards: 3
+        }
       })
     })
   })

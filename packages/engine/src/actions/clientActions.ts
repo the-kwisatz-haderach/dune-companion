@@ -16,8 +16,14 @@ export const SET_IS_READY = 'SET_IS_READY'
 export const SET_IS_NOT_READY = 'SET_IS_NOT_READY'
 export const DECLARE_AS_WINNER = 'DECLARE_AS_WINNER'
 export const CONFIRM_WINNER = 'CONFIRM_WINNER'
+export const SET_FIRST_PLAYER = 'SET_FIRST_PLAYER'
+export const SET_PLAYER_SPICE = 'SET_PLAYER_SPICE'
+export const SET_PLAYER_TREACHERY_CARDS = 'SET_PLAYER_TREACHERY_CARDS'
 export const MARK_PHASE_STEP_COMPLETED = 'MARK_PHASE_STEP_COMPLETED'
 export const MARK_PHASE_STEP_NOT_COMPLETED = 'MARK_PHASE_STEP_NOT_COMPLETED'
+export const START_AUCTION = 'START_AUCTION'
+export const PLACE_BID = 'PLACE_BID'
+export const SKIP_BID = 'SKIP_BID'
 
 const createClientAction = <P extends Record<string ,unknown> | void = void, T extends string = string>(
   type: T,
@@ -56,6 +62,12 @@ export const setIsReady = createClientAction<void, typeof SET_IS_READY>(SET_IS_R
 export const setIsNotReady = createClientAction<void, typeof SET_IS_NOT_READY>(SET_IS_NOT_READY)
 export const declareAsWinner = createClientAction<void, typeof DECLARE_AS_WINNER>(DECLARE_AS_WINNER)
 export const confirmWinner = createClientAction<void, typeof CONFIRM_WINNER>(CONFIRM_WINNER)
+export const setPlayerSpice = createClientAction<{ spice: number }, typeof SET_PLAYER_SPICE>(SET_PLAYER_SPICE)
+export const setPlayerTreacheryCards = createClientAction<{ cards: number }, typeof SET_PLAYER_TREACHERY_CARDS>(SET_PLAYER_TREACHERY_CARDS)
+export const setFirstPlayer = createClientAction<{ firstPlayerIndex: number }, typeof SET_FIRST_PLAYER>(SET_FIRST_PLAYER)
+export const placeBid = createClientAction<{ bid: number }, typeof PLACE_BID>(PLACE_BID)
+export const skipBid = createClientAction<void, typeof SKIP_BID>(SKIP_BID)
+export const startAuction = createClientAction<void, typeof START_AUCTION>(START_AUCTION)
 
 export const markPhaseStepCompleted = createClientAction<{
   step: {
@@ -85,7 +97,13 @@ export const clientActions = {
   DECLARE_AS_WINNER: declareAsWinner,
   CONFIRM_WINNER: confirmWinner,
   MARK_PHASE_STEP_COMPLETED: markPhaseStepCompleted,
-  MARK_PHASE_STEP_NOT_COMPLETED: markPhaseStepNotCompleted
+  MARK_PHASE_STEP_NOT_COMPLETED: markPhaseStepNotCompleted,
+  SET_PLAYER_SPICE: setPlayerSpice,
+  SET_PLAYER_TREACHERY_CARDS: setPlayerTreacheryCards,
+  SET_FIRST_PLAYER: setFirstPlayer,
+  SKIP_BID: skipBid,
+  PLACE_BID: placeBid,
+  START_AUCTION: startAuction
 } as const
 
 export type ClientActionType = keyof typeof clientActions

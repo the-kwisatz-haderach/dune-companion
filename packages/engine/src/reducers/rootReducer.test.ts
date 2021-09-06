@@ -12,6 +12,7 @@ describe('rootReducer', () => {
       )
     ).toEqual({
       ...initialGameState,
+      playerOrder: ['test'],
       players: {
         test: createPlayer('test')
       }

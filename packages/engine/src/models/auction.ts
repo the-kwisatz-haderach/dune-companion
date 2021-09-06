@@ -1,16 +1,12 @@
 export type Auction = {
-  awaitingConfirmation: string[]
   currentRound: number
-  participants: string[]
   rounds: AuctionRound[]
   results: AuctionRoundResult[]
-  isDone: boolean
 }
 
 export type AuctionRound = {
   currentBidder: string
   bids: AuctionBid[]
-  passingOnBidding: string[]
 }
 
 export type AuctionRoundResult = {
@@ -19,6 +15,6 @@ export type AuctionRoundResult = {
 }
 
 export type AuctionBid = {
-  bidder: string
+  playerId: string
   amount: number
 }

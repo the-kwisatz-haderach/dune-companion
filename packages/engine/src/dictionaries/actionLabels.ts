@@ -1,6 +1,6 @@
 import { ClientActionType } from '../actions'
 
-export const actionLabels: Record<ClientActionType, string> = {
+export const actionLabels: Partial<Record<ClientActionType, string>> = {
   RESPOND_TO_ALLIANCE_REQUEST: 'Respond',
   CREATE_GAME: 'Create game',
   JOIN_GAME: 'Join game',

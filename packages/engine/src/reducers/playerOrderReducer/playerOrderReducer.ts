@@ -8,6 +8,14 @@ export const playerOrderReducer = createReducer(
   initialGameState.playerOrder,
   (builder: ActionReducerMapBuilder<Game['playerOrder']>) =>
     builder
+      .addCase(clientActions.CREATE_GAME, (state, action) => [
+        ...state,
+        action.payload.playerId
+      ])
+      .addCase(clientActions.JOIN_GAME, (state, action) => [
+        ...state,
+        action.payload.playerId
+      ])
       .addCase(clientActions.LEAVE_GAME, (state, action) =>
         pull(state, action.payload.playerId)
       )
