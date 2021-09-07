@@ -21,6 +21,7 @@ export interface Props extends DialogProps {
   title?: string
   isRequired?: boolean
   actions: [DialogAction, ...DialogAction[]]
+  contentClassName?: string
 }
 
 const useStyles = makeStyles<Theme, { open: boolean }>(() =>
@@ -37,6 +38,7 @@ export default function Prompt({
   actions,
   isRequired = true,
   open,
+  contentClassName,
   ...props
 }: Props) {
   const classes = useStyles({ open })
@@ -50,7 +52,7 @@ export default function Prompt({
       >
         <Typography variant="caption">{title}</Typography>
       </DialogTitle>
-      <DialogContent>{children}</DialogContent>
+      <DialogContent className={contentClassName}>{children}</DialogContent>
       <DialogActions>
         {otherActions.map(({ disabled, onClick, label }, index) => (
           <Button

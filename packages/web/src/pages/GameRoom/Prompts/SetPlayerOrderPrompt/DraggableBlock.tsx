@@ -4,7 +4,6 @@ import { createStyles, makeStyles, Theme, Typography } from '@material-ui/core'
 type Props = {
   provided: DraggableProvided
   snapshot: DraggableStateSnapshot
-  index: number
 }
 
 const useStyles = makeStyles<Theme, { isDragging: boolean }>(theme =>
@@ -27,8 +26,7 @@ const useStyles = makeStyles<Theme, { isDragging: boolean }>(theme =>
 export const DraggableBlock: React.FC<Props> = ({
   children,
   provided,
-  snapshot,
-  index
+  snapshot
 }) => {
   const classes = useStyles({ isDragging: snapshot.isDragging })
   return (
@@ -39,7 +37,7 @@ export const DraggableBlock: React.FC<Props> = ({
       {...provided.draggableProps}
       {...provided.dragHandleProps}
     >
-      {index + 1}. {children}
+      {children}
     </Typography>
   )
 }

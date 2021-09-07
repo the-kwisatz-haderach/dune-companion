@@ -9,11 +9,20 @@ import { Prompt } from '../../../../components/Prompt'
 import { useGame, useGameDispatch } from '../../../../dune-react'
 import { DraggableBlock } from './DraggableBlock'
 import { DroppableSpace } from './DroppableSpace'
+import { Box, createStyles, makeStyles, Typography } from '@material-ui/core'
 
 type Props = {
   open: boolean
   onClose: () => void
 }
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    dialogContent: {
+      overflow: 'unset'
+    }
+  })
+)
 
 const reorder = (list: string[], startIndex: number, endIndex: number) => {
   const result = Array.from(list)
@@ -26,6 +35,7 @@ export default function SetPlayerOrderPrompt({
   open,
   onClose
 }: Props): ReactElement {
+  const classes = useStyles()
   const game = useGame()
   const [playerOrder, setPlayerOrder] = useState(game.playerOrder)
   const dispatch = useGameDispatch()
@@ -54,6 +64,7 @@ export default function SetPlayerOrderPrompt({
   return (
     <Prompt
       fullWidth
+      contentClassName={classes.dialogContent}
       maxWidth="md"
       title="Set Player Order"
       open={open}
@@ -68,6 +79,9 @@ export default function SetPlayerOrderPrompt({
         }
       ]}
     >
+      <Box display="flex" justifyContent="center" margin={1}>
+        <Typography variant="body2">First</Typography>
+      </Box>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, droppableSnapshot) => (
@@ -79,11 +93,7 @@ export default function SetPlayerOrderPrompt({
               {playerOrder.map((playerId, index) => (
                 <Draggable key={playerId} draggableId={playerId} index={index}>
                   {(provided, snapshot) => (
-                    <DraggableBlock
-                      index={index}
-                      provided={provided}
-                      snapshot={snapshot}
-                    >
+                    <DraggableBlock provided={provided} snapshot={snapshot}>
                       {game.players[playerId].name}
                     </DraggableBlock>
                   )}
@@ -94,6 +104,9 @@ export default function SetPlayerOrderPrompt({
           )}
         </Droppable>
       </DragDropContext>
+      <Box display="flex" justifyContent="center" margin={1}>
+        <Typography variant="body2">Last</Typography>
+      </Box>
     </Prompt>
   )
 }
