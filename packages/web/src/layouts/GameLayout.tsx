@@ -5,15 +5,14 @@ import { ConditionsMenu } from '../components/ConditionsMenu'
 
 export const GameLayout: React.FC = ({ children }) => {
   const game = useGame()
-  const firstPlayerName = 'Atreides'
-  // game.players[game.playerOrder[game.currentFirstPlayer]].name
-
   return (
     <Box position="relative">
       {game.currentTurn > 0 && (
         <ConditionsMenu
           maxTurns={game.conditions.maxTurns}
-          currentFirstPlayer={firstPlayerName}
+          currentFirstPlayer={
+            game.players[game.playerOrder[game.currentFirstPlayer]].name
+          }
           currentPhase={game.currentPhase}
           currentTurn={game.currentTurn}
         />

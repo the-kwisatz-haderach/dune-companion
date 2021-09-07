@@ -10,11 +10,7 @@ import { useGame, useGameDispatch } from '../../../../dune-react'
 import { DraggableBlock } from './DraggableBlock'
 import { DroppableSpace } from './DroppableSpace'
 import { Box, createStyles, makeStyles, Typography } from '@material-ui/core'
-
-type Props = {
-  open: boolean
-  onClose: () => void
-}
+import { PromptProps } from '../../types'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -32,9 +28,8 @@ const reorder = (list: string[], startIndex: number, endIndex: number) => {
 }
 
 export default function SetPlayerOrderPrompt({
-  open,
-  onClose
-}: Props): ReactElement {
+  closePrompt
+}: PromptProps): ReactElement {
   const classes = useStyles()
   const game = useGame()
   const [playerOrder, setPlayerOrder] = useState(game.playerOrder)
@@ -58,7 +53,7 @@ export default function SetPlayerOrderPrompt({
     dispatch('SET_PLAYER_ORDER', {
       playerOrder
     })
-    onClose()
+    closePrompt()
   }
 
   return (
@@ -67,7 +62,6 @@ export default function SetPlayerOrderPrompt({
       contentClassName={classes.dialogContent}
       maxWidth="md"
       title="Set Player Order"
-      open={open}
       actions={[
         {
           label: 'Update',
@@ -75,7 +69,7 @@ export default function SetPlayerOrderPrompt({
         },
         {
           label: 'Close',
-          onClick: onClose
+          onClick: closePrompt
         }
       ]}
     >

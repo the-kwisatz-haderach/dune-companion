@@ -4,7 +4,7 @@ import { useGame, useGameDispatch, usePlayer } from '../../dune-react'
 import CommonPhases from './Common/CommonPhases'
 import { createPendingActionsChecker } from './helpers'
 import FactionSelect from './Setup/FactionSelect'
-import PlayerSetupPrompt from './Prompts/PlayerSetupPrompt'
+import PlayerSetupPrompt from '../../contexts/PromptContext/Prompts/PlayerSetupPrompt'
 import {
   commonRuleSet,
   factionRuleSets,

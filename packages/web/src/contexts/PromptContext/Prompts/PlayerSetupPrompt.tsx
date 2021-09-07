@@ -1,10 +1,12 @@
 import { TextField } from '@material-ui/core'
 import { ReactElement, useState } from 'react'
 import { Prompt } from '../../../components/Prompt'
-import useUserContext from '../../../contexts/UserContext'
+import useUserContext from '../../UserContext'
 import { useGameDispatch, usePlayer } from '../../../dune-react'
+import { PromptProps } from '../types'
+import { useEffect } from 'react'
 
-export default function PlayerSetupPrompt(): ReactElement {
+export function PlayerSetupPrompt({ closePrompt }: PromptProps): ReactElement {
   const { username } = useUserContext()
   const player = usePlayer()
   const [name, setName] = useState(username)
@@ -16,10 +18,15 @@ export default function PlayerSetupPrompt(): ReactElement {
     })
   }
 
+  useEffect(() => {
+    if (player.name === '') {
+      closePrompt()
+    }
+  }, [player.name, closePrompt])
+
   return (
     <Prompt
       title="Enter your name"
-      open={player.name === ''}
       actions={[
         {
           label: 'Enter',

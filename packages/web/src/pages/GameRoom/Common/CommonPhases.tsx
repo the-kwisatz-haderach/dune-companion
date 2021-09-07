@@ -11,7 +11,7 @@ import { Header } from '../../../components/Header'
 import { Alert } from '@material-ui/lab'
 import { ActionMenu } from '../../../components/ActionMenu'
 import { useState } from 'react'
-import SetPlayerOrderPrompt from '../Prompts/SetPlayerOrderPrompt/SetPlayerOrderPrompt'
+import SetPlayerOrderPrompt from '../../../contexts/PromptContext/Prompts/SetPlayerOrderPrompt/SetPlayerOrderPrompt'
 
 type Props = {
   phase: Phases

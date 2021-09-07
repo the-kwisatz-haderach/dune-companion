@@ -1,24 +1,45 @@
-import { useState } from 'react'
-import { useContext } from 'react'
-import { useCallback } from 'react'
-import { createContext } from 'react'
-import { Prompt, Props as PromptProps } from '../../components/Prompt'
+import { useCallback, useState, createContext, useContext } from 'react'
+import { prompts, Prompts } from './Prompts'
 
-type IPromptContext = (props: PromptProps) => void
+type IPromptContext = <T extends keyof Prompts>(
+  promptName: T,
+  ...props: Parameters<Prompts[T]>
+) => void
 
 const PromptContext = createContext<IPromptContext>(() => {})
 
-export const PromptProvider: React.FC = ({ children }) => {
-  const [prompt, setPrompt] = useState<PromptProps>()
+const RootPrompt = (props: {
+  promptName?: keyof Prompts
+  promptProps?: Parameters<Prompts[keyof Prompts]>
+  closePrompt: () => void
+}) => {
+  if (!props.promptName) return <></>
+  const { promptName, promptProps, closePrompt } = props
+  const Prompt = prompts[promptName]
+  return <Prompt {...(promptProps ?? {})} closePrompt={closePrompt} />
+}
 
-  const showPrompt: IPromptContext = useCallback(props => {
-    setPrompt(props)
+export const PromptProvider: React.FC = ({ children }) => {
+  const [prompt, setPrompt] = useState<{
+    promptName: keyof Prompts
+    promptProps: Parameters<Prompts[keyof Prompts]>
+  }>()
+
+  const showPrompt: IPromptContext = useCallback(
+    (promptName, ...promptProps) => {
+      setPrompt({ promptName, promptProps })
+    },
+    []
+  )
+
+  const closePrompt = useCallback(() => {
+    setPrompt(undefined)
   }, [])
 
   return (
     <PromptContext.Provider value={showPrompt}>
       {children}
-      {prompt && <Prompt {...prompt} />}
+      <RootPrompt {...prompt} closePrompt={closePrompt} />
     </PromptContext.Provider>
   )
 }

@@ -17,11 +17,12 @@ type DialogAction = {
   disabled?: boolean
 }
 
-export interface Props extends DialogProps {
+export interface Props extends Omit<DialogProps, 'open'> {
   title?: string
   isRequired?: boolean
   actions: [DialogAction, ...DialogAction[]]
   contentClassName?: string
+  open?: boolean
 }
 
 const useStyles = makeStyles<Theme, { open: boolean }>(() =>
@@ -37,7 +38,7 @@ export default function Prompt({
   title,
   actions,
   isRequired = true,
-  open,
+  open = true,
   contentClassName,
   ...props
 }: Props) {
