@@ -3,14 +3,14 @@ import { prompts, Prompts } from './Prompts'
 
 type IPromptContext = <T extends keyof Prompts>(
   promptName: T,
-  ...props: Parameters<Prompts[T]>
+  props: Omit<Parameters<Prompts[T]>[0], 'closePrompt'>
 ) => void
 
 const PromptContext = createContext<IPromptContext>(() => {})
 
 const RootPrompt = (props: {
   promptName?: keyof Prompts
-  promptProps?: Parameters<Prompts[keyof Prompts]>
+  promptProps?: Omit<Parameters<Prompts[keyof Prompts]>[0], 'closePrompt'>
   closePrompt: () => void
 }) => {
   if (!props.promptName) return <></>
@@ -22,15 +22,12 @@ const RootPrompt = (props: {
 export const PromptProvider: React.FC = ({ children }) => {
   const [prompt, setPrompt] = useState<{
     promptName: keyof Prompts
-    promptProps: Parameters<Prompts[keyof Prompts]>
+    promptProps: Omit<Parameters<Prompts[keyof Prompts]>[0], 'closePrompt'>
   }>()
 
-  const showPrompt: IPromptContext = useCallback(
-    (promptName, ...promptProps) => {
-      setPrompt({ promptName, promptProps })
-    },
-    []
-  )
+  const showPrompt: IPromptContext = useCallback((promptName, promptProps) => {
+    setPrompt({ promptName, promptProps })
+  }, [])
 
   const closePrompt = useCallback(() => {
     setPrompt(undefined)

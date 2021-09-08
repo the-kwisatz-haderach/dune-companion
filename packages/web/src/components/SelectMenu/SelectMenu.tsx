@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export default function ActionMenu({
+export function SelectMenu({
   primaryActionLabel,
   primaryActionPreamble,
   onPrimaryAction,

@@ -19,6 +19,8 @@ import { Leader } from '../../../components/Leader'
 import { FactionSummary } from './FactionSummary'
 import { FactionAdvantages } from './FactionAdvantages'
 import dune from '../../../images/dune.jpeg'
+import { useEffect } from 'react'
+import usePromptContext from '../../../contexts/PromptContext'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -49,12 +51,19 @@ const useStyles = makeStyles(theme =>
 
 export default function FactionSelect(): ReactElement {
   const classes = useStyles()
+  const showPrompt = usePromptContext()
   const factionKeys = Object.keys(factions)
   const [factionIndex, setFactionIndex] = useState(0)
   const { palette } = useTheme()
   const dispatch = useGameDispatch()
   const game = useGame()
   const player = usePlayer()
+
+  useEffect(() => {
+    if (player.name === '') {
+      showPrompt('PlayerSetupPrompt', {})
+    }
+  }, [player.name, showPrompt])
 
   const currentFactionKey = Object.keys(factions)[factionIndex] as Factions
   const currentFaction = factions[currentFactionKey]
@@ -132,6 +141,7 @@ export default function FactionSelect(): ReactElement {
           <Box className={classes.sideScrollContainer}>
             {currentFaction.leaders.map(leader => (
               <Leader
+                key={leader.name}
                 faction={currentFactionKey}
                 name={leader.name}
                 imgSrc={dune}
@@ -153,6 +163,7 @@ export default function FactionSelect(): ReactElement {
               .filter(rule => !game.conditions.advancedMode || rule.isAdvanced)
               .map(rule => (
                 <Card
+                  key={rule.name}
                   title={rule.name}
                   meta="Faction rule"
                   faction={currentFactionKey}

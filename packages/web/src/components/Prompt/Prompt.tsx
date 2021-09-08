@@ -27,6 +27,9 @@ export interface Props extends Omit<DialogProps, 'open'> {
 
 const useStyles = makeStyles<Theme, { open: boolean }>(() =>
   createStyles({
+    root: {
+      zIndex: 10000
+    },
     titleBar: {
       textAlign: 'right'
     }
@@ -45,7 +48,7 @@ export default function Prompt({
   const classes = useStyles({ open })
   const [primaryAction, ...otherActions] = actions
   return (
-    <Dialog {...props} open={open}>
+    <Dialog {...props} open={open} className={classes.root}>
       <DialogTitle
         className={classes.titleBar}
         disableTypography

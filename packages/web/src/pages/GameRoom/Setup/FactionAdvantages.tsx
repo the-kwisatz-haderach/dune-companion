@@ -37,6 +37,7 @@ export const FactionAdvantages = ({ faction, isAdvancedMode }: Props) => {
               .filter(rule => isAdvancedMode || !rule.isAdvanced)
               .map(rule => (
                 <Card
+                  key={rule.name}
                   title={rule.name}
                   meta="Faction rule"
                   faction={faction}

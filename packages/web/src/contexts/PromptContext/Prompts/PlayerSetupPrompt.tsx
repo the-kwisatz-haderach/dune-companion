@@ -19,7 +19,7 @@ export function PlayerSetupPrompt({ closePrompt }: PromptProps): ReactElement {
   }
 
   useEffect(() => {
-    if (player.name === '') {
+    if (player.name !== '') {
       closePrompt()
     }
   }, [player.name, closePrompt])

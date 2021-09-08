@@ -13,18 +13,18 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <PromptProvider>
-          <SnackbarProvider>
-            <UserProvider>
-              <DuneProvider
-                hostUrl={config.HOST_URL}
-                clientIdStore={clientIdStore}
-              >
+        <SnackbarProvider>
+          <UserProvider>
+            <DuneProvider
+              hostUrl={config.HOST_URL}
+              clientIdStore={clientIdStore}
+            >
+              <PromptProvider>
                 <Routes />
-              </DuneProvider>
-            </UserProvider>
-          </SnackbarProvider>
-        </PromptProvider>
+              </PromptProvider>
+            </DuneProvider>
+          </UserProvider>
+        </SnackbarProvider>
       </Router>
     </ThemeProvider>
   )

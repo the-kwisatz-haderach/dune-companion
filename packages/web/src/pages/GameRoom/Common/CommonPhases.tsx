@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 import { Box } from '@material-ui/core'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
@@ -9,42 +9,21 @@ import { factionIcons } from '../../../lib/factionIcons'
 import { Section } from '../../../components/Section'
 import { Header } from '../../../components/Header'
 import { Alert } from '@material-ui/lab'
-import { ActionMenu } from '../../../components/ActionMenu'
-import { useState } from 'react'
-import SetPlayerOrderPrompt from '../../../contexts/PromptContext/Prompts/SetPlayerOrderPrompt/SetPlayerOrderPrompt'
 
-type Props = {
+interface Props {
   phase: Phases
   rules: RuleSet[]
-  isReady: boolean
-  onToggleReady: () => void
+  ActionMenu: React.FC
 }
 
 export default function CommonPhases({
   phase,
   rules,
-  isReady,
-  onToggleReady
+  ActionMenu
 }: Props): ReactElement {
-  const [isPromptOpen, setIsPromptOpen] = useState(false)
-
-  const openPlayerOrderPrompt = () => {
-    setIsPromptOpen(true)
-  }
-
   return (
     <Box bgcolor="white">
-      <SetPlayerOrderPrompt
-        open={isPromptOpen}
-        onClose={() => setIsPromptOpen(false)}
-      />
-      <ActionMenu
-        primaryActionLabel={isReady ? 'Not ready' : 'Ready'}
-        primaryActionType={isReady ? 'negative' : 'positive'}
-        onPrimaryAction={onToggleReady}
-        secondaryActionLeftLabel="Set player order"
-        onSecondaryActionLeft={openPlayerOrderPrompt}
-      />
+      <ActionMenu />
       <HeaderImage
         title={phases[phase].name}
         preamble="Phase"
@@ -71,6 +50,7 @@ export default function CommonPhases({
           <MarginList>
             {rules.map(rule => (
               <Card
+                key={rule.name}
                 title={rule.name}
                 meta={
                   rule.faction
