@@ -19,8 +19,7 @@ import { Leader } from '../../../components/Leader'
 import { FactionSummary } from './FactionSummary'
 import { FactionAdvantages } from './FactionAdvantages'
 import dune from '../../../images/dune.jpeg'
-import { useEffect } from 'react'
-import usePromptContext from '../../../contexts/PromptContext'
+import { useAutomaticPrompt } from '../useAutomaticPrompt'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -51,19 +50,13 @@ const useStyles = makeStyles(theme =>
 
 export default function FactionSelect(): ReactElement {
   const classes = useStyles()
-  const showPrompt = usePromptContext()
   const factionKeys = Object.keys(factions)
   const [factionIndex, setFactionIndex] = useState(0)
   const { palette } = useTheme()
   const dispatch = useGameDispatch()
   const game = useGame()
   const player = usePlayer()
-
-  useEffect(() => {
-    if (player.name === '') {
-      showPrompt('PlayerSetupPrompt', {})
-    }
-  }, [player.name, showPrompt])
+  useAutomaticPrompt()
 
   const currentFactionKey = Object.keys(factions)[factionIndex] as Factions
   const currentFaction = factions[currentFactionKey]

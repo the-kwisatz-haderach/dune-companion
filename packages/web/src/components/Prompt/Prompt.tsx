@@ -6,10 +6,13 @@ import {
   Button,
   createStyles,
   makeStyles,
+  Slide,
   Theme,
   Typography
 } from '@material-ui/core'
 import { DialogProps } from '@material-ui/core'
+import { forwardRef } from 'react'
+import { TransitionProps } from '@material-ui/core/transitions'
 
 type DialogAction = {
   label: string
@@ -36,6 +39,13 @@ const useStyles = makeStyles<Theme, { open: boolean }>(() =>
   })
 )
 
+const Transition = forwardRef(function Transition(
+  props: TransitionProps & { children?: React.ReactElement<any, any> },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />
+})
+
 export default function Prompt({
   children,
   title,
@@ -48,7 +58,13 @@ export default function Prompt({
   const classes = useStyles({ open })
   const [primaryAction, ...otherActions] = actions
   return (
-    <Dialog {...props} open={open} className={classes.root}>
+    <Dialog
+      {...props}
+      open={open}
+      className={classes.root}
+      transitionDuration={1000}
+      TransitionComponent={Transition}
+    >
       <DialogTitle
         className={classes.titleBar}
         disableTypography

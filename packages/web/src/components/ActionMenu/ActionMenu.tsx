@@ -9,11 +9,11 @@ import {
 import { NavigateBefore, NavigateNext } from '@material-ui/icons'
 
 export type Props = {
-  primaryActionLabel: string
+  primaryActionLabel?: string
   primaryActionPreamble?: string
   primaryActionType?: 'positive' | 'negative' | 'neutral'
   primaryActionIsDisabled?: boolean
-  onPrimaryAction: () => void
+  onPrimaryAction?: () => void
   secondaryActionLeftLabel?: string
   onSecondaryActionLeft?: () => void
   secondaryActionRightLabel?: string
@@ -66,22 +66,29 @@ export default function ActionMenu({
           <NavigateBefore />
         </Fab>
       )}
-      <Box position="relative" display="flex" flex={1} justifyContent="center">
-        {primaryActionPreamble && (
-          <Typography variant="body2" className={classes.preamble}>
-            {primaryActionPreamble}
-          </Typography>
-        )}
-        <Fab
-          size="large"
-          variant="extended"
-          disabled={primaryActionIsDisabled}
-          color={primaryActionType === 'positive' ? 'primary' : 'default'}
-          onClick={onPrimaryAction}
+      {primaryActionLabel && (
+        <Box
+          position="relative"
+          display="flex"
+          flex={1}
+          justifyContent="center"
         >
-          {primaryActionLabel}
-        </Fab>
-      </Box>
+          {primaryActionPreamble && (
+            <Typography variant="body2" className={classes.preamble}>
+              {primaryActionPreamble}
+            </Typography>
+          )}
+          <Fab
+            size="large"
+            variant="extended"
+            disabled={primaryActionIsDisabled}
+            color={primaryActionType === 'positive' ? 'primary' : 'default'}
+            onClick={onPrimaryAction}
+          >
+            {primaryActionLabel}
+          </Fab>
+        </Box>
+      )}
       {onSecondaryActionRight && secondaryActionRightLabel && (
         <Fab variant="extended" onClick={onSecondaryActionRight}>
           <NavigateNext />
