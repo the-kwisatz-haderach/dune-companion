@@ -1,4 +1,7 @@
-import { requiredPhaseActions } from '../dictionaries'
+import {
+  requiredPhaseActions,
+  requiredPhaseAdminActions
+} from '../dictionaries'
 import { Player } from '../models'
 import { createPlayerAction } from './createPlayerAction'
 
@@ -16,5 +19,10 @@ export const createPlayer = (
   faction: null,
   spice: 0,
   treacheryCards: 0,
-  actions: requiredPhaseActions.SETUP.map(type => createPlayerAction(type))
+  actions: [
+    ...requiredPhaseActions.SETUP.map(type => createPlayerAction(type)),
+    ...(options?.isAdmin
+      ? requiredPhaseAdminActions.SETUP.map(type => createPlayerAction(type))
+      : [])
+  ]
 })

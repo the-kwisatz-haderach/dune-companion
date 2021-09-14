@@ -1,4 +1,8 @@
-import { phaseOrder, requiredPhaseActions } from '../dictionaries'
+import {
+  phaseOrder,
+  requiredPhaseActions,
+  requiredPhaseAdminActions
+} from '../dictionaries'
 import { Game } from '../models'
 import { createPlayerAction } from './createPlayerAction'
 
@@ -12,9 +16,16 @@ export const createNextPhaseState = (state: Game): Game => {
         ...players,
         [playerId]: {
           ...players[playerId],
-          actions: requiredPhaseActions[nextPhase].map(type =>
-            createPlayerAction(type)
-          )
+          actions: [
+            ...requiredPhaseActions[nextPhase].map(type =>
+              createPlayerAction(type)
+            ),
+            ...(state.players[playerId].isAdmin
+              ? requiredPhaseAdminActions[nextPhase].map(type =>
+                  createPlayerAction(type)
+                )
+              : [])
+          ]
         }
       }),
       state.players

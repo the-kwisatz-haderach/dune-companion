@@ -1,4 +1,7 @@
-import { requiredPhaseActions } from '../dictionaries'
+import {
+  requiredPhaseActions,
+  requiredPhaseAdminActions
+} from '../dictionaries'
 import { Game } from '../models'
 import { initialGameState } from '../reducers/initialGameState'
 import { createPlayerAction } from './createPlayerAction'
@@ -13,9 +16,14 @@ export const createNewTurnState = (state: Game): Game => ({
       ...players,
       [playerId]: {
         ...players[playerId],
-        actions: requiredPhaseActions.STORM.map(type =>
-          createPlayerAction(type)
-        )
+        actions: [
+          ...requiredPhaseActions.STORM.map(type => createPlayerAction(type)),
+          ...(state.players[playerId].isAdmin
+            ? requiredPhaseAdminActions.STORM.map(type =>
+                createPlayerAction(type)
+              )
+            : [])
+        ]
       }
     }),
     state.players

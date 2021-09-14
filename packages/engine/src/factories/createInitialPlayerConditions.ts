@@ -1,4 +1,8 @@
-import { factions, requiredPhaseActions } from '../dictionaries'
+import {
+  factions,
+  requiredPhaseActions,
+  requiredPhaseAdminActions
+} from '../dictionaries'
 import { Game } from '../models'
 import { createPlayerAction } from './createPlayerAction'
 
@@ -11,9 +15,14 @@ export const createInitialPlayerConditions = (state: Game): Game => ({
         ...acc,
         [playerId]: {
           ...player,
-          actions: requiredPhaseActions.STORM.map(type =>
-            createPlayerAction(type)
-          ),
+          actions: [
+            ...requiredPhaseActions.STORM.map(type => createPlayerAction(type)),
+            ...(player.isAdmin
+              ? requiredPhaseAdminActions.STORM.map(type =>
+                  createPlayerAction(type)
+                )
+              : [])
+          ],
           spice: player.faction
             ? factions[player.faction].startingSpice
             : player.spice,

@@ -39,7 +39,7 @@ export function SetCurrentFirstPlayerPrompt({
       ]}
     >
       {game.playerOrder.map((playerId, index) => (
-        <Box>
+        <Box key={playerId}>
           <Button onClick={() => selectPlayer(index)}>
             {game.players[playerId]?.name}
           </Button>

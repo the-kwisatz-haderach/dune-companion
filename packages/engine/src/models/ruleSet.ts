@@ -9,3 +9,9 @@ export type RuleSet = {
   inclusionCondition?: (game: Game) => boolean
   inclusionReason?: string
 }
+
+export type RuleSection = {
+  title: string
+  description?: string
+  rules: RuleSet[]
+}

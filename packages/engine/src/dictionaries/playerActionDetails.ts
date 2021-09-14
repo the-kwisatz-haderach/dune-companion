@@ -12,5 +12,11 @@ export const playerActionDetails: StaticPlayerActionProperties = {
   },
   RESPOND_TO_ALLIANCE_REQUEST: {
     isRequired: true
+  },
+  SET_PLAYER_ORDER: {
+    isRequired: true
+  },
+  SET_FIRST_PLAYER: {
+    isRequired: true
   }
 }

@@ -31,6 +31,16 @@ export const playersReducer = createReducer(
           state[action.payload.playerId].actions
         )
       })
+      .addCase(clientActions.SET_PLAYER_ORDER, (state, action) => {
+        state[action.payload.playerId].actions = removeByType(
+          'SET_PLAYER_ORDER'
+        )(state[action.payload.playerId].actions)
+      })
+      .addCase(clientActions.SET_FIRST_PLAYER, (state, action) => {
+        state[action.payload.playerId].actions = removeByType(
+          'SET_FIRST_PLAYER'
+        )(state[action.payload.playerId].actions)
+      })
       .addCase(clientActions.UPDATE_PLAYER_NAME, (state, action) => {
         if (action.payload.name === '') return state
         state[action.payload.playerId].name = action.payload.name
@@ -100,8 +110,14 @@ export const playersReducer = createReducer(
       })
       .addCase(clientActions.SET_PLAYER_SPICE, (state, action) => {
         state[action.payload.playerId].spice = action.payload.spice
+        state[action.payload.playerId].actions = removeByType(action.type)(
+          state[action.payload.playerId].actions
+        )
       })
       .addCase(clientActions.SET_PLAYER_TREACHERY_CARDS, (state, action) => {
         state[action.payload.playerId].treacheryCards = action.payload.cards
+        state[action.payload.playerId].actions = removeByType(action.type)(
+          state[action.payload.playerId].actions
+        )
       })
 )

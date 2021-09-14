@@ -1,4 +1,8 @@
-import { factions, requiredPhaseActions } from '../../dictionaries'
+import {
+  factions,
+  requiredPhaseActions,
+  requiredPhaseAdminActions
+} from '../../dictionaries'
 import { createPlayerAction } from '../../factories/createPlayerAction'
 import { Factions, Game } from '../../models'
 import { playerFixture } from '../../models/__fixtures__'
@@ -66,9 +70,14 @@ describe('actionSideEffectsReducer', () => {
             ...state.players.somePlayer,
             spice: factions.FREMEN.startingSpice,
             treacheryCards: factions.FREMEN.startingItems,
-            actions: requiredPhaseActions.STORM.map(type =>
-              createPlayerAction(type)
-            )
+            actions: [
+              ...requiredPhaseActions.STORM.map(type =>
+                createPlayerAction(type)
+              ),
+              ...requiredPhaseAdminActions.STORM.map(type =>
+                createPlayerAction(type)
+              )
+            ]
           },
           anotherPlayer: {
             ...state.players.anotherPlayer,
@@ -196,9 +205,14 @@ describe('actionSideEffectsReducer', () => {
           ...state.players,
           somePlayer: {
             ...state.players.somePlayer,
-            actions: requiredPhaseActions.STORM.map(type =>
-              createPlayerAction(type)
-            )
+            actions: [
+              ...requiredPhaseActions.STORM.map(type =>
+                createPlayerAction(type)
+              ),
+              ...requiredPhaseAdminActions.STORM.map(type =>
+                createPlayerAction(type)
+              )
+            ]
           },
           anotherPlayer: {
             ...state.players.anotherPlayer,

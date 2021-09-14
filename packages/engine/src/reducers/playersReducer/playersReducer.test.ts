@@ -414,7 +414,8 @@ describe('playersReducer', () => {
         playersReducer(
           {
             test: {
-              ...playerFixture
+              ...playerFixture,
+              actions: [createPlayerAction('SET_PLAYER_SPICE')]
             }
           },
           clientActions.SET_PLAYER_SPICE({ playerId: 'test', spice: 666 })
@@ -422,7 +423,56 @@ describe('playersReducer', () => {
       ).toEqual({
         test: {
           ...playerFixture,
-          spice: 666
+          spice: 666,
+          actions: []
+        }
+      })
+    })
+  })
+
+  describe('SET_PLAYER_ORDER', () => {
+    it('updates the player', () => {
+      expect(
+        playersReducer(
+          {
+            test: {
+              ...playerFixture,
+              actions: [createPlayerAction('SET_PLAYER_ORDER')]
+            }
+          },
+          clientActions.SET_PLAYER_ORDER({
+            playerId: 'test',
+            playerOrder: ['test', 'hello']
+          })
+        )
+      ).toEqual({
+        test: {
+          ...playerFixture,
+          actions: []
+        }
+      })
+    })
+  })
+
+  describe('SET_FIRST_PLAYER', () => {
+    it('updates the player', () => {
+      expect(
+        playersReducer(
+          {
+            test: {
+              ...playerFixture,
+              actions: [createPlayerAction('SET_FIRST_PLAYER')]
+            }
+          },
+          clientActions.SET_FIRST_PLAYER({
+            playerId: 'test',
+            firstPlayerIndex: 1
+          })
+        )
+      ).toEqual({
+        test: {
+          ...playerFixture,
+          actions: []
         }
       })
     })
@@ -434,7 +484,8 @@ describe('playersReducer', () => {
         playersReducer(
           {
             test: {
-              ...playerFixture
+              ...playerFixture,
+              actions: [createPlayerAction('SET_PLAYER_TREACHERY_CARDS')]
             }
           },
           clientActions.SET_PLAYER_TREACHERY_CARDS({
@@ -445,7 +496,8 @@ describe('playersReducer', () => {
       ).toEqual({
         test: {
           ...playerFixture,
-          treacheryCards: 3
+          treacheryCards: 3,
+          actions: []
         }
       })
     })

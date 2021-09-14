@@ -7,7 +7,8 @@ import FactionSelect from './Setup/FactionSelect'
 import {
   commonRuleSet,
   factionRuleSets,
-  Factions
+  Factions,
+  RuleSection
 } from '@dune-companion/engine'
 import { Loading } from '../Loading'
 import { withTransition } from '../../hocs/withTransition'
@@ -37,17 +38,29 @@ function GamePhase(): ReactElement {
     game.players
   ])
 
-  const phaseRules = Object.values(game.players)
+  const factionRules = Object.values(game.players)
     .map(player => player.faction)
     .filter((faction): faction is Factions => faction !== null)
     .flatMap(faction => factionRuleSets[faction][game.currentPhase])
+    .filter(rule => !rule?.inclusionCondition || rule?.inclusionCondition(game))
+    .filter(
+      rule =>
+        !rule.isAdvanced || (game.conditions.advancedMode && rule.isAdvanced)
+    )
 
-  const rules = [
-    ...commonRuleSet[game.currentPhase].filter(
-      rule => !game.conditions.advancedMode || rule.isAdvanced
-    ),
-    ...phaseRules
-  ].filter(rule => !rule.inclusionCondition || rule.inclusionCondition(game))
+  const rules: RuleSection[] = [
+    ...commonRuleSet[game.currentPhase]?.map(section => ({
+      ...section,
+      rules: section?.rules?.filter(
+        rule =>
+          !rule.isAdvanced || (game.conditions.advancedMode && rule.isAdvanced)
+      )
+    })),
+    {
+      title: 'Faction Rules',
+      rules: factionRules
+    }
+  ]
 
   switch (game.currentPhase) {
     case 'SETUP':
