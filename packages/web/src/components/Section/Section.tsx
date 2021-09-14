@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, createStyles, makeStyles, Typography } from '@material-ui/core'
 
 interface Props {
-  heading: string
+  heading?: string
   description?: string
 }
 
@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme =>
       marginLeft: theme.spacing(-2),
       marginRight: theme.spacing(-2),
       paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(6),
+      marginBottom: theme.spacing(4),
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
       '&:nth-of-child(odd)': {
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme =>
     },
     sectionHeading: {
       textTransform: 'uppercase',
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(1)
     },
     sectionDescription: {
       marginBottom: theme.spacing(2)
@@ -39,15 +39,21 @@ export const Section: React.FC<Props> = ({
   const classes = useStyles()
   return (
     <Box className={classes.container} component="section">
-      <Typography variant="h6" className={classes.sectionHeading}>
-        {heading}
-      </Typography>
-      {description && (
-        <Typography variant="body2" className={classes.sectionDescription}>
-          {description}
-        </Typography>
+      {(heading || description) && (
+        <Box mb={4}>
+          {heading && (
+            <Typography variant="h6" className={classes.sectionHeading}>
+              {heading}
+            </Typography>
+          )}
+          {description && (
+            <Typography variant="body2" className={classes.sectionDescription}>
+              {description}
+            </Typography>
+          )}
+        </Box>
       )}
-      <Box>{children}</Box>
+      {children}
     </Box>
   )
 }

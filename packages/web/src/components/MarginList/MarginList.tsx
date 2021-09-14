@@ -6,7 +6,6 @@ interface Props {}
 const useStyles = makeStyles(theme =>
   createStyles({
     cardContainer: {
-      marginTop: theme.spacing(3),
       marginBottom: theme.spacing(2),
       '& > *:not(:last-child)': {
         marginBottom: theme.spacing(3)

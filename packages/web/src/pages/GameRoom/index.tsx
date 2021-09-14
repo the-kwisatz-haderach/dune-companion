@@ -5,7 +5,7 @@ import CommonPhases from './Common'
 import { createPendingActionsChecker } from './helpers'
 import FactionSelect from './Setup/FactionSelect'
 import {
-  commonRuleSet,
+  commonRuleSets,
   factionRuleSets,
   Factions,
   RuleSection
@@ -49,7 +49,7 @@ function GamePhase(): ReactElement {
     )
 
   const rules: RuleSection[] = [
-    ...commonRuleSet[game.currentPhase]?.map(section => ({
+    ...commonRuleSets[game.currentPhase]?.map(section => ({
       ...section,
       rules: section?.rules?.filter(
         rule =>

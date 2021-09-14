@@ -1,4 +1,4 @@
-import { Factions, Phases } from '../../models'
+import { Factions, Phases, RuleSection } from '../../models'
 import { RuleSet } from '../../models/ruleSet'
 import { beneGesseritRules } from './beneGesserit'
 import { atreidesRules } from './atreides'
@@ -6,8 +6,30 @@ import { emperorRules } from './emperor'
 import { fremenRules } from './fremen'
 import { harkonnenRules } from './harkonnen'
 import { spacingGuildRules } from './spacingGuild'
+import { setupRules } from './setup'
+import { stormRules } from './storm'
+import { spiceBlowAndNexusRules } from './spiceBlowAndNexus'
+import { choamCharityRules } from './choamCharity'
+import { biddingRules } from './bidding'
+import { revivalRules } from './revival'
+import { shipmentAndMovementRules } from './shipmentAndMovement'
+import { battleRules } from './battle'
+import { spiceHarvestRules } from './spiceHarvest'
+import { mentatPauseRules } from './mentatPause'
 
-export { commonRuleSet } from './common'
+export const commonRuleSets: Record<Phases, RuleSection[]> = {
+  SETUP: setupRules,
+  STORM: stormRules,
+  SPICE_BLOW_AND_NEXUS: spiceBlowAndNexusRules,
+  CHOAM_CHARITY: choamCharityRules,
+  BIDDING: biddingRules,
+  REVIVAL: revivalRules,
+  SHIPMENT_AND_MOVEMENT: shipmentAndMovementRules,
+  BATTLE: battleRules,
+  SPICE_HARVEST: spiceHarvestRules,
+  MENTAT_PAUSE: mentatPauseRules,
+  FINISHED: []
+}
 
 export const factionRuleSets: Record<Factions, Record<Phases, RuleSet[]>> = {
   BENE_GESSERIT: beneGesseritRules,
