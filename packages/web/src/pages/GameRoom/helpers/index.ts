@@ -24,7 +24,7 @@ export const createRuleFilter = (config: {
   playerFaction: Factions | null
   showAllFactions: boolean
 }) => (rule: RuleSet) => {
-  if (config.game.conditions.advancedMode && !rule.isAdvanced) return false
+  if (!config.game.conditions.advancedMode && rule.isAdvanced) return false
   if (
     !config.showAllFactions &&
     rule.faction !== undefined &&

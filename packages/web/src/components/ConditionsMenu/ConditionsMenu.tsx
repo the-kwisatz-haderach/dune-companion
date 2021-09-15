@@ -17,6 +17,8 @@ const useStyles = makeStyles(theme =>
       display: 'flex',
       flexDirection: 'column',
       '& p': {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
         lineHeight: 1.4
       }
     },
@@ -43,7 +45,7 @@ export const ConditionsMenu: React.FC<Props> = ({
   const classes = useStyles()
   return (
     <Grid container className={classes.root}>
-      <Grid item xs={3} className={classes.item}>
+      <Grid item xs={2} className={classes.item}>
         <Typography className={classes.title} variant="body1">
           Turn
         </Typography>
@@ -55,18 +57,18 @@ export const ConditionsMenu: React.FC<Props> = ({
       </Grid>
       <Grid item xs className={classes.item}>
         <Typography className={classes.title} variant="body1">
-          Phase
-        </Typography>
-        <Typography variant="body1">
-          <strong>{phases[currentPhase].name}</strong>
-        </Typography>
-      </Grid>
-      <Grid item xs className={classes.item}>
-        <Typography className={classes.title} variant="body1">
           First player
         </Typography>
         <Typography variant="body1">
           <strong>{currentFirstPlayer}</strong>
+        </Typography>
+      </Grid>
+      <Grid item xs className={classes.item}>
+        <Typography className={classes.title} variant="body1">
+          Phase
+        </Typography>
+        <Typography variant="body1">
+          <strong>{phases[currentPhase].name}</strong>
         </Typography>
       </Grid>
     </Grid>
