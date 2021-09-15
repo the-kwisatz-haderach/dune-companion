@@ -8,6 +8,7 @@ import { config } from './config'
 import { clientIdStore } from './lib/clientIdStore'
 import { theme } from './theme'
 import { PromptProvider } from './contexts/PromptContext'
+import { GameSettingsProvider } from './contexts/GameSettingsContext'
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
               clientIdStore={clientIdStore}
             >
               <PromptProvider>
-                <Routes />
+                <GameSettingsProvider>
+                  <Routes />
+                </GameSettingsProvider>
               </PromptProvider>
             </DuneProvider>
           </UserProvider>

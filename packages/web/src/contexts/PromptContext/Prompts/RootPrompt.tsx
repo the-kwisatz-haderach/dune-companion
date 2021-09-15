@@ -1,4 +1,4 @@
-import { prompts, Prompts } from './PromptContext/Prompts'
+import { prompts, Prompts } from '.'
 
 export const RootPrompt = (props: {
   promptName?: keyof Prompts

@@ -1,15 +1,7 @@
-import { ReactElement, useState } from 'react'
-import {
-  Box,
-  createStyles,
-  makeStyles,
-  Fab,
-  Menu,
-  MenuItem
-} from '@material-ui/core'
-import { FilterList as FilterIcon } from '@material-ui/icons'
-import { Menu as MenuIcon } from '@material-ui/icons'
-import { memo } from 'react'
+import { ReactElement, memo } from 'react'
+import { Box, createStyles, makeStyles, Fab } from '@material-ui/core'
+import { Settings as SettingsIcon, Menu as MenuIcon } from '@material-ui/icons'
+import { FloatingMenu, FloatingMenuProps } from '../../components/FloatingMenu'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -30,16 +22,10 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-type Action = {
-  label: string
-  onClick: () => void
-  style?: 'positive' | 'negative'
-}
-
 export type Props = {
-  filters: Action[]
-  secondaryActions: Action[]
-  primaryAction?: Action
+  filters: FloatingMenuProps['items']
+  secondaryActions: FloatingMenuProps['items']
+  primaryAction?: FloatingMenuProps['items'][number]
 }
 
 const PrimaryActionButton = ({
@@ -65,86 +51,19 @@ function GameActionMenu({
   primaryAction
 }: Props): ReactElement {
   const classes = useStyles()
-  const [
-    secondaryAnchorEl,
-    setSecondaryAnchorEl
-  ] = useState<null | HTMLElement>(null)
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null)
-
-  const handleOpenSecondaryMenu = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    setFilterAnchorEl(null)
-    setSecondaryAnchorEl(event.currentTarget)
-  }
-
-  const handleOpenFilterMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setSecondaryAnchorEl(null)
-    setFilterAnchorEl(event.currentTarget)
-  }
-
-  const handleCloseSecondaryMenu = () => {
-    setSecondaryAnchorEl(null)
-  }
-
-  const handleCloseFilterMenu = () => {
-    setFilterAnchorEl(null)
-  }
-
   return (
     <Box className={classes.root}>
-      <Fab
+      <FloatingMenu
+        trigger={<MenuIcon />}
         disabled={secondaryActions.length === 0}
-        variant="extended"
-        onClick={handleOpenSecondaryMenu}
-      >
-        <MenuIcon />
-      </Fab>
+        items={secondaryActions}
+      />
       <PrimaryActionButton primaryAction={primaryAction} />
-      <Fab
+      <FloatingMenu
+        trigger={<SettingsIcon />}
         disabled={filters.length === 0}
-        variant="extended"
-        onClick={handleOpenFilterMenu}
-      >
-        <FilterIcon />
-      </Fab>
-      {secondaryActions.length > 0 && (
-        <Menu
-          anchorEl={secondaryAnchorEl}
-          open={Boolean(secondaryAnchorEl)}
-          onClose={handleCloseSecondaryMenu}
-        >
-          {secondaryActions.map(({ label, onClick }) => (
-            <MenuItem
-              onClick={() => {
-                onClick()
-                handleCloseSecondaryMenu()
-              }}
-            >
-              {label}
-            </MenuItem>
-          ))}
-        </Menu>
-      )}
-      {filters.length > 0 && (
-        <Menu
-          keepMounted
-          anchorEl={filterAnchorEl}
-          open={Boolean(filterAnchorEl)}
-          onClose={handleCloseFilterMenu}
-        >
-          {filters.map(({ label, onClick }) => (
-            <MenuItem
-              onClick={() => {
-                onClick()
-                handleCloseFilterMenu()
-              }}
-            >
-              {label}
-            </MenuItem>
-          ))}
-        </Menu>
-      )}
+        items={filters}
+      />
     </Box>
   )
 }

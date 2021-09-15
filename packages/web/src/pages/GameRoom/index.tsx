@@ -11,8 +11,8 @@ import {
 } from '@dune-companion/engine'
 import { Loading } from '../Loading'
 import { withTransition } from '../../hocs/withTransition'
-import { useState } from 'react'
 import GameActionMenu, { Props as GameActionMenuProps } from './GameActionMenu'
+import useGameSettingsContext from '../../contexts/GameSettingsContext/GameSettingsContext'
 
 const CommonPhaseWithTransition = withTransition(CommonPhases, ({ phase }) => (
   <Loading phase={phase} />
@@ -25,11 +25,13 @@ const CommonActionMenu = ({
 }) => {
   const player = usePlayer()
   const actions = useGameActions()
+  const { showAllFactionRules } = useGameSettingsContext()
 
   const filters: GameActionMenuProps['filters'] = [
     {
-      label: 'Toggle Faction Rules',
-      onClick: toggleShowAllPlayers
+      label: 'Show All Factions Rules',
+      onClick: toggleShowAllPlayers,
+      selected: showAllFactionRules
     }
   ]
   const secondaryActions: GameActionMenuProps['secondaryActions'] = []
@@ -58,7 +60,7 @@ const CommonActionMenu = ({
 }
 
 function GamePhase(): ReactElement {
-  const [showAllFactions, setShowAllFactions] = useState(false)
+  const { dispatch, showAllFactionRules } = useGameSettingsContext()
   const game = useGame()
   const player = usePlayer()
 
@@ -67,18 +69,23 @@ function GamePhase(): ReactElement {
       createRuleFilter({
         game,
         playerFaction: player.faction,
-        showAllFactions
+        showAllFactions: showAllFactionRules
       }),
-    [game, player.faction, showAllFactions]
+    [game, player.faction, showAllFactionRules]
   )
 
   const ActionMenu = useCallback(
     () => (
       <CommonActionMenu
-        toggleShowAllPlayers={() => setShowAllFactions(curr => !curr)}
+        toggleShowAllPlayers={() =>
+          dispatch({
+            type: 'updateRuleVisibility',
+            payload: !showAllFactionRules
+          })
+        }
       />
     ),
-    []
+    [dispatch, showAllFactionRules]
   )
 
   const isPending = useMemo(() => createPendingActionsChecker(game.players), [

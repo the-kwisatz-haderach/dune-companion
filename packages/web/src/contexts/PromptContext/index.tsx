@@ -1,5 +1,5 @@
 import { useCallback, useState, createContext, useContext } from 'react'
-import { RootPrompt } from '../RootPrompt'
+import { RootPrompt } from './Prompts/RootPrompt'
 import { Prompts } from './Prompts'
 import { IPromptContext } from './types'
 
