@@ -30,6 +30,7 @@ export function SetCurrentFirstPlayerPrompt({
   return (
     <Prompt
       title="Select current first player"
+      onClose={closePrompt}
       actions={[
         {
           label: 'Enter',
@@ -40,7 +41,12 @@ export function SetCurrentFirstPlayerPrompt({
     >
       {game.playerOrder.map((playerId, index) => (
         <Box key={playerId}>
-          <Button onClick={() => selectPlayer(index)}>
+          <Button
+            fullWidth
+            color="primary"
+            variant="contained"
+            onClick={() => selectPlayer(index)}
+          >
             {game.players[playerId]?.name}
           </Button>
         </Box>

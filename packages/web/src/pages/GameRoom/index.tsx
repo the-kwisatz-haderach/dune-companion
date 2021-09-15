@@ -1,8 +1,7 @@
-import React, { ReactElement, useMemo } from 'react'
-import { Redirect } from 'react-router-dom'
-import { useGame, usePlayer, useGameActions } from '../../dune-react'
+import { ReactElement, useMemo, useCallback } from 'react'
+import { useGame, useGameActions, usePlayer } from '../../dune-react'
 import CommonPhases from './Common'
-import { createPendingActionsChecker } from './helpers'
+import { createPendingActionsChecker, createRuleFilter } from './helpers'
 import FactionSelect from './Setup/FactionSelect'
 import {
   commonRuleSets,
@@ -12,91 +11,110 @@ import {
 } from '@dune-companion/engine'
 import { Loading } from '../Loading'
 import { withTransition } from '../../hocs/withTransition'
-import { ActionMenu } from '../../components/ActionMenu'
+import { useState } from 'react'
+import GameActionMenu, { Props as GameActionMenuProps } from './GameActionMenu'
 
 const CommonPhaseWithTransition = withTransition(CommonPhases, ({ phase }) => (
   <Loading phase={phase} />
 ))
 
-const CommonActionMenu: React.FC = () => {
+const CommonActionMenu = ({
+  toggleShowAllPlayers
+}: {
+  toggleShowAllPlayers: () => void
+}) => {
   const player = usePlayer()
   const actions = useGameActions()
-  const requiredAction = player.actions.find(action => action.isRequired)
-  if (!requiredAction) return <></>
+
+  const filters: GameActionMenuProps['filters'] = [
+    {
+      label: 'Toggle Faction Rules',
+      onClick: toggleShowAllPlayers
+    }
+  ]
+  const secondaryActions: GameActionMenuProps['secondaryActions'] = []
+  if (actions.SET_FIRST_PLAYER) {
+    secondaryActions.push({
+      label: actions.SET_FIRST_PLAYER.label,
+      onClick: actions.SET_FIRST_PLAYER.handler
+    })
+  }
+
+  const primaryAction = actions[player.actions.slice(-1)[0].type]
+
   return (
-    <ActionMenu
-      primaryActionLabel={actions[requiredAction.type]?.label}
-      primaryActionType={actions[requiredAction.type]?.style}
-      onPrimaryAction={actions[requiredAction.type]?.handler}
+    <GameActionMenu
+      primaryAction={
+        primaryAction && {
+          label: primaryAction.label,
+          onClick: primaryAction.handler,
+          style: primaryAction.style
+        }
+      }
+      filters={filters}
+      secondaryActions={secondaryActions}
     />
   )
 }
 
 function GamePhase(): ReactElement {
+  const [showAllFactions, setShowAllFactions] = useState(false)
   const game = useGame()
+  const player = usePlayer()
+
+  const ruleFilter = useMemo(
+    () =>
+      createRuleFilter({
+        game,
+        playerFaction: player.faction,
+        showAllFactions
+      }),
+    [game, player.faction, showAllFactions]
+  )
+
+  const ActionMenu = useCallback(
+    () => (
+      <CommonActionMenu
+        toggleShowAllPlayers={() => setShowAllFactions(curr => !curr)}
+      />
+    ),
+    []
+  )
+
   const isPending = useMemo(() => createPendingActionsChecker(game.players), [
     game.players
   ])
 
-  const factionRules = Object.values(game.players)
-    .map(player => player.faction)
-    .filter((faction): faction is Factions => faction !== null)
-    .flatMap(faction => factionRuleSets[faction][game.currentPhase])
-    .filter(rule => !rule?.inclusionCondition || rule?.inclusionCondition(game))
-    .filter(
-      rule =>
-        !rule.isAdvanced || (game.conditions.advancedMode && rule.isAdvanced)
-    )
-
-  const rules: RuleSection[] = [
+  const currentPhaseRules: RuleSection[] = [
     ...commonRuleSets[game.currentPhase]?.map(section => ({
       ...section,
-      rules: section?.rules?.filter(
-        rule =>
-          !rule.isAdvanced || (game.conditions.advancedMode && rule.isAdvanced)
-      )
+      rules: section?.rules?.filter(ruleFilter)
     })),
     {
       title: 'Faction Rules',
-      rules: factionRules
+      rules: Object.values(game.players)
+        .map(player => player.faction)
+        .filter((faction): faction is Factions => faction !== null)
+        .flatMap(faction => factionRuleSets[faction][game.currentPhase])
+        .filter(ruleFilter)
     }
   ]
 
-  switch (game.currentPhase) {
-    case 'SETUP':
-      if (isPending('SELECT_FACTION').forAnyPlayer()) {
-        return <FactionSelect />
-      }
-      return (
-        <CommonPhaseWithTransition
-          phase={game.currentPhase}
-          rules={rules}
-          trigger={game.currentPhase}
-          ActionMenu={CommonActionMenu}
-        />
-      )
-    case 'STORM':
-    case 'SPICE_BLOW_AND_NEXUS':
-    case 'CHOAM_CHARITY':
-    case 'BIDDING':
-    case 'REVIVAL':
-    case 'SHIPMENT_AND_MOVEMENT':
-    case 'BATTLE':
-    case 'SPICE_HARVEST':
-    case 'MENTAT_PAUSE':
-      return (
-        <CommonPhaseWithTransition
-          phase={game.currentPhase}
-          rules={rules}
-          trigger={game.currentPhase}
-          ActionMenu={CommonActionMenu}
-        />
-      )
-    case 'FINISHED':
-      return <p>FINISHED!</p>
-    default:
-      return <Redirect to="/" />
+  if (
+    game.currentPhase === 'SETUP' &&
+    isPending('SELECT_FACTION').forAnyPlayer()
+  ) {
+    return <FactionSelect />
   }
+
+  return (
+    <CommonPhaseWithTransition
+      phase={game.currentPhase}
+      rules={currentPhaseRules}
+      trigger={game.currentPhase}
+      ActionMenu={ActionMenu}
+    />
+  )
 }
 
 export default GamePhase

@@ -1,10 +1,9 @@
 import { TextField } from '@material-ui/core'
 import { ReactElement, useState } from 'react'
-import { Prompt } from '../../../components/Prompt'
-import useUserContext from '../../UserContext'
-import { useGameDispatch, usePlayer } from '../../../dune-react'
-import { PromptProps } from '../types'
-import { useEffect } from 'react'
+import { Prompt } from '../../../../components/Prompt'
+import useUserContext from '../../../UserContext'
+import { useGameDispatch, usePlayer } from '../../../../dune-react'
+import { PromptProps } from '../../types'
 
 export function PlayerSetupPrompt({ closePrompt }: PromptProps): ReactElement {
   const { username } = useUserContext()
@@ -16,17 +15,13 @@ export function PlayerSetupPrompt({ closePrompt }: PromptProps): ReactElement {
     dispatch('UPDATE_PLAYER_NAME', {
       name
     })
+    closePrompt()
   }
-
-  useEffect(() => {
-    if (player.name !== '') {
-      closePrompt()
-    }
-  }, [player.name, closePrompt])
 
   return (
     <Prompt
       title="Enter your name"
+      onClose={player.name !== '' ? closePrompt : undefined}
       actions={[
         {
           label: 'Enter',

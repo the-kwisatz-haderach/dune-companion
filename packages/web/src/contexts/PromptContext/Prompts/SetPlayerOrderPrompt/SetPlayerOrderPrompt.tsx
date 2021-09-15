@@ -59,6 +59,7 @@ export default function SetPlayerOrderPrompt({
   return (
     <Prompt
       fullWidth
+      onClose={closePrompt}
       contentClassName={classes.dialogContent}
       maxWidth="md"
       title="Set Player Order"
