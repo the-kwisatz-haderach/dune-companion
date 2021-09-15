@@ -2,17 +2,19 @@ import React, { ReactElement } from 'react'
 import { Box } from '@material-ui/core'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
-import { factions, Phases, phases, RuleSection } from '@dune-companion/engine'
-import { MarginList } from '../../../components/MarginList'
-import { Card } from '../../../components/Card'
-import { factionIcons } from '../../../lib/factionIcons'
-import { Section } from '../../../components/Section'
+import {
+  Phases,
+  phases,
+  RuleSection as RuleSectionType
+} from '@dune-companion/engine'
 import { Header } from '../../../components/Header'
 import { Alert } from '@material-ui/lab'
+import { RuleSection } from './RuleSection'
+import { phaseIcons } from '../../../lib/phaseIcons'
 
 interface Props {
   phase: Phases
-  rules: RuleSection[]
+  rules: RuleSectionType[]
   ActionMenu: React.FC
 }
 
@@ -27,7 +29,7 @@ export default function CommonPhases({
       <HeaderImage
         title={phases[phase].name}
         preamble="Phase"
-        BackdropImage={factionIcons.BENE_GESSERIT}
+        BackdropImage={phaseIcons[phase]}
       />
       <RoundedContainer>
         {phase === 'SETUP' && (
@@ -44,31 +46,7 @@ export default function CommonPhases({
           </Alert>
         )}
         {rules.map((section, index) => (
-          <Section
-            key={`${section.title}${index}`}
-            heading={section.title}
-            description={section.description}
-          >
-            <MarginList>
-              {section?.rules.map((rule, index) => (
-                <Card
-                  key={`${rule.name}${index}`}
-                  title={rule.name}
-                  meta={
-                    rule.faction
-                      ? `${factions[rule.faction].name} rule`
-                      : rule.inclusionReason
-                      ? 'Temporary rule'
-                      : 'Common rule'
-                  }
-                  inclusionReason={rule.inclusionReason}
-                  faction={rule.faction}
-                  advanced={rule.isAdvanced}
-                  body={rule.description}
-                />
-              ))}
-            </MarginList>
-          </Section>
+          <RuleSection key={`${section.title}${index}`} section={section} />
         ))}
       </RoundedContainer>
     </Box>

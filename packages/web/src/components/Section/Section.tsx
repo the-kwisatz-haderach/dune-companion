@@ -40,7 +40,7 @@ export const Section: React.FC<Props> = ({
   return (
     <Box className={classes.container} component="section">
       {(heading || description) && (
-        <Box mb={4}>
+        <Box mb={2}>
           {heading && (
             <Typography variant="h6" className={classes.sectionHeading}>
               {heading}
