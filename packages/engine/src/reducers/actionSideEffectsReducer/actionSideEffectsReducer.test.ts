@@ -43,8 +43,8 @@ describe('actionSideEffectsReducer', () => {
             isAdmin: true,
             id: 'somePlayer',
             name: 'somePlayer',
-            spice: 0,
-            treacheryCards: 0,
+            spice: 5,
+            treacheryCards: 3,
             faction: Factions.FREMEN,
             actions: [getActionProperties('MARK_PHASE_STEP_NOT_COMPLETED')]
           },
@@ -53,8 +53,8 @@ describe('actionSideEffectsReducer', () => {
             isAdmin: false,
             id: 'anotherPlayer',
             name: 'anotherPlayer',
-            spice: 0,
-            treacheryCards: 0,
+            spice: 2,
+            treacheryCards: 1,
             faction: Factions.HOUSE_ATREIDES,
             actions: []
           }
@@ -68,8 +68,8 @@ describe('actionSideEffectsReducer', () => {
           ...state.players,
           somePlayer: {
             ...state.players.somePlayer,
-            spice: factions.FREMEN.startingSpice,
-            treacheryCards: factions.FREMEN.startingItems,
+            spice: 5,
+            treacheryCards: 3,
             actions: [
               ...requiredPhaseActions.STORM.map(type =>
                 getActionProperties(type)
@@ -81,8 +81,8 @@ describe('actionSideEffectsReducer', () => {
           },
           anotherPlayer: {
             ...state.players.anotherPlayer,
-            spice: factions.HOUSE_ATREIDES.startingSpice,
-            treacheryCards: factions.HOUSE_ATREIDES.startingItems,
+            spice: 2,
+            treacheryCards: 1,
             actions: requiredPhaseActions.STORM.map(type =>
               getActionProperties(type)
             )

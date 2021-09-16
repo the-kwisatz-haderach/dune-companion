@@ -1,5 +1,6 @@
 import { ActionReducerMapBuilder, createReducer } from '@reduxjs/toolkit'
 import { clientActions, ClientActionType } from '../../actions'
+import { factions } from '../../dictionaries'
 import { createPlayer } from '../../factories'
 import { getActionProperties } from '../../factories/getActionProperties'
 import { Game, PlayerAction } from '../../models'
@@ -21,32 +22,39 @@ export const playersReducer = createReducer(
         state[action.payload.playerId].faction = action.payload.faction
 
         if (action.payload.faction === null) {
+          state[action.payload.playerId].spice = 0
+          state[action.payload.playerId].treacheryCards = 0
           state[action.payload.playerId].actions.push(
-            getActionProperties('SELECT_FACTION')
+            getActionProperties(action.type)
           )
           return
         }
 
-        state[action.payload.playerId].actions = removeByType('SELECT_FACTION')(
+        state[action.payload.playerId].spice =
+          factions[action.payload.faction].startingSpice
+        state[action.payload.playerId].treacheryCards =
+          factions[action.payload.faction].startingItems
+
+        state[action.payload.playerId].actions = removeByType(action.type)(
           state[action.payload.playerId].actions
         )
       })
       .addCase(clientActions.SET_PLAYER_ORDER, (state, action) => {
-        state[action.payload.playerId].actions = removeByType(
-          'SET_PLAYER_ORDER'
-        )(state[action.payload.playerId].actions)
+        state[action.payload.playerId].actions = removeByType(action.type)(
+          state[action.payload.playerId].actions
+        )
       })
       .addCase(clientActions.SET_FIRST_PLAYER, (state, action) => {
-        state[action.payload.playerId].actions = removeByType(
-          'SET_FIRST_PLAYER'
-        )(state[action.payload.playerId].actions)
+        state[action.payload.playerId].actions = removeByType(action.type)(
+          state[action.payload.playerId].actions
+        )
       })
       .addCase(clientActions.UPDATE_PLAYER_NAME, (state, action) => {
         if (action.payload.name === '') return state
         state[action.payload.playerId].name = action.payload.name
-        state[action.payload.playerId].actions = removeByType(
-          'UPDATE_PLAYER_NAME'
-        )(state[action.payload.playerId].actions)
+        state[action.payload.playerId].actions = removeByType(action.type)(
+          state[action.payload.playerId].actions
+        )
       })
       .addCase(clientActions.SET_ADMIN, (state, action) => {
         state[action.payload.playerId].isAdmin = false

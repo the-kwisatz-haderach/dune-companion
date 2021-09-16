@@ -6,6 +6,7 @@ import { initialGameState } from '../initialGameState'
 import { Game } from '../../models'
 import { getActionProperties } from '../../factories/getActionProperties'
 import { createPlayer } from '../../factories'
+import { factions } from '../../dictionaries'
 
 jest.mock('@reduxjs/toolkit', () => ({
   ...(jest.requireActual('@reduxjs/toolkit') as object),
@@ -50,6 +51,8 @@ describe('playersReducer', () => {
         test: {
           ...playerFixture,
           faction: Factions.EMPEROR,
+          spice: factions.EMPEROR.startingSpice,
+          treacheryCards: factions.EMPEROR.startingItems,
           actions: []
         }
       })
@@ -61,6 +64,8 @@ describe('playersReducer', () => {
             test: {
               ...playerFixture,
               faction: Factions.BENE_GESSERIT,
+              spice: factions.BENE_GESSERIT.startingSpice,
+              treacheryCards: factions.BENE_GESSERIT.startingItems,
               actions: []
             }
           },
@@ -73,6 +78,8 @@ describe('playersReducer', () => {
         test: {
           ...playerFixture,
           faction: null,
+          spice: 0,
+          treacheryCards: 0,
           actions: [getActionProperties('SELECT_FACTION')]
         }
       })
