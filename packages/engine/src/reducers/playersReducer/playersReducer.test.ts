@@ -4,7 +4,7 @@ import { Factions } from '../../models/faction'
 import { playerFixture } from '../../models/__fixtures__'
 import { initialGameState } from '../initialGameState'
 import { Game } from '../../models'
-import { createPlayerAction } from '../../factories/createPlayerAction'
+import { getActionProperties } from '../../factories/getActionProperties'
 import { createPlayer } from '../../factories'
 
 jest.mock('@reduxjs/toolkit', () => ({
@@ -38,7 +38,7 @@ describe('playersReducer', () => {
             test: {
               ...playerFixture,
               faction: Factions.BENE_GESSERIT,
-              actions: [createPlayerAction('SELECT_FACTION')]
+              actions: [getActionProperties('SELECT_FACTION')]
             }
           },
           clientActions.SELECT_FACTION({
@@ -73,7 +73,7 @@ describe('playersReducer', () => {
         test: {
           ...playerFixture,
           faction: null,
-          actions: [createPlayerAction('SELECT_FACTION')]
+          actions: [getActionProperties('SELECT_FACTION')]
         }
       })
     })
@@ -232,7 +232,7 @@ describe('playersReducer', () => {
           {
             somePlayer: {
               ...playerFixture,
-              actions: [createPlayerAction('SET_IS_READY')]
+              actions: [getActionProperties('SET_IS_READY')]
             }
           },
           clientActions.SET_IS_READY({
@@ -242,7 +242,7 @@ describe('playersReducer', () => {
       ).toEqual({
         somePlayer: {
           ...playerFixture,
-          actions: [createPlayerAction('SET_IS_NOT_READY')]
+          actions: [getActionProperties('SET_IS_NOT_READY')]
         }
       })
     })
@@ -255,7 +255,7 @@ describe('playersReducer', () => {
           {
             somePlayer: {
               ...playerFixture,
-              actions: [createPlayerAction('SET_IS_NOT_READY')]
+              actions: [getActionProperties('SET_IS_NOT_READY')]
             }
           },
           clientActions.SET_IS_NOT_READY({
@@ -265,7 +265,7 @@ describe('playersReducer', () => {
       ).toEqual({
         somePlayer: {
           ...playerFixture,
-          actions: [createPlayerAction('SET_IS_READY')]
+          actions: [getActionProperties('SET_IS_READY')]
         }
       })
     })
@@ -298,7 +298,7 @@ describe('playersReducer', () => {
         anotherPlayer: {
           ...playerFixture,
           actions: [
-            createPlayerAction('RESPOND_TO_ALLIANCE_REQUEST', {
+            getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
               id: 'mockNanoId'
             })
           ]
@@ -306,7 +306,7 @@ describe('playersReducer', () => {
         thirdPlayer: {
           ...playerFixture,
           actions: [
-            createPlayerAction('RESPOND_TO_ALLIANCE_REQUEST', {
+            getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
               id: 'mockNanoId'
             })
           ]
@@ -327,7 +327,7 @@ describe('playersReducer', () => {
               anotherPlayer: {
                 ...playerFixture,
                 actions: [
-                  createPlayerAction('RESPOND_TO_ALLIANCE_REQUEST', {
+                  getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
                     id: 'someAlliance'
                   })
                 ]
@@ -335,7 +335,7 @@ describe('playersReducer', () => {
               thirdPlayer: {
                 ...playerFixture,
                 actions: [
-                  createPlayerAction('RESPOND_TO_ALLIANCE_REQUEST', {
+                  getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
                     id: 'someAlliance'
                   })
                 ]
@@ -358,7 +358,7 @@ describe('playersReducer', () => {
           thirdPlayer: {
             ...playerFixture,
             actions: [
-              createPlayerAction('RESPOND_TO_ALLIANCE_REQUEST', {
+              getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
                 id: 'someAlliance'
               })
             ]
@@ -374,7 +374,7 @@ describe('playersReducer', () => {
               anotherPlayer: {
                 ...playerFixture,
                 actions: [
-                  createPlayerAction('RESPOND_TO_ALLIANCE_REQUEST', {
+                  getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
                     id: 'someAlliance'
                   })
                 ]
@@ -382,7 +382,7 @@ describe('playersReducer', () => {
               thirdPlayer: {
                 ...playerFixture,
                 actions: [
-                  createPlayerAction('RESPOND_TO_ALLIANCE_REQUEST', {
+                  getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
                     id: 'someAlliance'
                   })
                 ]
@@ -415,7 +415,7 @@ describe('playersReducer', () => {
           {
             test: {
               ...playerFixture,
-              actions: [createPlayerAction('SET_PLAYER_SPICE')]
+              actions: [getActionProperties('SET_PLAYER_SPICE')]
             }
           },
           clientActions.SET_PLAYER_SPICE({ playerId: 'test', spice: 666 })
@@ -437,7 +437,7 @@ describe('playersReducer', () => {
           {
             test: {
               ...playerFixture,
-              actions: [createPlayerAction('SET_PLAYER_ORDER')]
+              actions: [getActionProperties('SET_PLAYER_ORDER')]
             }
           },
           clientActions.SET_PLAYER_ORDER({
@@ -461,7 +461,7 @@ describe('playersReducer', () => {
           {
             test: {
               ...playerFixture,
-              actions: [createPlayerAction('SET_FIRST_PLAYER')]
+              actions: [getActionProperties('SET_FIRST_PLAYER')]
             }
           },
           clientActions.SET_FIRST_PLAYER({
@@ -485,7 +485,7 @@ describe('playersReducer', () => {
           {
             test: {
               ...playerFixture,
-              actions: [createPlayerAction('SET_PLAYER_TREACHERY_CARDS')]
+              actions: [getActionProperties('SET_PLAYER_TREACHERY_CARDS')]
             }
           },
           clientActions.SET_PLAYER_TREACHERY_CARDS({

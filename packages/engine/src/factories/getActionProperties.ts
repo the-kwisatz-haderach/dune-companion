@@ -6,18 +6,18 @@ import {
   StaticPlayerActionProperties
 } from '../models'
 
-export function createPlayerAction<
+export function getActionProperties<
   T extends keyof DynamicPlayerActionProperties
 >(type: T, additional: DynamicPlayerActionProperties[T]): PlayerAction<T>
 
-export function createPlayerAction<
+export function getActionProperties<
   T extends Exclude<
     keyof StaticPlayerActionProperties,
     keyof DynamicPlayerActionProperties
   >
 >(type: T, additional?: never): PlayerAction<T>
 
-export function createPlayerAction<T extends ClientActionType>(
+export function getActionProperties<T extends ClientActionType>(
   type: T,
   additional: any
 ): PlayerAction<T> {

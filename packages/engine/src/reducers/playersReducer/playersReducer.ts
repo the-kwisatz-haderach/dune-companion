@@ -1,7 +1,7 @@
 import { ActionReducerMapBuilder, createReducer } from '@reduxjs/toolkit'
 import { clientActions, ClientActionType } from '../../actions'
 import { createPlayer } from '../../factories'
-import { createPlayerAction } from '../../factories/createPlayerAction'
+import { getActionProperties } from '../../factories/getActionProperties'
 import { Game, PlayerAction } from '../../models'
 import { initialGameState } from '../initialGameState'
 
@@ -22,7 +22,7 @@ export const playersReducer = createReducer(
 
         if (action.payload.faction === null) {
           state[action.payload.playerId].actions.push(
-            createPlayerAction('SELECT_FACTION')
+            getActionProperties('SELECT_FACTION')
           )
           return
         }
@@ -71,7 +71,7 @@ export const playersReducer = createReducer(
           state[action.payload.playerId].actions
         )
         state[action.payload.playerId].actions.push(
-          createPlayerAction('SET_IS_NOT_READY')
+          getActionProperties('SET_IS_NOT_READY')
         )
       })
       .addCase(clientActions.SET_IS_NOT_READY, (state, action) => {
@@ -79,13 +79,13 @@ export const playersReducer = createReducer(
           state[action.payload.playerId].actions
         )
         state[action.payload.playerId].actions.push(
-          createPlayerAction('SET_IS_READY')
+          getActionProperties('SET_IS_READY')
         )
       })
       .addCase(clientActions.REQUEST_ALLIANCE, (state, action) => {
         action.payload.responders.forEach(playerId => {
           state[playerId].actions.push(
-            createPlayerAction('RESPOND_TO_ALLIANCE_REQUEST', {
+            getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
               id: action.payload.id
             })
           )

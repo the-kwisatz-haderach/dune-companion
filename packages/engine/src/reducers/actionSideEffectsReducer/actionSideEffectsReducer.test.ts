@@ -3,7 +3,7 @@ import {
   requiredPhaseActions,
   requiredPhaseAdminActions
 } from '../../dictionaries'
-import { createPlayerAction } from '../../factories/createPlayerAction'
+import { getActionProperties } from '../../factories/getActionProperties'
 import { Factions, Game } from '../../models'
 import { playerFixture } from '../../models/__fixtures__'
 import { initialGameState } from '../initialGameState'
@@ -18,7 +18,7 @@ describe('actionSideEffectsReducer', () => {
         players: {
           somePlayer: {
             ...playerFixture,
-            actions: [createPlayerAction('SELECT_FACTION')]
+            actions: [getActionProperties('SELECT_FACTION')]
           }
         }
       }
@@ -46,7 +46,7 @@ describe('actionSideEffectsReducer', () => {
             spice: 0,
             treacheryCards: 0,
             faction: Factions.FREMEN,
-            actions: [createPlayerAction('MARK_PHASE_STEP_NOT_COMPLETED')]
+            actions: [getActionProperties('MARK_PHASE_STEP_NOT_COMPLETED')]
           },
           anotherPlayer: {
             ...playerFixture,
@@ -72,10 +72,10 @@ describe('actionSideEffectsReducer', () => {
             treacheryCards: factions.FREMEN.startingItems,
             actions: [
               ...requiredPhaseActions.STORM.map(type =>
-                createPlayerAction(type)
+                getActionProperties(type)
               ),
               ...requiredPhaseAdminActions.STORM.map(type =>
-                createPlayerAction(type)
+                getActionProperties(type)
               )
             ]
           },
@@ -84,7 +84,7 @@ describe('actionSideEffectsReducer', () => {
             spice: factions.HOUSE_ATREIDES.startingSpice,
             treacheryCards: factions.HOUSE_ATREIDES.startingItems,
             actions: requiredPhaseActions.STORM.map(type =>
-              createPlayerAction(type)
+              getActionProperties(type)
             )
           }
         }
@@ -136,7 +136,7 @@ describe('actionSideEffectsReducer', () => {
             treacheryCards: 0,
             faction: Factions.FREMEN,
             actions: requiredPhaseActions.BIDDING.map(type =>
-              createPlayerAction(type)
+              getActionProperties(type)
             )
           },
           anotherPlayer: {
@@ -148,7 +148,7 @@ describe('actionSideEffectsReducer', () => {
             treacheryCards: 0,
             faction: Factions.HOUSE_ATREIDES,
             actions: requiredPhaseActions.BIDDING.map(type =>
-              createPlayerAction(type)
+              getActionProperties(type)
             )
           }
         },
@@ -207,17 +207,17 @@ describe('actionSideEffectsReducer', () => {
             ...state.players.somePlayer,
             actions: [
               ...requiredPhaseActions.STORM.map(type =>
-                createPlayerAction(type)
+                getActionProperties(type)
               ),
               ...requiredPhaseAdminActions.STORM.map(type =>
-                createPlayerAction(type)
+                getActionProperties(type)
               )
             ]
           },
           anotherPlayer: {
             ...state.players.anotherPlayer,
             actions: requiredPhaseActions.STORM.map(type =>
-              createPlayerAction(type)
+              getActionProperties(type)
             )
           }
         },
@@ -261,10 +261,12 @@ describe('actionSideEffectsReducer', () => {
         currentPhase: 'BATTLE',
         players: {
           somePlayer: {
-            ...playerFixture
+            ...playerFixture,
+            id: 'somePlayer'
           },
           anotherPlayer: {
-            ...playerFixture
+            ...playerFixture,
+            id: 'anotherPlayer'
           }
         }
       }
@@ -275,14 +277,16 @@ describe('actionSideEffectsReducer', () => {
         players: {
           somePlayer: {
             ...playerFixture,
+            id: 'somePlayer',
             actions: requiredPhaseActions.SPICE_HARVEST.map(type =>
-              createPlayerAction(type)
+              getActionProperties(type)
             )
           },
           anotherPlayer: {
             ...playerFixture,
+            id: 'anotherPlayer',
             actions: requiredPhaseActions.SPICE_HARVEST.map(type =>
-              createPlayerAction(type)
+              getActionProperties(type)
             )
           }
         }

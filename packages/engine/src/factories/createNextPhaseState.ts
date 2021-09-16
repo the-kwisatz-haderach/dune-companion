@@ -1,31 +1,18 @@
-import {
-  phaseOrder,
-  requiredPhaseActions,
-  requiredPhaseAdminActions
-} from '../dictionaries'
+import { phaseOrder } from '../dictionaries'
 import { Game } from '../models'
-import { createPlayerAction } from './createPlayerAction'
+import { getPhaseActionProperties } from './getPhaseActionProperties'
 
 export const createNextPhaseState = (state: Game): Game => {
   const nextPhase = phaseOrder[phaseOrder.indexOf(state.currentPhase) + 1]
   return {
     ...state,
     currentPhase: nextPhase,
-    players: Object.keys(state.players).reduce<Game['players']>(
-      (players, playerId) => ({
+    players: Object.values(state.players).reduce(
+      (players, player) => ({
         ...players,
-        [playerId]: {
-          ...players[playerId],
-          actions: [
-            ...requiredPhaseActions[nextPhase].map(type =>
-              createPlayerAction(type)
-            ),
-            ...(state.players[playerId].isAdmin
-              ? requiredPhaseAdminActions[nextPhase].map(type =>
-                  createPlayerAction(type)
-                )
-              : [])
-          ]
+        [player.id]: {
+          ...player,
+          actions: getPhaseActionProperties(nextPhase, player.isAdmin)
         }
       }),
       state.players
