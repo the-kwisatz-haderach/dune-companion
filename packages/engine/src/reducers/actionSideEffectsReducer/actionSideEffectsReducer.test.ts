@@ -4,6 +4,7 @@ import {
   requiredPhaseAdminActions
 } from '../../dictionaries'
 import { getActionProperties } from '../../factories/getActionProperties'
+import { getPhaseActionProperties } from '../../factories/getPhaseActionProperties'
 import { Factions, Game } from '../../models'
 import { playerFixture } from '../../models/__fixtures__'
 import { initialGameState } from '../initialGameState'
@@ -32,7 +33,58 @@ describe('actionSideEffectsReducer', () => {
       )
     })
   })
-  describe('when setup is completed and there are no required actions left', () => {
+  describe('when FACTION_SELECT is complete', () => {
+    it('goes to the SETUP phase', () => {
+      const state: Game = {
+        ...initialGameState,
+        currentPhase: 'FACTION_SELECT',
+        players: {
+          somePlayer: {
+            ...playerFixture,
+            isAdmin: true,
+            id: 'somePlayer',
+            name: 'somePlayer',
+            spice: 5,
+            treacheryCards: 3,
+            faction: Factions.FREMEN,
+            actions: []
+          },
+          anotherPlayer: {
+            ...playerFixture,
+            isAdmin: false,
+            id: 'anotherPlayer',
+            name: 'anotherPlayer',
+            spice: 2,
+            treacheryCards: 1,
+            faction: Factions.HOUSE_ATREIDES,
+            actions: [getActionProperties('SET_IS_NOT_READY')]
+          }
+        }
+      }
+      expect(actionSideEffectsReducer(state)).toEqual({
+        ...state,
+        currentTurn: 0,
+        currentPhase: 'SETUP',
+        players: {
+          ...state.players,
+          somePlayer: {
+            ...state.players.somePlayer,
+            spice: 5,
+            treacheryCards: 3,
+            actions: getPhaseActionProperties('SETUP', true)
+          },
+          anotherPlayer: {
+            ...state.players.anotherPlayer,
+            spice: 2,
+            treacheryCards: 1,
+            actions: getPhaseActionProperties('SETUP', false)
+          }
+        }
+      })
+    })
+  })
+
+  describe('when SETUP is completed and there are no required actions left', () => {
     it("sets up the game's starting conditions", () => {
       const state: Game = {
         ...initialGameState,

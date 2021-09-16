@@ -1,6 +1,8 @@
 import { Phase, Phases } from '../models/phase'
 
 export const phaseOrder: Phases[] = [
+  'FACTION_SELECT',
+  'SETUP',
   'STORM',
   'SPICE_BLOW_AND_NEXUS',
   'CHOAM_CHARITY',
@@ -11,6 +13,8 @@ export const phaseOrder: Phases[] = [
   'SPICE_HARVEST',
   'MENTAT_PAUSE'
 ]
+
+export const firstRegularPhase: Phases = 'STORM'
 
 export const requiredPhaseActions = {
   FACTION_SELECT: ['UPDATE_PLAYER_NAME', 'SELECT_FACTION'],
