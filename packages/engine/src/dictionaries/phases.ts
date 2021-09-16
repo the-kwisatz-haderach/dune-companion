@@ -13,9 +13,11 @@ export const phaseOrder: Phases[] = [
 ]
 
 export const requiredPhaseActions = {
-  SETUP: ['UPDATE_PLAYER_NAME', 'SELECT_FACTION', 'SET_IS_READY'],
+  FACTION_SELECT: ['UPDATE_PLAYER_NAME', 'SELECT_FACTION'],
+  SETUP: ['SET_IS_READY'],
   STORM: ['SET_IS_READY'],
   SPICE_BLOW_AND_NEXUS: ['SET_IS_READY'],
+  NEXUS: ['SET_IS_READY'],
   CHOAM_CHARITY: ['SET_IS_READY'],
   BIDDING: ['SET_PLAYER_SPICE', 'SET_PLAYER_TREACHERY_CARDS', 'SET_IS_READY'],
   REVIVAL: ['SET_IS_READY'],
@@ -27,9 +29,11 @@ export const requiredPhaseActions = {
 } as const
 
 export const requiredPhaseAdminActions = {
+  FACTION_SELECT: [],
   SETUP: ['SET_PLAYER_ORDER'],
   STORM: ['SET_FIRST_PLAYER'],
   SPICE_BLOW_AND_NEXUS: [],
+  NEXUS: [],
   CHOAM_CHARITY: [],
   BIDDING: [],
   REVIVAL: [],
@@ -41,6 +45,10 @@ export const requiredPhaseAdminActions = {
 } as const
 
 export const phases: Record<Phases, Phase> = {
+  FACTION_SELECT: {
+    name: 'Faction Selection',
+    description: ''
+  },
   SETUP: {
     name: 'Setup',
     description:
@@ -55,6 +63,11 @@ export const phases: Record<Phases, Phase> = {
     name: 'Spice blow and nexus',
     description:
       'The top card of the Spice Deck is turned over and the amount of spice shown on the card is placed in the highlighted territory. If Shai-Hulud appears during the Spice Blow Phase, a Nexus occurs and the players have the opportunity to make and break Alliances.'
+  },
+  NEXUS: {
+    name: 'Nexus',
+    description:
+      'Once a Shai-Hulud (sandworm) card is turned over on the second or subsequent turns, at the end of the Spice Blow and NEXUS Phase, a Nexus occurs. During a Nexus, all players have a chance to make, join or break Alliances. Once players have had a chance to do so, play continues.'
   },
   CHOAM_CHARITY: {
     name: 'Choam charity',

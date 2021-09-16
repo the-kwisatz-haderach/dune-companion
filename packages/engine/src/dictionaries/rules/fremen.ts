@@ -2,6 +2,8 @@ import { Factions, Phases } from '../../models'
 import { RuleSet } from '../../models/ruleSet'
 
 export const fremenRules: Record<Phases, RuleSet[]> = {
+  FACTION_SELECT: [],
+  NEXUS: [],
   SETUP: [],
   STORM: [
     {

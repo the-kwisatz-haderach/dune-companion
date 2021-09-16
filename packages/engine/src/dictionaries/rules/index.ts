@@ -18,9 +18,11 @@ import { spiceHarvestRules } from './spiceHarvest'
 import { mentatPauseRules } from './mentatPause'
 
 export const commonRuleSets: Record<Phases, RuleSection[]> = {
+  FACTION_SELECT: [],
   SETUP: setupRules,
   STORM: stormRules,
   SPICE_BLOW_AND_NEXUS: spiceBlowAndNexusRules,
+  NEXUS: [],
   CHOAM_CHARITY: choamCharityRules,
   BIDDING: biddingRules,
   REVIVAL: revivalRules,

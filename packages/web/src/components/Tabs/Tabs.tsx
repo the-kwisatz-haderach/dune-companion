@@ -46,7 +46,8 @@ const useStyles = makeStyles<Theme, Pick<Props, 'sticky'>>(theme =>
       borderTop: `1px solid ${theme.palette.grey[200]}`,
       boxShadow: '0px 10px 15px -5px rgb(0 0 0 / 20%)',
       marginLeft: '-1rem',
-      marginRight: '-1rem'
+      marginRight: '-1rem',
+      marginBottom: '1rem'
     },
     tab: {
       '&.MuiTab-textColorPrimary.Mui-selected': {

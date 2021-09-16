@@ -1,7 +1,9 @@
 export type Phases =
+  | 'FACTION_SELECT'
   | 'SETUP'
   | 'STORM'
   | 'SPICE_BLOW_AND_NEXUS'
+  | 'NEXUS'
   | 'CHOAM_CHARITY'
   | 'BIDDING'
   | 'REVIVAL'
@@ -13,6 +15,7 @@ export type Phases =
 
 // Can be used for checklist. Warn before proceeding if something is not completed.
 export type PhaseStates = {
+  FACTION_SELECT: {}
   SETUP: {
     isFactionsSelected: boolean
     isPositioningDone: boolean
@@ -31,6 +34,7 @@ export type PhaseStates = {
     isSpicePlacedOnTerritory: boolean
     isNexusCompleted: boolean
   }
+  NEXUS: {}
   CHOAM_CHARITY: {
     isChoamCharityDistributed: boolean
   }

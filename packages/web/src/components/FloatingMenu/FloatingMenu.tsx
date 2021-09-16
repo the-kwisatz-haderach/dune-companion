@@ -1,5 +1,5 @@
 import { useState, memo, ReactElement } from 'react'
-import { Check as CheckIcon } from '@material-ui/icons'
+import { Check as CheckIcon, NotInterested } from '@material-ui/icons'
 import { Fab, Menu, MenuItem, ListItemText } from '@material-ui/core'
 import { useCallback } from 'react'
 
@@ -8,6 +8,7 @@ type Action = {
   onClick: () => void
   selected?: boolean
   disabled?: boolean
+  selectable?: boolean
   style?: 'positive' | 'negative'
 }
 
@@ -17,21 +18,30 @@ export type Props = {
   items: Action[]
 }
 
-const Item = memo(({ label, disabled, selected, onClick }: Action) => (
-  <MenuItem
-    key={label}
-    disabled={disabled}
-    selected={selected}
-    dense
-    onClick={e => {
-      e.stopPropagation()
-      onClick()
-    }}
-  >
-    {selected && <CheckIcon fontSize="small" style={{ marginRight: 10 }} />}
-    <ListItemText primary={label} />
-  </MenuItem>
-))
+const Item = memo(
+  ({ label, disabled, selected, onClick, selectable = false }: Action) => (
+    <MenuItem disabled={disabled} selected={selected} dense onClick={onClick}>
+      {selected ? (
+        <CheckIcon
+          fontSize="small"
+          style={{
+            marginRight: 10,
+            display: selectable ? 'initial' : 'none'
+          }}
+        />
+      ) : (
+        <NotInterested
+          fontSize="small"
+          style={{
+            marginRight: 10,
+            display: selectable ? 'initial' : 'none'
+          }}
+        />
+      )}
+      <ListItemText primary={label} />
+    </MenuItem>
+  )
+)
 
 export const FloatingMenu = memo(({ trigger, disabled, items }: Props) => {
   const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null)

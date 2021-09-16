@@ -2,6 +2,8 @@ import { Factions, Phases } from '../../models'
 import { RuleSet } from '../../models/ruleSet'
 
 export const emperorRules: Record<Phases, RuleSet[]> = {
+  FACTION_SELECT: [],
+  NEXUS: [],
   SETUP: [],
   STORM: [],
   SPICE_BLOW_AND_NEXUS: [],

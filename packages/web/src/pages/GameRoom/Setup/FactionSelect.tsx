@@ -153,7 +153,11 @@ export default function FactionSelect(): ReactElement {
         <Section heading="Common Advantages">
           <Box className={classes.cardContainer}>
             {currentFaction.advantages
-              .filter(rule => !game.conditions.advancedMode || rule.isAdvanced)
+              .filter(
+                rule =>
+                  (game.conditions.advancedMode && rule.isAdvanced) ||
+                  !rule.isAdvanced
+              )
               .map(rule => (
                 <Card
                   key={rule.name}

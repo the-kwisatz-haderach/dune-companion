@@ -2,6 +2,8 @@ import { Factions, Phases } from '../../models'
 import { RuleSet } from '../../models/ruleSet'
 
 export const beneGesseritRules: Record<Phases, RuleSet[]> = {
+  FACTION_SELECT: [],
+  NEXUS: [],
   SETUP: [
     {
       name: 'Prediction',

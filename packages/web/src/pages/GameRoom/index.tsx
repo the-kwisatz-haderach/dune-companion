@@ -1,7 +1,7 @@
-import { ReactElement, useMemo, useCallback } from 'react'
+import { ReactElement, useMemo } from 'react'
 import { useGame, useGameActions, usePlayer } from '../../dune-react'
 import CommonPhases from './Common'
-import { createPendingActionsChecker, createRuleFilter } from './helpers'
+import { createRuleFilter } from './helpers'
 import FactionSelect from './Setup/FactionSelect'
 import {
   commonRuleSets,
@@ -18,41 +18,45 @@ const CommonPhaseWithTransition = withTransition(CommonPhases, ({ phase }) => (
   <Loading phase={phase} />
 ))
 
-const CommonActionMenu = ({
-  toggleShowAllPlayers
-}: {
-  toggleShowAllPlayers: () => void
-}) => {
+const CommonActionMenu = () => {
   const player = usePlayer()
   const actions = useGameActions()
-  const { showAllFactionRules } = useGameSettingsContext()
+  const { showAllFactionRules, dispatch } = useGameSettingsContext()
 
   const filters: GameActionMenuProps['filters'] = [
     {
       label: 'Show All Factions Rules',
-      onClick: toggleShowAllPlayers,
+      onClick: () =>
+        dispatch({
+          type: 'updateRuleVisibility',
+          payload: !showAllFactionRules
+        }),
+      selectable: true,
       selected: showAllFactionRules
     }
   ]
-  const secondaryActions: GameActionMenuProps['secondaryActions'] = []
-  if (actions.SET_FIRST_PLAYER) {
-    secondaryActions.push({
-      label: actions.SET_FIRST_PLAYER.label,
-      onClick: actions.SET_FIRST_PLAYER.handler
-    })
-  }
 
-  const primaryAction = actions[player.actions.slice(-1)[0].type]
+  const secondaryActions: GameActionMenuProps['secondaryActions'] = player.actions
+    .filter(action => !action.isRequired && actions[action.type] !== undefined)
+    .map(({ type }) => ({
+      label: actions[type]?.label as string,
+      onClick: actions[type]?.handler as () => void
+    }))
+
+  const primaryAction = useMemo(() => {
+    const action = actions[player.actions.slice(-1)[0].type]
+    return (
+      action && {
+        label: action.label,
+        onClick: action.handler,
+        style: action.style
+      }
+    )
+  }, [actions, player.actions])
 
   return (
     <GameActionMenu
-      primaryAction={
-        primaryAction && {
-          label: primaryAction.label,
-          onClick: primaryAction.handler,
-          style: primaryAction.style
-        }
-      }
+      primaryAction={primaryAction}
       filters={filters}
       secondaryActions={secondaryActions}
     />
@@ -60,7 +64,7 @@ const CommonActionMenu = ({
 }
 
 function GamePhase(): ReactElement {
-  const { dispatch, showAllFactionRules } = useGameSettingsContext()
+  const { showAllFactionRules } = useGameSettingsContext()
   const game = useGame()
   const player = usePlayer()
 
@@ -73,24 +77,6 @@ function GamePhase(): ReactElement {
       }),
     [game, player.faction, showAllFactionRules]
   )
-
-  const ActionMenu = useCallback(
-    () => (
-      <CommonActionMenu
-        toggleShowAllPlayers={() =>
-          dispatch({
-            type: 'updateRuleVisibility',
-            payload: !showAllFactionRules
-          })
-        }
-      />
-    ),
-    [dispatch, showAllFactionRules]
-  )
-
-  const isPending = useMemo(() => createPendingActionsChecker(game.players), [
-    game.players
-  ])
 
   const currentPhaseRules: RuleSection[] = [
     ...commonRuleSets[game.currentPhase]?.map(section => ({
@@ -107,10 +93,7 @@ function GamePhase(): ReactElement {
     }
   ]
 
-  if (
-    game.currentPhase === 'SETUP' &&
-    isPending('SELECT_FACTION').forAnyPlayer()
-  ) {
+  if (game.currentPhase === 'FACTION_SELECT') {
     return <FactionSelect />
   }
 
@@ -119,7 +102,7 @@ function GamePhase(): ReactElement {
       phase={game.currentPhase}
       rules={currentPhaseRules}
       trigger={game.currentPhase}
-      ActionMenu={ActionMenu}
+      ActionMenu={CommonActionMenu}
     />
   )
 }

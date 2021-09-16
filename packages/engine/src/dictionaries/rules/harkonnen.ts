@@ -2,6 +2,8 @@ import { Factions, Phases } from '../../models'
 import { RuleSet } from '../../models/ruleSet'
 
 export const harkonnenRules: Record<Phases, RuleSet[]> = {
+  FACTION_SELECT: [],
+  NEXUS: [],
   SETUP: [
     {
       name: 'Traitors',

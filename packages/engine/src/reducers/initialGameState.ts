@@ -10,11 +10,12 @@ export const initialGameState: Game = {
   },
   currentTurn: 0,
   currentFirstPlayer: 0,
-  currentPhase: 'SETUP',
+  currentPhase: 'FACTION_SELECT',
   auctions: [],
   allianceRequests: [],
   alliances: [],
   phaseStates: {
+    FACTION_SELECT: {},
     SETUP: {
       isFactionsSelected: false,
       isForcesPlaced: false,
@@ -33,6 +34,7 @@ export const initialGameState: Game = {
       isSpicePlacedOnTerritory: false,
       isNexusCompleted: false
     },
+    NEXUS: {},
     CHOAM_CHARITY: {
       isChoamCharityDistributed: false
     },

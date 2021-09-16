@@ -7,8 +7,10 @@ export const phaseIcons: Record<
   Phases,
   OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
 > = {
+  FACTION_SELECT: StormIcon,
   STORM: StormIcon,
   SPICE_BLOW_AND_NEXUS: StormIcon,
+  NEXUS: StormIcon,
   CHOAM_CHARITY: StormIcon,
   BATTLE: StormIcon,
   BIDDING: StormIcon,
