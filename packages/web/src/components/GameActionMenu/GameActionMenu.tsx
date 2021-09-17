@@ -1,7 +1,7 @@
 import { ReactElement, memo } from 'react'
 import { Box, createStyles, makeStyles, Fab } from '@material-ui/core'
 import { Settings as SettingsIcon, Menu as MenuIcon } from '@material-ui/icons'
-import { FloatingMenu, FloatingMenuProps } from '../../components/FloatingMenu'
+import { FloatingMenu, FloatingMenuProps } from '../FloatingMenu'
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme =>
 )
 
 export type Props = {
-  filters: FloatingMenuProps['items']
+  settingsMenu: FloatingMenuProps['items']
   secondaryActions: FloatingMenuProps['items']
   primaryAction?: FloatingMenuProps['items'][number]
 }
@@ -46,7 +46,7 @@ const PrimaryActionButton = ({
 )
 
 function GameActionMenu({
-  filters,
+  settingsMenu,
   secondaryActions,
   primaryAction
 }: Props): ReactElement {
@@ -61,8 +61,8 @@ function GameActionMenu({
       <PrimaryActionButton primaryAction={primaryAction} />
       <FloatingMenu
         trigger={<SettingsIcon />}
-        disabled={filters.length === 0}
-        items={filters}
+        disabled={settingsMenu.length === 0}
+        items={settingsMenu}
       />
     </Box>
   )

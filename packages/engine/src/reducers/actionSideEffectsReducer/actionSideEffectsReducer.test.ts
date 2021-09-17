@@ -1,8 +1,4 @@
-import {
-  factions,
-  requiredPhaseActions,
-  requiredPhaseAdminActions
-} from '../../dictionaries'
+import { phaseActions, adminPhaseActions } from '../../dictionaries'
 import { getActionProperties } from '../../factories/getActionProperties'
 import { getPhaseActionProperties } from '../../factories/getPhaseActionProperties'
 import { Factions, Game } from '../../models'
@@ -123,21 +119,15 @@ describe('actionSideEffectsReducer', () => {
             spice: 5,
             treacheryCards: 3,
             actions: [
-              ...requiredPhaseActions.STORM.map(type =>
-                getActionProperties(type)
-              ),
-              ...requiredPhaseAdminActions.STORM.map(type =>
-                getActionProperties(type)
-              )
+              ...phaseActions.STORM.map(type => getActionProperties(type)),
+              ...adminPhaseActions.STORM.map(type => getActionProperties(type))
             ]
           },
           anotherPlayer: {
             ...state.players.anotherPlayer,
             spice: 2,
             treacheryCards: 1,
-            actions: requiredPhaseActions.STORM.map(type =>
-              getActionProperties(type)
-            )
+            actions: phaseActions.STORM.map(type => getActionProperties(type))
           }
         }
       })
@@ -187,9 +177,7 @@ describe('actionSideEffectsReducer', () => {
             spice: 0,
             treacheryCards: 0,
             faction: Factions.FREMEN,
-            actions: requiredPhaseActions.BIDDING.map(type =>
-              getActionProperties(type)
-            )
+            actions: phaseActions.BIDDING.map(type => getActionProperties(type))
           },
           anotherPlayer: {
             ...playerFixture,
@@ -199,9 +187,7 @@ describe('actionSideEffectsReducer', () => {
             spice: 0,
             treacheryCards: 0,
             faction: Factions.HOUSE_ATREIDES,
-            actions: requiredPhaseActions.BIDDING.map(type =>
-              getActionProperties(type)
-            )
+            actions: phaseActions.BIDDING.map(type => getActionProperties(type))
           }
         },
         currentTurn: 3,
@@ -258,19 +244,13 @@ describe('actionSideEffectsReducer', () => {
           somePlayer: {
             ...state.players.somePlayer,
             actions: [
-              ...requiredPhaseActions.STORM.map(type =>
-                getActionProperties(type)
-              ),
-              ...requiredPhaseAdminActions.STORM.map(type =>
-                getActionProperties(type)
-              )
+              ...phaseActions.STORM.map(type => getActionProperties(type)),
+              ...adminPhaseActions.STORM.map(type => getActionProperties(type))
             ]
           },
           anotherPlayer: {
             ...state.players.anotherPlayer,
-            actions: requiredPhaseActions.STORM.map(type =>
-              getActionProperties(type)
-            )
+            actions: phaseActions.STORM.map(type => getActionProperties(type))
           }
         },
         currentTurn: 4,
@@ -330,14 +310,14 @@ describe('actionSideEffectsReducer', () => {
           somePlayer: {
             ...playerFixture,
             id: 'somePlayer',
-            actions: requiredPhaseActions.SPICE_HARVEST.map(type =>
+            actions: phaseActions.SPICE_HARVEST.map(type =>
               getActionProperties(type)
             )
           },
           anotherPlayer: {
             ...playerFixture,
             id: 'anotherPlayer',
-            actions: requiredPhaseActions.SPICE_HARVEST.map(type =>
+            actions: phaseActions.SPICE_HARVEST.map(type =>
               getActionProperties(type)
             )
           }

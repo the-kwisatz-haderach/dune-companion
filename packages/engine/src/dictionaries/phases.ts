@@ -16,7 +16,7 @@ export const phaseOrder: Phases[] = [
 
 export const firstRegularPhase: Phases = 'STORM'
 
-export const requiredPhaseActions = {
+export const phaseActions = {
   FACTION_SELECT: ['UPDATE_PLAYER_NAME', 'SELECT_FACTION'],
   SETUP: ['SET_IS_READY'],
   STORM: ['SET_IS_READY'],
@@ -32,7 +32,7 @@ export const requiredPhaseActions = {
   FINISHED: []
 } as const
 
-export const requiredPhaseAdminActions = {
+export const adminPhaseActions = {
   FACTION_SELECT: [],
   SETUP: ['SET_PLAYER_ORDER'],
   STORM: ['SET_FIRST_PLAYER'],

@@ -1,8 +1,10 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement, useState, useEffect } from 'react'
 import {
   Box,
   createStyles,
+  Fade,
   makeStyles,
+  Theme,
   Typography,
   useTheme
 } from '@material-ui/core'
@@ -21,7 +23,7 @@ import { FactionAdvantages } from './FactionAdvantages'
 import dune from '../../../images/dune.jpeg'
 import { useAutomaticPrompt } from '../useAutomaticPrompt'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles<Theme, { color: string }>(theme =>
   createStyles({
     sideScrollContainer: {
       display: 'flex',
@@ -44,21 +46,42 @@ const useStyles = makeStyles(theme =>
       '& > *:not(:last-child)': {
         marginBottom: theme.spacing(3)
       }
+    },
+    effect: {
+      position: 'fixed',
+      inset: 0,
+      width: '100vw',
+      height: '100vh',
+      zIndex: 5,
+      backgroundColor: ({ color }) => color,
+      animation: '$pulse 0.5s'
+    },
+    '@keyframes pulse': {
+      from: {
+        opacity: 0
+      },
+      '50%': {
+        opacity: 0.5
+      },
+      to: {
+        opacity: 0
+      }
     }
   })
 )
 
 export default function FactionSelect(): ReactElement {
-  const classes = useStyles()
-  const factionKeys = Object.keys(factions)
-  const [factionIndex, setFactionIndex] = useState(0)
   const { palette } = useTheme()
+  const [showEffect, setShowEffect] = useState(false)
+  const [factionIndex, setFactionIndex] = useState(0)
+  const factionKeys = Object.keys(factions)
+  const currentFactionKey = factionKeys[factionIndex] as Factions
+  const classes = useStyles({ color: palette[currentFactionKey].light })
   const dispatch = useGameDispatch()
   const game = useGame()
   const player = usePlayer()
   useAutomaticPrompt()
 
-  const currentFactionKey = Object.keys(factions)[factionIndex] as Factions
   const currentFaction = factions[currentFactionKey]
 
   const playerSelected = Object.values(game.players).find(
@@ -81,25 +104,33 @@ export default function FactionSelect(): ReactElement {
   }
 
   const onSelectFaction = (faction: Factions) => {
-    if (isSelectedByPlayer) {
-      dispatch('SELECT_FACTION', {
-        faction: null
-      })
-      return
-    }
     dispatch('SELECT_FACTION', {
-      faction
+      faction: isSelectedByPlayer ? null : faction
     })
   }
 
+  useEffect(() => {
+    let timeout: NodeJS.Timeout
+    if (player.faction) {
+      setShowEffect(true)
+      timeout = setTimeout(() => {
+        setShowEffect(false)
+      }, 500)
+    }
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [player.faction])
+
   return (
     <Box>
+      {showEffect && <div className={classes.effect} />}
       <ActionMenu
         primaryActionLabel={isSelectedByPlayer ? 'Deselect' : 'Select'}
         primaryActionType={isSelectedByPlayer ? 'negative' : 'positive'}
         primaryActionPreamble={
-          playerSelected && !isSelectedByPlayer
-            ? `Selected by ${playerSelected.name}`
+          playerSelected
+            ? `Selected by ${isSelectedByPlayer ? 'you' : playerSelected.name}`
             : undefined
         }
         primaryActionIsDisabled={playerSelected && !isSelectedByPlayer}

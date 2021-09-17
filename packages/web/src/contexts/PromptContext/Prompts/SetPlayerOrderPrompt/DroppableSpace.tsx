@@ -1,5 +1,6 @@
 import { DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd'
 import { createStyles, makeStyles } from '@material-ui/core'
+import { forwardRef } from 'react'
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -21,19 +22,13 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export const DroppableSpace: React.FC<Props> = ({
-  children,
-  provided,
-  snapshot
-}) => {
-  const classes = useStyles()
-  return (
-    <div
-      {...provided.droppableProps}
-      ref={provided.innerRef}
-      className={classes.root}
-    >
-      {children}
-    </div>
-  )
-}
+export const DroppableSpace = forwardRef<HTMLDivElement, Props>(
+  ({ children, provided }, ref) => {
+    const classes = useStyles()
+    return (
+      <div {...provided.droppableProps} ref={ref} className={classes.root}>
+        {children}
+      </div>
+    )
+  }
+)

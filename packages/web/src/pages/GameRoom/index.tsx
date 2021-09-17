@@ -1,5 +1,5 @@
 import { ReactElement, useMemo } from 'react'
-import { useGame, useGameActions, usePlayer } from '../../dune-react'
+import { useGame, usePlayer } from '../../dune-react'
 import CommonPhases from './Common'
 import { createRuleFilter } from './helpers'
 import FactionSelect from './Setup/FactionSelect'
@@ -11,57 +11,12 @@ import {
 } from '@dune-companion/engine'
 import { Loading } from '../Loading'
 import { withTransition } from '../../hocs/withTransition'
-import GameActionMenu, { Props as GameActionMenuProps } from './GameActionMenu'
 import useGameSettingsContext from '../../contexts/GameSettingsContext/GameSettingsContext'
+import { CommonActionMenu } from './Common/CommonActionMenu'
 
 const CommonPhaseWithTransition = withTransition(CommonPhases, ({ phase }) => (
   <Loading phase={phase} />
 ))
-
-const CommonActionMenu = () => {
-  const player = usePlayer()
-  const actions = useGameActions()
-  const { showAllFactionRules, dispatch } = useGameSettingsContext()
-
-  const filters: GameActionMenuProps['filters'] = [
-    {
-      label: 'Show All Factions Rules',
-      onClick: () =>
-        dispatch({
-          type: 'updateRuleVisibility',
-          payload: !showAllFactionRules
-        }),
-      selectable: true,
-      selected: showAllFactionRules
-    }
-  ]
-
-  const secondaryActions: GameActionMenuProps['secondaryActions'] = player.actions
-    .filter(action => !action.isRequired && actions[action.type] !== undefined)
-    .map(({ type }) => ({
-      label: actions[type]?.label as string,
-      onClick: actions[type]?.handler as () => void
-    }))
-
-  const primaryAction = useMemo(() => {
-    const action = actions[player.actions.slice(-1)[0].type]
-    return (
-      action && {
-        label: action.label,
-        onClick: action.handler,
-        style: action.style
-      }
-    )
-  }, [actions, player.actions])
-
-  return (
-    <GameActionMenu
-      primaryAction={primaryAction}
-      filters={filters}
-      secondaryActions={secondaryActions}
-    />
-  )
-}
 
 function GamePhase(): ReactElement {
   const { showAllFactionRules } = useGameSettingsContext()

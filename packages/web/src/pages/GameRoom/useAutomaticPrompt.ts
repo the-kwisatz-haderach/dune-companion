@@ -9,7 +9,7 @@ export const useAutomaticPrompt = () => {
 
   useEffect(() => {
     switch (game.currentPhase) {
-      case 'SETUP': {
+      case 'FACTION_SELECT': {
         if (player.name === '') {
           showPrompt('PlayerSetupPrompt', {})
         }

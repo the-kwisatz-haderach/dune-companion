@@ -14,9 +14,11 @@ export const playersReducer = createReducer(
   (builder: ActionReducerMapBuilder<Game['players']>) =>
     builder
       .addCase(clientActions.SELECT_FACTION, (state, action) => {
-        const isAlreadySelected = Object.values(state).some(
-          player => player.faction === action.payload.faction
-        )
+        const isAlreadySelected =
+          action.payload.faction !== null &&
+          Object.values(state).some(
+            player => player.faction === action.payload.faction
+          )
         if (isAlreadySelected) return state
 
         state[action.payload.playerId].faction = action.payload.faction

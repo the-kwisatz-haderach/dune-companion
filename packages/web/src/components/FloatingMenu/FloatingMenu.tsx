@@ -77,7 +77,9 @@ export const FloatingMenu = memo(({ trigger, disabled, items }: Props) => {
         }}
       >
         {items.map((item, index) => (
-          <Item key={index} {...item} />
+          <div key={index}>
+            <Item {...item} />
+          </div>
         ))}
       </Menu>
     </>

@@ -84,6 +84,47 @@ describe('playersReducer', () => {
         }
       })
     })
+    it('always works for null', () => {
+      expect(
+        playersReducer(
+          {
+            test: {
+              ...playerFixture,
+              faction: Factions.BENE_GESSERIT,
+              spice: factions.BENE_GESSERIT.startingSpice,
+              treacheryCards: factions.BENE_GESSERIT.startingItems,
+              actions: []
+            },
+            otherTest: {
+              ...playerFixture,
+              faction: null,
+              spice: 1,
+              treacheryCards: 5,
+              actions: []
+            }
+          },
+          clientActions.SELECT_FACTION({
+            playerId: 'test',
+            faction: null
+          })
+        )
+      ).toEqual({
+        test: {
+          ...playerFixture,
+          faction: null,
+          spice: 0,
+          treacheryCards: 0,
+          actions: [getActionProperties('SELECT_FACTION')]
+        },
+        otherTest: {
+          ...playerFixture,
+          faction: null,
+          spice: 1,
+          treacheryCards: 5,
+          actions: []
+        }
+      })
+    })
     it('returns the state if the faction is already selected', () => {
       const state: Game['players'] = {
         test: {
