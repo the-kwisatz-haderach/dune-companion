@@ -2,6 +2,7 @@ import {
   ClientActionType,
   Factions,
   Game,
+  Phases,
   Player,
   RuleSet
 } from '@dune-companion/engine'
@@ -19,19 +20,32 @@ export const createPendingActionsChecker = (players: Game['players']) => {
   })
 }
 
-export const createRuleFilter = (config: {
-  game: Game
+type FilterConfig = {
+  advancedMode: boolean
+  currentPhase: Phases
+  currentTurn: number
   playerFaction: Factions | null
   showAllFactions: boolean
-}) => (rule: RuleSet) => {
-  if (!config.game.conditions.advancedMode && rule.isAdvanced) return false
+}
+
+export const createRuleFilter = ({
+  currentPhase,
+  currentTurn,
+  advancedMode,
+  playerFaction,
+  showAllFactions
+}: FilterConfig) => (rule: RuleSet) => {
+  if (!advancedMode && rule.isAdvanced) return false
   if (
-    !config.showAllFactions &&
+    !showAllFactions &&
     rule.faction !== undefined &&
-    rule.faction !== config.playerFaction
+    rule.faction !== playerFaction
   )
     return false
-  if (rule?.inclusionCondition && !rule?.inclusionCondition(config.game))
+  if (
+    rule?.inclusionCondition &&
+    !rule?.inclusionCondition({ currentTurn, currentPhase })
+  )
     return false
   return true
 }

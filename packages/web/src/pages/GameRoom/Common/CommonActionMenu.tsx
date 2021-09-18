@@ -38,7 +38,11 @@ export const CommonActionMenu = () => {
         onClick: actions.SET_FIRST_PLAYER.handler
       }
     ]
-    const action = actions[player.actions[0].type as keyof typeof actions]
+    const action =
+      actions[
+        player.actions.filter(action => action.isRequired)[0]
+          ?.type as keyof typeof actions
+      ]
     return {
       secondaryActions,
       primaryAction: action && {

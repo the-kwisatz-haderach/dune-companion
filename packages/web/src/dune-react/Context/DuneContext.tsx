@@ -47,28 +47,28 @@ export const WebsocketProvider: React.FC<Props> = ({
           CONNECTION_CLOSED_BY_CLIENT: () =>
             showSnack('Disconnected from server.'),
           CONNECTION_REOPENED: () =>
-            showSnack(`Reopened connection.`, 'success'),
-          CONNECTION_CLOSED_BY_HOST: reason => showSnack(reason, 'info'),
-          CONNECTION_OPENED: () => showSnack('Connected to server.', 'success'),
-          ERROR: message => showSnack(message, 'error'),
+            showSnack(`Reopened connection.`, { type: 'success' }),
+          CONNECTION_CLOSED_BY_HOST: reason =>
+            showSnack(reason, { type: 'info' }),
+          CONNECTION_OPENED: () =>
+            showSnack('Connected to server.', { type: 'success' }),
+          ERROR: message => showSnack(message, { type: 'error' }),
           INCOMING_MESSAGE: action => {
             switch (action.type) {
               case 'GAME_CREATED':
                 history.push(`/game/${action.payload.roomId}`)
-                showSnack(
-                  `Created game room ${action.payload.roomId}.`,
-                  'success'
-                )
+                showSnack(`Created game room ${action.payload.roomId}.`, {
+                  type: 'success'
+                })
                 break
               case 'GAME_JOINED':
                 history.push(`/game/${action.payload.roomId}`)
-                showSnack(
-                  `Joined game room ${action.payload.roomId}.`,
-                  'success'
-                )
+                showSnack(`Joined game room ${action.payload.roomId}.`, {
+                  type: 'success'
+                })
                 break
               case 'SHOW_NOTIFICATION':
-                showSnack(action.payload.message, action.payload.type)
+                showSnack(action.payload.message, { type: action.payload.type })
                 break
               case 'GAME_UPDATED':
                 dispatch(hostActions.GAME_UPDATED(action.payload))

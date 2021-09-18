@@ -29,10 +29,10 @@ export const SnackbarProvider: React.FC = ({ children }) => {
   }, [snackPack, messageInfo, open])
 
   const showSnack = useCallback<ISnackbarContext['showSnack']>(
-    (message, type) => {
+    (message, options = {}) => {
       setSnackPack(prev => [
         ...prev,
-        { message, key: new Date().getTime(), type }
+        { message, key: new Date().getTime(), ...options }
       ])
     },
     []
@@ -71,7 +71,7 @@ export const SnackbarProvider: React.FC = ({ children }) => {
               horizontal: 'center'
             }}
             open={open}
-            autoHideDuration={5000}
+            autoHideDuration={messageInfo?.autoHideDuration ?? 3000}
             onClose={handleClose}
             TransitionProps={{
               onExited: handleExited

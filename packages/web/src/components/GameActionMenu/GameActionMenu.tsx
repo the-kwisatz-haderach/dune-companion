@@ -6,17 +6,19 @@ import { FloatingMenu, FloatingMenuProps } from '../FloatingMenu'
 const useStyles = makeStyles(theme =>
   createStyles({
     root: {
-      position: 'fixed',
-      zIndex: 500,
-      bottom: theme.spacing(1),
-      left: 10,
-      width: 'calc(100% - 20px)',
+      width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
       color: theme.palette.common.white,
       pointerEvents: 'none',
       '& button': {
-        pointerEvents: 'initial'
+        pointerEvents: 'initial',
+        '&:first-child': {
+          marginLeft: theme.spacing(1)
+        },
+        '&:last-child': {
+          marginRight: theme.spacing(1)
+        }
       }
     }
   })

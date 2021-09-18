@@ -1,9 +1,8 @@
-import { ReactElement, useState, useEffect } from 'react'
+import { ReactElement, useState } from 'react'
 import {
   Box,
   createStyles,
   makeStyles,
-  Theme,
   Typography,
   useTheme
 } from '@material-ui/core'
@@ -21,8 +20,10 @@ import { FactionSummary } from './FactionSummary'
 import { FactionAdvantages } from './FactionAdvantages'
 import dune from '../../../images/dune.jpeg'
 import { useAutomaticPrompt } from '../useAutomaticPrompt'
+import { FactionOverlay } from '../../../components/FactionOverlay'
+import { useTransition } from '../../../hooks/useTransition'
 
-const useStyles = makeStyles<Theme, { faction: Factions }>(theme =>
+const useStyles = makeStyles(theme =>
   createStyles({
     sideScrollContainer: {
       display: 'flex',
@@ -45,49 +46,23 @@ const useStyles = makeStyles<Theme, { faction: Factions }>(theme =>
       '& > *:not(:last-child)': {
         marginBottom: theme.spacing(3)
       }
-    },
-    effect: {
-      position: 'fixed',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      inset: 0,
-      width: '100vw',
-      height: '100vh',
-      zIndex: 1000,
-      backgroundColor: ({ faction }) => theme.palette[faction].light,
-      mixBlendMode: 'multiply',
-      animation: '1s ease-in-out $pulse forwards'
-    },
-    icon: {
-      width: '100%',
-      height: '100%',
-      fill: ({ faction }) => theme.palette[faction].contrastText
-    },
-    '@keyframes pulse': {
-      from: {
-        opacity: 0
-      },
-      '50%': {
-        opacity: 1
-      },
-      to: {
-        opacity: 0
-      }
     }
   })
 )
 
 export default function FactionSelect(): ReactElement {
   const { palette } = useTheme()
-  const [showEffect, setShowEffect] = useState(false)
   const [factionIndex, setFactionIndex] = useState(0)
   const factionKeys = Object.keys(factions)
   const currentFactionKey = factionKeys[factionIndex] as Factions
-  const classes = useStyles({ faction: currentFactionKey })
+  const classes = useStyles()
   const dispatch = useGameDispatch()
   const game = useGame()
   const player = usePlayer()
+  const showEffect = useTransition(player.faction, {
+    duration: 1000,
+    condition: player.faction !== null
+  })
   useAutomaticPrompt()
 
   const currentFaction = factions[currentFactionKey]
@@ -111,35 +86,14 @@ export default function FactionSelect(): ReactElement {
     })
   }
 
-  const onSelectFaction = (faction: Factions) => {
-    const selectedFaction = isSelectedByPlayer ? null : faction
+  const onSelectFaction = (faction: Factions) =>
     dispatch('SELECT_FACTION', {
-      faction: selectedFaction
+      faction: isSelectedByPlayer ? null : faction
     })
-    if (selectedFaction) {
-      setShowEffect(true)
-    }
-  }
-
-  useEffect(() => {
-    if (!showEffect) return
-    const timeout = setTimeout(() => {
-      setShowEffect(false)
-    }, 1000)
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [showEffect])
-
-  const FactionIcon = factionIcons[currentFactionKey]
 
   return (
     <Box>
-      {showEffect && (
-        <div className={classes.effect}>
-          <FactionIcon className={classes.icon} />
-        </div>
-      )}
+      {showEffect && <FactionOverlay faction={currentFactionKey} />}
       <ActionMenu
         primaryActionLabel={isSelectedByPlayer ? 'Deselect' : 'Select'}
         primaryActionType={isSelectedByPlayer ? 'negative' : 'positive'}

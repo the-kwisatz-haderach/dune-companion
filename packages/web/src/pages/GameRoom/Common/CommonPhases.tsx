@@ -1,11 +1,15 @@
-import React, { ReactElement } from 'react'
+import { memo, ReactElement } from 'react'
 import { Box } from '@material-ui/core'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
 import {
+  commonRuleSets,
+  factionRuleSets,
+  Factions,
   Phases,
   phases,
-  RuleSection as RuleSectionType
+  RuleSection as RuleSectionType,
+  RuleSet
 } from '@dune-companion/engine'
 import { Header } from '../../../components/Header'
 import { Alert } from '@material-ui/lab'
@@ -14,18 +18,23 @@ import { phaseIcons } from '../../../lib/phaseIcons'
 
 interface Props {
   phase: Phases
-  rules: RuleSectionType[]
-  ActionMenu: React.FC
+  ruleFilter: (value: RuleSet) => boolean
+  playerFactions: Factions[]
 }
 
-export default function CommonPhases({
+export function CommonPhases({
   phase,
-  rules,
-  ActionMenu
+  ruleFilter,
+  playerFactions
 }: Props): ReactElement {
+  const rules: RuleSectionType[] = filterRules(
+    phase,
+    ruleFilter,
+    playerFactions
+  )
+
   return (
     <Box bgcolor="white">
-      <ActionMenu />
       <HeaderImage
         title={phases[phase].name}
         preamble="Phase"
@@ -52,3 +61,24 @@ export default function CommonPhases({
     </Box>
   )
 }
+
+function filterRules(
+  phase: Phases,
+  ruleFilter: (value: RuleSet) => boolean,
+  playerFactions: Factions[]
+): RuleSectionType[] {
+  return [
+    ...commonRuleSets[phase]?.map(section => ({
+      ...section,
+      rules: section?.rules?.filter(ruleFilter)
+    })),
+    {
+      title: 'Faction Rules',
+      rules: playerFactions
+        .flatMap(faction => factionRuleSets[faction][phase])
+        .filter(ruleFilter)
+    }
+  ]
+}
+
+export default memo(CommonPhases)

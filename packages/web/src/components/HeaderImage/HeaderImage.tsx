@@ -19,9 +19,9 @@ interface Props {
 }
 
 const sizeTable = {
-  small: 200,
-  medium: 280,
-  large: 350
+  small: 240,
+  medium: 320,
+  large: 420
 } as const
 
 const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(theme =>

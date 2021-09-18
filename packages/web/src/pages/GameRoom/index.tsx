@@ -3,62 +3,70 @@ import { useGame, usePlayer } from '../../dune-react'
 import CommonPhases from './Common'
 import { createRuleFilter } from './helpers'
 import FactionSelect from './Setup/FactionSelect'
-import {
-  commonRuleSets,
-  factionRuleSets,
-  Factions,
-  RuleSection
-} from '@dune-companion/engine'
 import { Loading } from '../Loading'
-import { withTransition } from '../../hocs/withTransition'
 import useGameSettingsContext from '../../contexts/GameSettingsContext/GameSettingsContext'
-import { CommonActionMenu } from './Common/CommonActionMenu'
-
-const CommonPhaseWithTransition = withTransition(CommonPhases, ({ phase }) => (
-  <Loading phase={phase} />
-))
+import { Factions } from '@dune-companion/engine'
+import { Box, Fade } from '@material-ui/core'
+import { useDelayedState } from '../../hooks/useDelayedState'
+import { useTransition } from '../../hooks/useTransition'
 
 function GamePhase(): ReactElement {
   const { showAllFactionRules } = useGameSettingsContext()
   const game = useGame()
   const player = usePlayer()
+  const transition = useTransition(game.currentPhase, {
+    duration: 3500,
+    delay: 500
+  })
+  const delayedCurrentPhase = useDelayedState(game.currentPhase, 3500)
 
   const ruleFilter = useMemo(
     () =>
       createRuleFilter({
-        game,
+        currentPhase: game.currentPhase,
+        currentTurn: game.currentTurn,
+        advancedMode: game.conditions.advancedMode,
         playerFaction: player.faction,
         showAllFactions: showAllFactionRules
       }),
-    [game, player.faction, showAllFactionRules]
+    [
+      game.currentPhase,
+      game.currentTurn,
+      game.conditions.advancedMode,
+      player.faction,
+      showAllFactionRules
+    ]
   )
 
-  const currentPhaseRules: RuleSection[] = [
-    ...commonRuleSets[game.currentPhase]?.map(section => ({
-      ...section,
-      rules: section?.rules?.filter(ruleFilter)
-    })),
-    {
-      title: 'Faction Rules',
-      rules: Object.values(game.players)
+  const playerFactions = useMemo(
+    () =>
+      Object.values(game.players)
         .map(player => player.faction)
-        .filter((faction): faction is Factions => faction !== null)
-        .flatMap(faction => factionRuleSets[faction][game.currentPhase])
-        .filter(ruleFilter)
-    }
-  ]
+        .filter((faction): faction is Factions => faction !== null),
+    [game.players]
+  )
 
   if (game.currentPhase === 'FACTION_SELECT') {
     return <FactionSelect />
   }
 
   return (
-    <CommonPhaseWithTransition
-      phase={game.currentPhase}
-      rules={currentPhaseRules}
-      trigger={game.currentPhase}
-      ActionMenu={CommonActionMenu}
-    />
+    <>
+      <Fade in={!transition} timeout={1000}>
+        <Box position="relative">
+          <CommonPhases
+            ruleFilter={ruleFilter}
+            phase={delayedCurrentPhase}
+            playerFactions={playerFactions}
+          />
+        </Box>
+      </Fade>
+      <Fade in={transition} timeout={1000} unmountOnExit>
+        <Box position="relative" zIndex={10000}>
+          <Loading phase={game.currentPhase} />
+        </Box>
+      </Fade>
+    </>
   )
 }
 

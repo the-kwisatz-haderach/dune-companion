@@ -4,6 +4,7 @@ import { Box, createStyles, Fade, makeStyles } from '@material-ui/core'
 type TransitionOptions = {
   timeInOut?: number
   timeDuring?: number
+  delayTime?: number
 }
 
 const useStyles = makeStyles(() =>
@@ -17,7 +18,8 @@ const useStyles = makeStyles(() =>
 
 const defaultOptions: TransitionOptions = {
   timeDuring: 3500,
-  timeInOut: 1000
+  timeInOut: 1000,
+  delayTime: 0
 }
 
 interface TransitionProps {
@@ -27,7 +29,11 @@ interface TransitionProps {
 export const withTransition = <T extends object>(
   Component: ComponentType<T>,
   Loader: ComponentType<T>,
-  { timeDuring = 3500, timeInOut = 1000 } = defaultOptions
+  {
+    timeDuring = defaultOptions.timeDuring,
+    timeInOut = defaultOptions.timeInOut,
+    delayTime = defaultOptions.delayTime
+  } = defaultOptions
 ) => {
   return ({ trigger, ...componentProps }: T & TransitionProps) => {
     const classes = useStyles()
@@ -57,7 +63,12 @@ export const withTransition = <T extends object>(
             )}
           </Box>
         </Fade>
-        <Fade in={transition} timeout={timeInOut} unmountOnExit>
+        <Fade
+          in={transition}
+          timeout={timeInOut}
+          unmountOnExit
+          style={{ transitionDelay: `${delayTime}ms` }}
+        >
           <Box className={classes.loaderWrapper}>
             <Loader {...(componentProps as T)} />
           </Box>
