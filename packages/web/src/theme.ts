@@ -60,6 +60,18 @@ export const theme = createTheme({
     }
   },
   palette: {
+    success: {
+      main: 'hsl(130deg 53% 64%)'
+    },
+    info: {
+      main: '#7dbaea'
+    },
+    warning: {
+      main: '#efba6c'
+    },
+    error: {
+      main: '#ec6359'
+    },
     primary: {
       main: 'hsl(219, 40%, 47%)',
       light: 'hsl(219, 40%, 65%)',
