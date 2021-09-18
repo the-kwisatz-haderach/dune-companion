@@ -1,11 +1,19 @@
 import { useState, memo, ReactElement } from 'react'
-import { Check as CheckIcon, NotInterested } from '@material-ui/icons'
-import { Fab, Menu, MenuItem, ListItemText } from '@material-ui/core'
+import {
+  Fab,
+  Menu,
+  MenuItem,
+  ListItemText,
+  SvgIconTypeMap
+} from '@material-ui/core'
 import { useCallback } from 'react'
+import { SelectableIcon } from './SelectableIcon'
+import { OverridableComponent } from '@material-ui/core/OverridableComponent'
 
 type Action = {
   label: string
   onClick: () => void
+  Icon?: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
   selected?: boolean
   disabled?: boolean
   selectable?: boolean
@@ -19,24 +27,18 @@ export type Props = {
 }
 
 const Item = memo(
-  ({ label, disabled, selected, onClick, selectable = false }: Action) => (
+  ({
+    Icon,
+    label,
+    disabled,
+    selected,
+    onClick,
+    selectable = false
+  }: Action) => (
     <MenuItem disabled={disabled} selected={selected} dense onClick={onClick}>
-      {selected ? (
-        <CheckIcon
-          fontSize="small"
-          style={{
-            marginRight: 10,
-            display: selectable ? 'initial' : 'none'
-          }}
-        />
-      ) : (
-        <NotInterested
-          fontSize="small"
-          style={{
-            marginRight: 10,
-            display: selectable ? 'initial' : 'none'
-          }}
-        />
+      {selectable && <SelectableIcon selected={Boolean(selected)} />}
+      {Icon && !selectable && (
+        <Icon style={{ marginRight: 5 }} fontSize="small" />
       )}
       <ListItemText primary={label} />
     </MenuItem>

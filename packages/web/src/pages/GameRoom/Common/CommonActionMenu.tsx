@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 import { useGameActions, usePlayer } from '../../../dune-react'
+import PlayerOrderIcon from '@material-ui/icons/FormatListNumbered'
+import FirstPlayerIcon from '@material-ui/icons/PlusOne'
 import useGameSettingsContext from '../../../contexts/GameSettingsContext/GameSettingsContext'
 import {
   GameActionMenu,
@@ -31,11 +33,13 @@ export const CommonActionMenu = () => {
     const secondaryActions: GameActionMenuProps['secondaryActions'] = [
       {
         label: actions.SET_PLAYER_ORDER.label,
-        onClick: actions.SET_PLAYER_ORDER.handler
+        onClick: actions.SET_PLAYER_ORDER.handler,
+        Icon: PlayerOrderIcon
       },
       {
         label: actions.SET_FIRST_PLAYER.label,
-        onClick: actions.SET_FIRST_PLAYER.handler
+        onClick: actions.SET_FIRST_PLAYER.handler,
+        Icon: FirstPlayerIcon
       }
     ]
     const action =
