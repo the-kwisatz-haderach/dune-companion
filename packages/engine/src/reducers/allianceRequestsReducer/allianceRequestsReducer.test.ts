@@ -2,7 +2,7 @@ import { allianceRequestsReducer } from './allianceRequestsReducer'
 import { clientActions } from '../../actions'
 
 jest.mock('@reduxjs/toolkit', () => ({
-  ...jest.requireActual('@reduxjs/toolkit'),
+  ...(jest.requireActual('@reduxjs/toolkit') as object),
   nanoid: () => 'mockNanoId'
 }))
 
@@ -20,6 +20,59 @@ describe('allianceRequestsReducer', () => {
       { id: 'mockNanoId', requester: 'atreides', responders: ['fremen'] }
     ])
   })
+  describe('RESPOND_TO_ALLIANCE_REQUEST', () => {
+    xtest('the only remaining responder accepts the request', () => {
+      expect(
+        allianceRequestsReducer(
+          [{ id: 'mockNanoId', requester: 'atreides', responders: ['fremen'] }],
+          clientActions.RESPOND_TO_ALLIANCE_REQUEST({
+            playerId: 'fremen',
+            id: 'mockNanoId',
+            response: 'accept'
+          })
+        )
+      ).toEqual([])
+    })
+    test('one of multiple responders accepts the request', () => {
+      expect(
+        allianceRequestsReducer(
+          [
+            {
+              id: 'mockNanoId',
+              requester: 'atreides',
+              responders: ['fremen', 'harkonnen']
+            }
+          ],
+          clientActions.RESPOND_TO_ALLIANCE_REQUEST({
+            playerId: 'fremen',
+            id: 'mockNanoId',
+            response: 'accept'
+          })
+        )
+      ).toEqual([
+        { id: 'mockNanoId', requester: 'atreides', responders: ['harkonnen'] }
+      ])
+    })
+    xtest('one of multiple responders rejects the request', () => {
+      expect(
+        allianceRequestsReducer(
+          [
+            {
+              id: 'mockNanoId',
+              requester: 'atreides',
+              responders: ['fremen', 'harkonnen']
+            }
+          ],
+          clientActions.RESPOND_TO_ALLIANCE_REQUEST({
+            playerId: 'fremen',
+            id: 'mockNanoId',
+            response: 'decline'
+          })
+        )
+      ).toEqual([])
+    })
+  })
+
   test('leaveGame', () => {
     expect(
       allianceRequestsReducer(

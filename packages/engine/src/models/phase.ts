@@ -15,9 +15,10 @@ export type Phases =
 
 // Can be used for checklist. Warn before proceeding if something is not completed.
 export type PhaseStates = {
-  FACTION_SELECT: {}
-  SETUP: {
+  FACTION_SELECT: {
     isFactionsSelected: boolean
+  }
+  SETUP: {
     isPositioningDone: boolean
     isTraitorsDistributed: boolean
     isSpiceDistributed: boolean
@@ -32,9 +33,10 @@ export type PhaseStates = {
   SPICE_BLOW_AND_NEXUS: {
     isTopCardTurned: boolean
     isSpicePlacedOnTerritory: boolean
+  }
+  NEXUS: {
     isNexusCompleted: boolean
   }
-  NEXUS: {}
   CHOAM_CHARITY: {
     isChoamCharityDistributed: boolean
   }

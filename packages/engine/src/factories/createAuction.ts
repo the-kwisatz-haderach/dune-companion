@@ -1,9 +1,9 @@
-import { Auction } from '../models'
+import { Game, Auction } from '../models'
 
-export function createAuction(): Auction {
+export function createAuction(game: Game): Auction {
   return {
-    currentRound: 0,
+    isDone: false,
     rounds: [],
-    results: []
+    participants: []
   }
 }

@@ -52,6 +52,31 @@ const createActionHandlers = ({
       style: 'negative',
       label: actionLabels['LEAVE_GAME']
     },
+    SET_PLAYER_SPICE: {
+      handler: () => showPrompt('SetPlayerSpicePrompt', {}),
+      style: 'positive',
+      label: actionLabels['SET_PLAYER_SPICE']
+    },
+    SET_PLAYER_TREACHERY_CARDS: {
+      handler: () => showPrompt('SetPlayerTreacheryCardsPrompt', {}),
+      style: 'positive',
+      label: actionLabels['SET_PLAYER_TREACHERY_CARDS']
+    },
+    START_AUCTION: {
+      handler: () => dispatch('START_AUCTION', {}),
+      style: 'positive',
+      label: actionLabels['START_AUCTION']
+    },
+    GO_TO_NEXUS: {
+      handler: () => dispatch('GO_TO_NEXUS', {}),
+      style: 'positive',
+      label: actionLabels['GO_TO_NEXUS']
+    },
+    SKIP_BID: {
+      handler: () => dispatch('SKIP_BID', {}),
+      style: 'negative',
+      label: actionLabels['SKIP_BID']
+    }
     // SET_ADMIN: {
     //   handler: (id: string) => dispatch('SET_ADMIN', { id }),
     //   style: 'positive',
@@ -92,31 +117,11 @@ const createActionHandlers = ({
     //   style: 'positive',
     //   label: actionLabels['CONFIRM_WINNER']
     // },
-    // SET_PLAYER_SPICE: {
-    //   handler: () => dispatch('SET_PLAYER_SPICE', {}),
-    //   style: 'positive',
-    //   label: actionLabels['SET_PLAYER_SPICE']
-    // },
-    // SET_PLAYER_TREACHERY_CARDS: {
-    //   handler: () => dispatch('SET_PLAYER_TREACHERY_CARDS', {}),
-    //   style: 'positive',
-    //   label: actionLabels['SET_PLAYER_TREACHERY_CARDS']
-    // },
-    // SKIP_BID: {
-    //   handler: () => dispatch('SKIP_BID', {}),
-    //   style: 'negative',
-    //   label: actionLabels['SKIP_BID']
-    // },
     // PLACE_BID: {
     //   handler: () => dispatch('PLACE_BID', {}),
     //   style: 'positive',
     //   label: actionLabels['PLACE_BID']
     // },
-    START_AUCTION: {
-      handler: () => dispatch('START_AUCTION', {}),
-      style: 'positive',
-      label: actionLabels['START_AUCTION']
-    }
   } as const)
 
 export const useGameActions = () => {

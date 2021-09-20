@@ -3,6 +3,7 @@ import { clientActions, ClientActionType } from '../../actions'
 import { factions } from '../../dictionaries'
 import { createPlayer } from '../../factories'
 import { getActionProperties } from '../../factories/getActionProperties'
+import { getPhaseActionProperties } from '../../factories/getPhaseActionProperties'
 import { Game, PlayerAction } from '../../models'
 import { initialGameState } from '../initialGameState'
 
@@ -52,7 +53,14 @@ export const playersReducer = createReducer(
         )
       })
       .addCase(clientActions.UPDATE_PLAYER_NAME, (state, action) => {
-        if (action.payload.name === '') return state
+        if (
+          action.payload.name === '' ||
+          Object.values(state).some(
+            player => player.name === action.payload.name
+          )
+        ) {
+          return state
+        }
         state[action.payload.playerId].name = action.payload.name
         state[action.payload.playerId].actions = removeByType(action.type)(
           state[action.payload.playerId].actions
@@ -130,4 +138,16 @@ export const playersReducer = createReducer(
           state[action.payload.playerId].actions
         )
       })
+      .addCase(clientActions.GO_TO_NEXUS, state =>
+        Object.values(state).reduce(
+          (players, player) => ({
+            ...players,
+            [player.id]: {
+              ...player,
+              actions: getPhaseActionProperties('NEXUS', player.isAdmin)
+            }
+          }),
+          state
+        )
+      )
 )

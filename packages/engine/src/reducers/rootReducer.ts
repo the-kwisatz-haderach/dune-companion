@@ -17,6 +17,7 @@ import { Game } from '../models'
 import { initialGameState } from './initialGameState'
 import { phaseStatesReducer } from './phaseStatesReducer/phaseStatesReducer'
 import { currentFirstPlayerReducer } from './currentFirstPlayerReducer/currentFirstPlayerReducer'
+import { currentPhaseReducer } from './currentPhaseReducer'
 
 const defaultBuilder = <T>(builder: ActionReducerMapBuilder<T>) =>
   builder.addDefaultCase(state => state)
@@ -33,11 +34,11 @@ const combinedReducer: Reducer<
   players: playersReducer,
   phaseStates: phaseStatesReducer,
   currentFirstPlayer: currentFirstPlayerReducer,
+  currentPhase: currentPhaseReducer,
   /*
     Below are states not affected by specific actions.
     Adding with defaultBuilder to include in composed reducer output below.
   */
-  currentPhase: createReducer(initialGameState.currentPhase, defaultBuilder),
   currentTurn: createReducer(initialGameState.currentTurn, defaultBuilder)
 })
 

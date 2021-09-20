@@ -18,5 +18,14 @@ export const playerActionDetails: StaticPlayerActionProperties = {
   },
   SET_FIRST_PLAYER: {
     isRequired: true
+  },
+  SET_PLAYER_SPICE: {
+    isRequired: true
+  },
+  SET_PLAYER_TREACHERY_CARDS: {
+    isRequired: true
+  },
+  START_AUCTION: {
+    isRequired: true
   }
 }

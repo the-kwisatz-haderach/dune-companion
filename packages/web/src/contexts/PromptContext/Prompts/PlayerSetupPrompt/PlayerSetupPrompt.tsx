@@ -5,7 +5,10 @@ import useUserContext from '../../../UserContext'
 import { useGameDispatch, usePlayer } from '../../../../dune-react'
 import { PromptProps } from '../../types'
 
-export function PlayerSetupPrompt({ closePrompt }: PromptProps): ReactElement {
+export function PlayerSetupPrompt({
+  closePrompt,
+  open
+}: PromptProps): ReactElement {
   const { username } = useUserContext()
   const player = usePlayer()
   const [name, setName] = useState(username)
@@ -20,6 +23,7 @@ export function PlayerSetupPrompt({ closePrompt }: PromptProps): ReactElement {
 
   return (
     <Prompt
+      open={open}
       title="Enter your name"
       onClose={player.name !== '' ? closePrompt : undefined}
       actions={[

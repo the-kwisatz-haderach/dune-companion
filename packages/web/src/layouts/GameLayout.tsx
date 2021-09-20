@@ -35,7 +35,9 @@ export const GameLayout: React.FC = ({ children }) => {
             <ConditionsMenu
               maxTurns={game.conditions.maxTurns}
               currentFirstPlayer={
-                game.players[game.playerOrder[game.currentFirstPlayer]].name
+                game.currentFirstPlayer !== null
+                  ? game.players[game.playerOrder[game.currentFirstPlayer]].name
+                  : 'TBD'
               }
               currentPhase={game.currentPhase}
               currentTurn={game.currentTurn}

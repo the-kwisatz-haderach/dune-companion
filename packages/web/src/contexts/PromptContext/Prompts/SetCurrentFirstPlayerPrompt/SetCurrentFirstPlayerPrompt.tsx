@@ -1,11 +1,12 @@
 import { Box, Button } from '@material-ui/core'
 import { ReactElement, useState } from 'react'
-import { Prompt } from '../../../../components/Prompt'
 import { useGame, useGameDispatch } from '../../../../dune-react'
 import { PromptProps } from '../../types'
+import { SimplePrompt } from '../SimplePrompt'
 
 export function SetCurrentFirstPlayerPrompt({
-  closePrompt
+  closePrompt,
+  ...props
 }: PromptProps): ReactElement {
   const game = useGame()
   const [firstPlayerIndex, setFirstPlayerIndex] = useState<number>()
@@ -28,16 +29,16 @@ export function SetCurrentFirstPlayerPrompt({
   }
 
   return (
-    <Prompt
+    <SimplePrompt
+      {...props}
+      closePrompt={closePrompt}
       title="Select current first player"
-      onClose={closePrompt}
-      actions={[
-        {
-          label: 'Enter',
-          onClick: setFirstPlayer,
-          disabled: firstPlayerIndex === undefined
-        }
-      ]}
+      closable
+      primaryAction={{
+        label: 'Enter',
+        onClick: setFirstPlayer,
+        disabled: firstPlayerIndex === undefined
+      }}
     >
       {game.playerOrder.map((playerId, index) => (
         <Box key={playerId}>
@@ -51,6 +52,6 @@ export function SetCurrentFirstPlayerPrompt({
           </Button>
         </Box>
       ))}
-    </Prompt>
+    </SimplePrompt>
   )
 }

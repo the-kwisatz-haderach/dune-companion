@@ -14,7 +14,7 @@ import { DialogProps } from '@material-ui/core'
 import { forwardRef } from 'react'
 import { TransitionProps } from '@material-ui/core/transitions'
 
-type DialogAction = {
+export type DialogAction = {
   label: string
   onClick: () => void
   disabled?: boolean
@@ -23,7 +23,7 @@ type DialogAction = {
 export interface Props extends Omit<DialogProps, 'open'> {
   title?: string
   isRequired?: boolean
-  actions: [DialogAction, ...DialogAction[]]
+  actions?: [DialogAction, ...DialogAction[]]
   contentClassName?: string
   open?: boolean
 }
@@ -35,6 +35,10 @@ const useStyles = makeStyles<Theme, { open: boolean }>(() =>
     },
     titleBar: {
       textAlign: 'right'
+    },
+    actions: {
+      display: 'flex',
+      justifyContent: 'space-between'
     }
   })
 )
@@ -53,16 +57,16 @@ export default function Prompt({
   isRequired = true,
   open = true,
   contentClassName,
+  transitionDuration = 500,
   ...props
 }: Props) {
   const classes = useStyles({ open })
-  const [primaryAction, ...otherActions] = actions
   return (
     <Dialog
       {...props}
       open={open}
       className={classes.root}
-      transitionDuration={1000}
+      transitionDuration={transitionDuration}
       TransitionComponent={Transition}
     >
       <DialogTitle
@@ -73,24 +77,31 @@ export default function Prompt({
         <Typography variant="caption">{title}</Typography>
       </DialogTitle>
       <DialogContent className={contentClassName}>{children}</DialogContent>
-      <DialogActions>
-        {otherActions.map(({ disabled, onClick, label }, index) => (
-          <Button
-            key={index}
-            disabled={disabled}
-            onClick={onClick}
-            color="default"
-          >
-            {label}
-          </Button>
-        ))}
-        <Button
-          disabled={primaryAction.disabled}
-          onClick={primaryAction.onClick}
-          color="primary"
-        >
-          {primaryAction.label}
-        </Button>
+      <DialogActions className={classes.actions}>
+        <div>
+          {actions &&
+            actions.slice(1).map(({ disabled, onClick, label }, index) => (
+              <Button
+                key={index}
+                disabled={disabled}
+                onClick={onClick}
+                color="default"
+              >
+                {label}
+              </Button>
+            ))}
+        </div>
+        <div>
+          {actions && (
+            <Button
+              disabled={actions[0].disabled}
+              onClick={actions[0].onClick}
+              color="primary"
+            >
+              {actions[0].label}
+            </Button>
+          )}
+        </div>
       </DialogActions>
     </Dialog>
   )

@@ -8,7 +8,7 @@ export type Game = {
   conditions: Conditions
   currentPhase: Phases
   currentTurn: number
-  currentFirstPlayer: number
+  currentFirstPlayer: number | null
   playerOrder: Player['id'][]
   players: Record<Player['id'], Player>
   auctions: Auction[]

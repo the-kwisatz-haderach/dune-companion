@@ -6,10 +6,7 @@ export const getPhaseActionProperties = (
   phase: Phases,
   isAdmin = false
 ): PlayerAction[] =>
-  phaseActions[phase]
-    .map(type => getActionProperties(type))
-    .concat(
-      isAdmin
-        ? adminPhaseActions[phase].map(type => getActionProperties(type))
-        : []
-    )
+  (isAdmin
+    ? adminPhaseActions[phase].map(type => getActionProperties(type))
+    : []
+  ).concat(phaseActions[phase].map(type => getActionProperties(type)))

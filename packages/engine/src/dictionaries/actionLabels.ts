@@ -21,5 +21,6 @@ export const actionLabels: Record<ClientActionType, string> = {
   SET_FIRST_PLAYER: 'Set first player',
   SKIP_BID: 'Skip bid',
   PLACE_BID: 'Place bid',
-  START_AUCTION: 'Start auction'
+  START_AUCTION: 'Start auction',
+  GO_TO_NEXUS: 'Go to Nexus'
 }

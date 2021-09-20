@@ -28,7 +28,8 @@ const reorder = (list: string[], startIndex: number, endIndex: number) => {
 }
 
 export default function SetPlayerOrderPrompt({
-  closePrompt
+  closePrompt,
+  open
 }: PromptProps): ReactElement {
   const classes = useStyles()
   const game = useGame()
@@ -59,6 +60,7 @@ export default function SetPlayerOrderPrompt({
   return (
     <Prompt
       fullWidth
+      open={open}
       onClose={closePrompt}
       contentClassName={classes.dialogContent}
       maxWidth="md"

@@ -7,6 +7,7 @@ export const createNewTurnState = (state: Game): Game => ({
   ...state,
   phaseStates: initialGameState.phaseStates,
   currentTurn: state.currentTurn + 1,
+  currentFirstPlayer: null,
   currentPhase: firstRegularPhase,
   players: getInitialPhasePlayerState(state)
 })

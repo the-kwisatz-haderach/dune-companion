@@ -9,15 +9,16 @@ export const initialGameState: Game = {
     maxTurns: 10
   },
   currentTurn: 0,
-  currentFirstPlayer: 0,
+  currentFirstPlayer: null,
   currentPhase: 'FACTION_SELECT',
   auctions: [],
   allianceRequests: [],
   alliances: [],
   phaseStates: {
-    FACTION_SELECT: {},
+    FACTION_SELECT: {
+      isFactionsSelected: false
+    },
     SETUP: {
-      isFactionsSelected: false,
       isForcesPlaced: false,
       isPositioningDone: false,
       isSpiceDistributed: false,
@@ -31,10 +32,11 @@ export const initialGameState: Game = {
     },
     SPICE_BLOW_AND_NEXUS: {
       isTopCardTurned: false,
-      isSpicePlacedOnTerritory: false,
+      isSpicePlacedOnTerritory: false
+    },
+    NEXUS: {
       isNexusCompleted: false
     },
-    NEXUS: {},
     CHOAM_CHARITY: {
       isChoamCharityDistributed: false
     },

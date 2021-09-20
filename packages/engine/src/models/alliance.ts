@@ -2,6 +2,7 @@ import { Player } from './player'
 
 export type Alliance = {
   players: Player['id'][]
+  status: 'confirmed' | 'pending'
 }
 
 export type AllianceRequest = {

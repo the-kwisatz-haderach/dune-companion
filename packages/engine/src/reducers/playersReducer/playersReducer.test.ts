@@ -7,6 +7,7 @@ import { Game } from '../../models'
 import { getActionProperties } from '../../factories/getActionProperties'
 import { createPlayer } from '../../factories'
 import { factions } from '../../dictionaries'
+import { getPhaseActionProperties } from '../../factories/getPhaseActionProperties'
 
 jest.mock('@reduxjs/toolkit', () => ({
   ...(jest.requireActual('@reduxjs/toolkit') as object),
@@ -240,6 +241,27 @@ describe('playersReducer', () => {
           name: 'some name'
         }
       })
+    })
+    it('does nothing if the name is the same as another players', () => {
+      const state: Game['players'] = {
+        testPlayer: {
+          ...playerFixture,
+          name: 'someone'
+        },
+        anotherPlayer: {
+          ...playerFixture,
+          name: 'some name'
+        }
+      }
+      expect(
+        playersReducer(
+          state,
+          clientActions.UPDATE_PLAYER_NAME({
+            playerId: 'testPlayer',
+            name: 'someone'
+          })
+        )
+      ).toEqual(state)
     })
   })
   describe('SET_ADMIN', () => {
@@ -546,6 +568,52 @@ describe('playersReducer', () => {
           ...playerFixture,
           treacheryCards: 3,
           actions: []
+        }
+      })
+    })
+  })
+  describe('GO_TO_NEXUS', () => {
+    it('updates the player', () => {
+      expect(
+        playersReducer(
+          {
+            player1: {
+              ...playerFixture,
+              id: 'player1',
+              isAdmin: true,
+              actions: []
+            },
+            player2: {
+              ...playerFixture,
+              id: 'player2',
+              actions: [getActionProperties('SET_PLAYER_TREACHERY_CARDS')]
+            },
+            player3: {
+              ...playerFixture,
+              id: 'player3',
+              actions: []
+            }
+          },
+          clientActions.GO_TO_NEXUS({
+            playerId: 'test'
+          })
+        )
+      ).toEqual({
+        player1: {
+          ...playerFixture,
+          id: 'player1',
+          isAdmin: true,
+          actions: getPhaseActionProperties('NEXUS', true)
+        },
+        player2: {
+          ...playerFixture,
+          id: 'player2',
+          actions: getPhaseActionProperties('NEXUS')
+        },
+        player3: {
+          ...playerFixture,
+          id: 'player3',
+          actions: getPhaseActionProperties('NEXUS')
         }
       })
     })

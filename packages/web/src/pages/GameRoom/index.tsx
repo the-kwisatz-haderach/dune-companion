@@ -16,7 +16,8 @@ function GamePhase(): ReactElement {
   const player = usePlayer()
   const transition = useTransition(game.currentPhase, {
     duration: 3500,
-    delay: 500
+    delay: 500,
+    condition: game.currentPhase !== 'FACTION_SELECT'
   })
   const delayedCurrentPhase = useDelayedState(game.currentPhase, 3500)
 
@@ -46,19 +47,20 @@ function GamePhase(): ReactElement {
     [game.players]
   )
 
-  if (game.currentPhase === 'FACTION_SELECT') {
-    return <FactionSelect />
-  }
-
   return (
     <>
-      <Fade in={!transition} timeout={1000}>
+      <Fade in={!transition} timeout={1000} unmountOnExit>
         <Box position="relative">
-          <CommonPhases
-            ruleFilter={ruleFilter}
-            phase={delayedCurrentPhase}
-            playerFactions={playerFactions}
-          />
+          {game.currentPhase === 'FACTION_SELECT' ||
+          delayedCurrentPhase === 'FACTION_SELECT' ? (
+            <FactionSelect />
+          ) : (
+            <CommonPhases
+              ruleFilter={ruleFilter}
+              phase={delayedCurrentPhase}
+              playerFactions={playerFactions}
+            />
+          )}
         </Box>
       </Fade>
       <Fade in={transition} timeout={1000} unmountOnExit>

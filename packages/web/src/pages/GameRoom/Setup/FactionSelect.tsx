@@ -19,7 +19,7 @@ import { Leader } from '../../../components/Leader'
 import { FactionSummary } from './FactionSummary'
 import { FactionAdvantages } from './FactionAdvantages'
 import dune from '../../../images/dune.jpeg'
-import { useAutomaticPrompt } from '../useAutomaticPrompt'
+import { usePhaseSideEffects } from '../usePhaseSideEffects'
 import { FactionOverlay } from '../../../components/FactionOverlay'
 import { useTransition } from '../../../hooks/useTransition'
 
@@ -63,7 +63,7 @@ export default function FactionSelect(): ReactElement {
     duration: 1000,
     condition: player.faction !== null
   })
-  useAutomaticPrompt()
+  usePhaseSideEffects('FACTION_SELECT')
 
   const currentFaction = factions[currentFactionKey]
 

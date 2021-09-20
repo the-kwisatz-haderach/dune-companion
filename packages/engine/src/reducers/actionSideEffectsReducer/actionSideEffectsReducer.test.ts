@@ -1,4 +1,3 @@
-import { phaseActions, adminPhaseActions } from '../../dictionaries'
 import { getActionProperties } from '../../factories/getActionProperties'
 import { getPhaseActionProperties } from '../../factories/getPhaseActionProperties'
 import { Factions, Game } from '../../models'
@@ -85,6 +84,7 @@ describe('actionSideEffectsReducer', () => {
       const state: Game = {
         ...initialGameState,
         currentPhase: 'SETUP',
+        currentFirstPlayer: 4,
         players: {
           somePlayer: {
             ...playerFixture,
@@ -112,27 +112,87 @@ describe('actionSideEffectsReducer', () => {
         ...state,
         currentTurn: 1,
         currentPhase: 'STORM',
+        currentFirstPlayer: null,
         players: {
           ...state.players,
           somePlayer: {
             ...state.players.somePlayer,
             spice: 5,
             treacheryCards: 3,
-            actions: [
-              ...phaseActions.STORM.map(type => getActionProperties(type)),
-              ...adminPhaseActions.STORM.map(type => getActionProperties(type))
-            ]
+            actions: getPhaseActionProperties('STORM', true)
           },
           anotherPlayer: {
             ...state.players.anotherPlayer,
             spice: 2,
             treacheryCards: 1,
-            actions: phaseActions.STORM.map(type => getActionProperties(type))
+            actions: getPhaseActionProperties('STORM')
           }
         }
       })
     })
   })
+
+  describe('when there are no pending actions left in the BIDDING phase', () => {
+    describe('when the auction has not been held', () => {
+      it('sets up the game for an auction', () => {
+        const state: Game = {
+          ...initialGameState,
+          currentTurn: 3,
+          currentFirstPlayer: 1,
+          playerOrder: ['somePlayer', 'anotherPlayer'],
+          currentPhase: 'BIDDING',
+          auctions: [
+            {
+              isDone: true,
+              participants: ['somePlayer', 'anotherPlayer'],
+              rounds: [
+                {
+                  bids: [],
+                  currentBidderIndex: 0,
+                  skipped: ['anotherPlayer']
+                }
+              ]
+            },
+            { isDone: true, participants: ['anotherPlayer'], rounds: [] }
+          ],
+          players: {
+            somePlayer: {
+              ...playerFixture,
+              isAdmin: true,
+              id: 'somePlayer',
+              spice: 5,
+              treacheryCards: 2
+            },
+            anotherPlayer: {
+              ...playerFixture,
+              isAdmin: false,
+              id: 'anotherPlayer',
+              spice: 1,
+              treacheryCards: 3
+            }
+          }
+        }
+        expect(actionSideEffectsReducer(state)).toEqual({
+          ...state,
+          auctions: [
+            ...state.auctions,
+            {
+              isDone: false,
+              participants: ['anotherPlayer', 'somePlayer'],
+              rounds: [
+                {
+                  bids: [],
+                  skipped: [],
+                  currentBidderIndex: 0
+                }
+              ]
+            }
+          ]
+        })
+      })
+    })
+  })
+
   describe('when the game is ongoing and there are no awaiting actions', () => {
     it('increments the currentPhase and updates player actions according to the new phase', () => {
       const state: Game = {
@@ -177,7 +237,7 @@ describe('actionSideEffectsReducer', () => {
             spice: 0,
             treacheryCards: 0,
             faction: Factions.FREMEN,
-            actions: phaseActions.BIDDING.map(type => getActionProperties(type))
+            actions: getPhaseActionProperties('BIDDING', true)
           },
           anotherPlayer: {
             ...playerFixture,
@@ -187,7 +247,7 @@ describe('actionSideEffectsReducer', () => {
             spice: 0,
             treacheryCards: 0,
             faction: Factions.HOUSE_ATREIDES,
-            actions: phaseActions.BIDDING.map(type => getActionProperties(type))
+            actions: getPhaseActionProperties('BIDDING')
           }
         },
         currentTurn: 3,
@@ -204,6 +264,7 @@ describe('actionSideEffectsReducer', () => {
       const state: Game = {
         ...initialGameState,
         currentTurn: 3,
+        currentFirstPlayer: 1,
         currentPhase: 'MENTAT_PAUSE', // Mentat pause is the last phase of the game.
         phaseStates: {
           ...initialGameState.phaseStates,
@@ -239,18 +300,16 @@ describe('actionSideEffectsReducer', () => {
       }
       expect(actionSideEffectsReducer(state)).toEqual({
         ...state,
+        currentFirstPlayer: null,
         players: {
           ...state.players,
           somePlayer: {
             ...state.players.somePlayer,
-            actions: [
-              ...phaseActions.STORM.map(type => getActionProperties(type)),
-              ...adminPhaseActions.STORM.map(type => getActionProperties(type))
-            ]
+            actions: getPhaseActionProperties('STORM', true)
           },
           anotherPlayer: {
             ...state.players.anotherPlayer,
-            actions: phaseActions.STORM.map(type => getActionProperties(type))
+            actions: getPhaseActionProperties('STORM')
           }
         },
         currentTurn: 4,
@@ -310,16 +369,12 @@ describe('actionSideEffectsReducer', () => {
           somePlayer: {
             ...playerFixture,
             id: 'somePlayer',
-            actions: phaseActions.SPICE_HARVEST.map(type =>
-              getActionProperties(type)
-            )
+            actions: getPhaseActionProperties('SPICE_HARVEST')
           },
           anotherPlayer: {
             ...playerFixture,
             id: 'anotherPlayer',
-            actions: phaseActions.SPICE_HARVEST.map(type =>
-              getActionProperties(type)
-            )
+            actions: getPhaseActionProperties('SPICE_HARVEST')
           }
         }
       })

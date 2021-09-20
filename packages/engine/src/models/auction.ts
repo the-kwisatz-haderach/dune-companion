@@ -1,17 +1,15 @@
+import { Player } from '.'
+
 export type Auction = {
-  currentRound: number
+  participants: Player['id'][]
+  isDone: boolean
   rounds: AuctionRound[]
-  results: AuctionRoundResult[]
 }
 
 export type AuctionRound = {
-  currentBidder: string
+  currentBidderIndex: number
+  skipped: Player['id'][]
   bids: AuctionBid[]
-}
-
-export type AuctionRoundResult = {
-  winner: string
-  winningBid: number
 }
 
 export type AuctionBid = {

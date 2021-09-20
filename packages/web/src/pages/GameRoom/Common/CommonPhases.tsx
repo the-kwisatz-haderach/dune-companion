@@ -15,6 +15,7 @@ import { Header } from '../../../components/Header'
 import { Alert } from '@material-ui/lab'
 import { RuleSection } from './RuleSection'
 import { phaseIcons } from '../../../lib/phaseIcons'
+import { usePhaseSideEffects } from '../usePhaseSideEffects'
 
 interface Props {
   phase: Phases
@@ -32,6 +33,8 @@ export function CommonPhases({
     ruleFilter,
     playerFactions
   )
+
+  usePhaseSideEffects(phase)
 
   return (
     <Box bgcolor="white">

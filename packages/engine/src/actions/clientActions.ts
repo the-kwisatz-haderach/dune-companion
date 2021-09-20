@@ -21,9 +21,9 @@ export const SET_PLAYER_SPICE = 'SET_PLAYER_SPICE'
 export const SET_PLAYER_TREACHERY_CARDS = 'SET_PLAYER_TREACHERY_CARDS'
 export const MARK_PHASE_STEP_COMPLETED = 'MARK_PHASE_STEP_COMPLETED'
 export const MARK_PHASE_STEP_NOT_COMPLETED = 'MARK_PHASE_STEP_NOT_COMPLETED'
-export const START_AUCTION = 'START_AUCTION'
 export const PLACE_BID = 'PLACE_BID'
 export const SKIP_BID = 'SKIP_BID'
+export const GO_TO_NEXUS = 'GO_TO_NEXUS'
 
 const createClientAction = <P extends Record<string ,unknown> | void = void, T extends string = string>(
   type: T,
@@ -67,7 +67,7 @@ export const setPlayerTreacheryCards = createClientAction<{ cards: number }, typ
 export const setFirstPlayer = createClientAction<{ firstPlayerIndex: number }, typeof SET_FIRST_PLAYER>(SET_FIRST_PLAYER)
 export const placeBid = createClientAction<{ bid: number }, typeof PLACE_BID>(PLACE_BID)
 export const skipBid = createClientAction<void, typeof SKIP_BID>(SKIP_BID)
-export const startAuction = createClientAction<void, typeof START_AUCTION>(START_AUCTION)
+export const goToNexus = createClientAction<void, typeof GO_TO_NEXUS>(GO_TO_NEXUS)
 
 export const markPhaseStepCompleted = createClientAction<{
   step: {
@@ -103,7 +103,7 @@ export const clientActions = {
   SET_FIRST_PLAYER: setFirstPlayer,
   SKIP_BID: skipBid,
   PLACE_BID: placeBid,
-  START_AUCTION: startAuction
+  GO_TO_NEXUS: goToNexus,
 } as const
 
 export type ClientActionType = keyof typeof clientActions
