@@ -24,8 +24,5 @@ export const playerActionDetails: StaticPlayerActionProperties = {
   },
   SET_PLAYER_TREACHERY_CARDS: {
     isRequired: true
-  },
-  START_AUCTION: {
-    isRequired: true
   }
 }

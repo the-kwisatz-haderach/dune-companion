@@ -137,9 +137,14 @@ describe('actionSideEffectsReducer', () => {
       it('sets up the game for an auction', () => {
         const state: Game = {
           ...initialGameState,
-          currentTurn: 3,
+          currentTurn: 2,
           currentFirstPlayer: 1,
-          playerOrder: ['somePlayer', 'anotherPlayer'],
+          playerOrder: [
+            'somePlayer',
+            'anotherPlayer',
+            'thirdPlayer',
+            'fourthPlayer'
+          ],
           currentPhase: 'BIDDING',
           auctions: [
             {
@@ -152,8 +157,7 @@ describe('actionSideEffectsReducer', () => {
                   skipped: ['anotherPlayer']
                 }
               ]
-            },
-            { isDone: true, participants: ['anotherPlayer'], rounds: [] }
+            }
           ],
           players: {
             somePlayer: {
@@ -169,16 +173,145 @@ describe('actionSideEffectsReducer', () => {
               id: 'anotherPlayer',
               spice: 1,
               treacheryCards: 3
+            },
+            thirdPlayer: {
+              ...playerFixture,
+              isAdmin: false,
+              id: 'thirdPlayer',
+              spice: 1,
+              treacheryCards: 3
+            },
+            fourthPlayer: {
+              ...playerFixture,
+              isAdmin: false,
+              id: 'fourthPlayer',
+              spice: 1,
+              treacheryCards: 3
             }
           }
         }
         expect(actionSideEffectsReducer(state)).toEqual({
           ...state,
+          players: {
+            somePlayer: {
+              ...state.players.somePlayer,
+              actions: [
+                getActionProperties('PLACE_BID'),
+                getActionProperties('SKIP_BID')
+              ]
+            },
+            anotherPlayer: {
+              ...state.players.anotherPlayer,
+              actions: [
+                getActionProperties('PLACE_BID'),
+                getActionProperties('SKIP_BID')
+              ]
+            },
+            thirdPlayer: {
+              ...state.players.thirdPlayer,
+              actions: [
+                getActionProperties('PLACE_BID'),
+                getActionProperties('SKIP_BID')
+              ]
+            },
+            fourthPlayer: {
+              ...state.players.fourthPlayer,
+              actions: [
+                getActionProperties('PLACE_BID'),
+                getActionProperties('SKIP_BID')
+              ]
+            }
+          },
           auctions: [
             ...state.auctions,
             {
               isDone: false,
-              participants: ['anotherPlayer', 'somePlayer'],
+              participants: [
+                'anotherPlayer',
+                'thirdPlayer',
+                'fourthPlayer',
+                'somePlayer'
+              ],
+              rounds: [
+                {
+                  bids: [],
+                  skipped: [],
+                  currentBidderIndex: 0
+                }
+              ]
+            }
+          ]
+        })
+      })
+      it("doesn't add players who already have maximum number of treachery cards", () => {
+        const state: Game = {
+          ...initialGameState,
+          currentTurn: 1,
+          currentFirstPlayer: 2,
+          playerOrder: [
+            'somePlayer',
+            'anotherPlayer',
+            'thirdPlayer',
+            'fourthPlayer'
+          ],
+          currentPhase: 'BIDDING',
+          auctions: [],
+          players: {
+            somePlayer: {
+              ...playerFixture,
+              isAdmin: true,
+              id: 'somePlayer',
+              spice: 5,
+              treacheryCards: 4
+            },
+            anotherPlayer: {
+              ...playerFixture,
+              isAdmin: false,
+              id: 'anotherPlayer',
+              spice: 1,
+              faction: Factions.HOUSE_HARKONNEN,
+              treacheryCards: 6
+            },
+            thirdPlayer: {
+              ...playerFixture,
+              isAdmin: false,
+              id: 'thirdPlayer',
+              spice: 1,
+              treacheryCards: 4
+            },
+            fourthPlayer: {
+              ...playerFixture,
+              isAdmin: false,
+              id: 'fourthPlayer',
+              spice: 1,
+              treacheryCards: 3
+            }
+          }
+        }
+        expect(actionSideEffectsReducer(state)).toEqual({
+          ...state,
+          players: {
+            ...state.players,
+            anotherPlayer: {
+              ...state.players.anotherPlayer,
+              actions: [
+                getActionProperties('PLACE_BID'),
+                getActionProperties('SKIP_BID')
+              ]
+            },
+            fourthPlayer: {
+              ...state.players.fourthPlayer,
+              actions: [
+                getActionProperties('PLACE_BID'),
+                getActionProperties('SKIP_BID')
+              ]
+            }
+          },
+          auctions: [
+            ...state.auctions,
+            {
+              isDone: false,
+              participants: ['fourthPlayer', 'anotherPlayer'],
               rounds: [
                 {
                   bids: [],

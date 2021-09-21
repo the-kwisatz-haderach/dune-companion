@@ -9,6 +9,7 @@ import { Factions } from '@dune-companion/engine'
 import { Box, Fade } from '@material-ui/core'
 import { useDelayedState } from '../../hooks/useDelayedState'
 import { useTransition } from '../../hooks/useTransition'
+import { Auction } from './Auction'
 
 function GamePhase(): ReactElement {
   const { showAllFactionRules } = useGameSettingsContext()
@@ -47,12 +48,18 @@ function GamePhase(): ReactElement {
     [game.players]
   )
 
+  if (game.currentPhase === 'BIDDING') {
+    const latestAuction = game.auctions[game.currentTurn - 1]
+    if (latestAuction) {
+      return <Auction auction={latestAuction} />
+    }
+  }
+
   return (
     <>
       <Fade in={!transition} timeout={1000} unmountOnExit>
         <Box position="relative">
-          {game.currentPhase === 'FACTION_SELECT' ||
-          delayedCurrentPhase === 'FACTION_SELECT' ? (
+          {delayedCurrentPhase === 'FACTION_SELECT' ? (
             <FactionSelect />
           ) : (
             <CommonPhases

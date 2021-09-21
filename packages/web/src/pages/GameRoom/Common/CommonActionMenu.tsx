@@ -38,7 +38,10 @@ const getPrimaryAction = (
   const action =
     actions[
       playerActions.filter(
-        action => action.isRequired || action.type === 'SET_IS_NOT_READY'
+        action =>
+          action.isRequired ||
+          action.type === 'SET_IS_NOT_READY' ||
+          action.type === 'SKIP_BID'
       )[0]?.type as keyof typeof actions
     ]
   if (!action) return

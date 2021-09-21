@@ -62,11 +62,6 @@ const createActionHandlers = ({
       style: 'positive',
       label: actionLabels['SET_PLAYER_TREACHERY_CARDS']
     },
-    START_AUCTION: {
-      handler: () => dispatch('START_AUCTION', {}),
-      style: 'positive',
-      label: actionLabels['START_AUCTION']
-    },
     GO_TO_NEXUS: {
       handler: () => dispatch('GO_TO_NEXUS', {}),
       style: 'positive',
