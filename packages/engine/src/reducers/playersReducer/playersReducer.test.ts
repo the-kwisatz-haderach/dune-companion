@@ -4,10 +4,10 @@ import { Factions } from '../../models/faction'
 import { playerFixture } from '../../models/__fixtures__'
 import { initialGameState } from '../initialGameState'
 import { Game } from '../../models'
-import { getActionProperties } from '../../factories/getActionProperties'
+import { getActionProperties } from '../../actions/getActionProperties'
 import { createPlayer } from '../../factories'
 import { factions } from '../../dictionaries'
-import { getPhaseActionProperties } from '../../factories/getPhaseActionProperties'
+import { getPhaseActionProperties } from '../../actions/getPhaseActionProperties'
 
 jest.mock('@reduxjs/toolkit', () => ({
   ...(jest.requireActual('@reduxjs/toolkit') as object),
@@ -43,8 +43,7 @@ describe('playersReducer', () => {
           {
             test: {
               ...playerFixture,
-              faction: Factions.BENE_GESSERIT,
-              actions: [getActionProperties('SELECT_FACTION')]
+              faction: Factions.BENE_GESSERIT
             }
           },
           clientActions.SELECT_FACTION({
@@ -57,8 +56,7 @@ describe('playersReducer', () => {
           ...playerFixture,
           faction: Factions.EMPEROR,
           spice: factions.EMPEROR.startingSpice,
-          treacheryCards: factions.EMPEROR.startingItems,
-          actions: []
+          treacheryCards: factions.EMPEROR.startingItems
         }
       })
     })
@@ -70,8 +68,7 @@ describe('playersReducer', () => {
               ...playerFixture,
               faction: Factions.BENE_GESSERIT,
               spice: factions.BENE_GESSERIT.startingSpice,
-              treacheryCards: factions.BENE_GESSERIT.startingItems,
-              actions: []
+              treacheryCards: factions.BENE_GESSERIT.startingItems
             }
           },
           clientActions.SELECT_FACTION({
@@ -84,8 +81,7 @@ describe('playersReducer', () => {
           ...playerFixture,
           faction: null,
           spice: 0,
-          treacheryCards: 0,
-          actions: [getActionProperties('SELECT_FACTION')]
+          treacheryCards: 0
         }
       })
     })
@@ -97,15 +93,13 @@ describe('playersReducer', () => {
               ...playerFixture,
               faction: Factions.BENE_GESSERIT,
               spice: factions.BENE_GESSERIT.startingSpice,
-              treacheryCards: factions.BENE_GESSERIT.startingItems,
-              actions: []
+              treacheryCards: factions.BENE_GESSERIT.startingItems
             },
             otherTest: {
               ...playerFixture,
               faction: null,
               spice: 1,
-              treacheryCards: 5,
-              actions: []
+              treacheryCards: 5
             }
           },
           clientActions.SELECT_FACTION({
@@ -118,15 +112,13 @@ describe('playersReducer', () => {
           ...playerFixture,
           faction: null,
           spice: 0,
-          treacheryCards: 0,
-          actions: [getActionProperties('SELECT_FACTION')]
+          treacheryCards: 0
         },
         otherTest: {
           ...playerFixture,
           faction: null,
           spice: 1,
-          treacheryCards: 5,
-          actions: []
+          treacheryCards: 5
         }
       })
     })
@@ -306,8 +298,7 @@ describe('playersReducer', () => {
           {
             somePlayer: {
               ...playerFixture,
-              hasCompletedPhase: false,
-              actions: [getActionProperties('SET_IS_READY')]
+              hasCompletedPhase: false
             }
           },
           clientActions.SET_IS_READY({
@@ -317,8 +308,7 @@ describe('playersReducer', () => {
       ).toEqual({
         somePlayer: {
           ...playerFixture,
-          hasCompletedPhase: true,
-          actions: [getActionProperties('SET_IS_NOT_READY')]
+          hasCompletedPhase: true
         }
       })
     })
@@ -331,8 +321,7 @@ describe('playersReducer', () => {
           {
             somePlayer: {
               ...playerFixture,
-              hasCompletedPhase: true,
-              actions: [getActionProperties('SET_IS_NOT_READY')]
+              hasCompletedPhase: true
             }
           },
           clientActions.SET_IS_NOT_READY({
@@ -342,8 +331,7 @@ describe('playersReducer', () => {
       ).toEqual({
         somePlayer: {
           ...playerFixture,
-          hasCompletedPhase: false,
-          actions: [getActionProperties('SET_IS_READY')]
+          hasCompletedPhase: false
         }
       })
     })
@@ -374,20 +362,10 @@ describe('playersReducer', () => {
           ...playerFixture
         },
         anotherPlayer: {
-          ...playerFixture,
-          actions: [
-            getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
-              id: 'mockNanoId'
-            })
-          ]
+          ...playerFixture
         },
         thirdPlayer: {
-          ...playerFixture,
-          actions: [
-            getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
-              id: 'mockNanoId'
-            })
-          ]
+          ...playerFixture
         }
       })
     })
@@ -403,20 +381,10 @@ describe('playersReducer', () => {
                 ...playerFixture
               },
               anotherPlayer: {
-                ...playerFixture,
-                actions: [
-                  getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
-                    id: 'someAlliance'
-                  })
-                ]
+                ...playerFixture
               },
               thirdPlayer: {
-                ...playerFixture,
-                actions: [
-                  getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
-                    id: 'someAlliance'
-                  })
-                ]
+                ...playerFixture
               }
             },
             clientActions.RESPOND_TO_ALLIANCE_REQUEST({
@@ -430,16 +398,10 @@ describe('playersReducer', () => {
             ...playerFixture
           },
           anotherPlayer: {
-            ...playerFixture,
-            actions: []
+            ...playerFixture
           },
           thirdPlayer: {
-            ...playerFixture,
-            actions: [
-              getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
-                id: 'someAlliance'
-              })
-            ]
+            ...playerFixture
           }
         })
       })
@@ -450,20 +412,10 @@ describe('playersReducer', () => {
           playersReducer(
             {
               anotherPlayer: {
-                ...playerFixture,
-                actions: [
-                  getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
-                    id: 'someAlliance'
-                  })
-                ]
+                ...playerFixture
               },
               thirdPlayer: {
-                ...playerFixture,
-                actions: [
-                  getActionProperties('RESPOND_TO_ALLIANCE_REQUEST', {
-                    id: 'someAlliance'
-                  })
-                ]
+                ...playerFixture
               }
             },
             clientActions.RESPOND_TO_ALLIANCE_REQUEST({
@@ -474,12 +426,10 @@ describe('playersReducer', () => {
           )
         ).toEqual({
           anotherPlayer: {
-            ...playerFixture,
-            actions: []
+            ...playerFixture
           },
           thirdPlayer: {
-            ...playerFixture,
-            actions: []
+            ...playerFixture
           }
         })
       })
@@ -492,8 +442,7 @@ describe('playersReducer', () => {
         playersReducer(
           {
             test: {
-              ...playerFixture,
-              actions: [getActionProperties('SET_PLAYER_SPICE')]
+              ...playerFixture
             }
           },
           clientActions.SET_PLAYER_SPICE({ playerId: 'test', spice: 666 })
@@ -501,8 +450,7 @@ describe('playersReducer', () => {
       ).toEqual({
         test: {
           ...playerFixture,
-          spice: 666,
-          actions: []
+          spice: 666
         }
       })
     })
@@ -514,8 +462,7 @@ describe('playersReducer', () => {
         playersReducer(
           {
             test: {
-              ...playerFixture,
-              actions: [getActionProperties('SET_PLAYER_ORDER')]
+              ...playerFixture
             }
           },
           clientActions.SET_PLAYER_ORDER({
@@ -525,8 +472,7 @@ describe('playersReducer', () => {
         )
       ).toEqual({
         test: {
-          ...playerFixture,
-          actions: []
+          ...playerFixture
         }
       })
     })
@@ -538,8 +484,7 @@ describe('playersReducer', () => {
         playersReducer(
           {
             test: {
-              ...playerFixture,
-              actions: [getActionProperties('SET_FIRST_PLAYER')]
+              ...playerFixture
             }
           },
           clientActions.SET_FIRST_PLAYER({
@@ -549,8 +494,7 @@ describe('playersReducer', () => {
         )
       ).toEqual({
         test: {
-          ...playerFixture,
-          actions: []
+          ...playerFixture
         }
       })
     })
@@ -562,8 +506,7 @@ describe('playersReducer', () => {
         playersReducer(
           {
             test: {
-              ...playerFixture,
-              actions: [getActionProperties('SET_PLAYER_TREACHERY_CARDS')]
+              ...playerFixture
             }
           },
           clientActions.SET_PLAYER_TREACHERY_CARDS({
@@ -574,8 +517,7 @@ describe('playersReducer', () => {
       ).toEqual({
         test: {
           ...playerFixture,
-          treacheryCards: 3,
-          actions: []
+          treacheryCards: 3
         }
       })
     })
@@ -588,18 +530,15 @@ describe('playersReducer', () => {
             player1: {
               ...playerFixture,
               id: 'player1',
-              isAdmin: true,
-              actions: []
+              isAdmin: true
             },
             player2: {
               ...playerFixture,
-              id: 'player2',
-              actions: [getActionProperties('SET_PLAYER_TREACHERY_CARDS')]
+              id: 'player2'
             },
             player3: {
               ...playerFixture,
-              id: 'player3',
-              actions: []
+              id: 'player3'
             }
           },
           clientActions.GO_TO_NEXUS({
@@ -610,18 +549,15 @@ describe('playersReducer', () => {
         player1: {
           ...playerFixture,
           id: 'player1',
-          isAdmin: true,
-          actions: getPhaseActionProperties('NEXUS', true)
+          isAdmin: true
         },
         player2: {
           ...playerFixture,
-          id: 'player2',
-          actions: getPhaseActionProperties('NEXUS')
+          id: 'player2'
         },
         player3: {
           ...playerFixture,
-          id: 'player3',
-          actions: getPhaseActionProperties('NEXUS')
+          id: 'player3'
         }
       })
     })

@@ -1,4 +1,4 @@
-import { ClientActionType } from '../actions'
+import { ClientActionType } from '.'
 import { playerActionDetails } from '../dictionaries'
 import {
   DynamicPlayerActionProperties,

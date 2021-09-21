@@ -4,8 +4,6 @@ import {
   createNewTurnState,
   createNextPhaseState
 } from '../..'
-import { getActionProperties } from '../../factories/getActionProperties'
-import { getPhaseActionProperties } from '../../factories/getPhaseActionProperties'
 import { Factions, Game } from '../../models'
 import { playerFixture } from '../../models/__fixtures__'
 import { initialGameState } from '../initialGameState'
@@ -52,7 +50,6 @@ describe('actionSideEffectsReducer', () => {
             spice: 5,
             treacheryCards: 3,
             faction: Factions.FREMEN,
-            actions: [],
             hasCompletedPhase: true
           },
           anotherPlayer: {
@@ -63,8 +60,7 @@ describe('actionSideEffectsReducer', () => {
             spice: 2,
             treacheryCards: 1,
             faction: Factions.HOUSE_ATREIDES,
-            hasCompletedPhase: true,
-            actions: [getActionProperties('SET_IS_NOT_READY')]
+            hasCompletedPhase: true
           }
         }
       }
@@ -89,8 +85,7 @@ describe('actionSideEffectsReducer', () => {
             spice: 5,
             treacheryCards: 3,
             faction: Factions.FREMEN,
-            hasCompletedPhase: true,
-            actions: [getActionProperties('MARK_PHASE_STEP_NOT_COMPLETED')]
+            hasCompletedPhase: true
           },
           anotherPlayer: {
             ...playerFixture,
@@ -100,8 +95,7 @@ describe('actionSideEffectsReducer', () => {
             spice: 2,
             treacheryCards: 1,
             hasCompletedPhase: true,
-            faction: Factions.HOUSE_ATREIDES,
-            actions: []
+            faction: Factions.HOUSE_ATREIDES
           }
         }
       }
@@ -175,32 +169,16 @@ describe('actionSideEffectsReducer', () => {
           ...state,
           players: {
             somePlayer: {
-              ...state.players.somePlayer,
-              actions: [
-                getActionProperties('PLACE_BID'),
-                getActionProperties('SKIP_BID')
-              ]
+              ...state.players.somePlayer
             },
             anotherPlayer: {
-              ...state.players.anotherPlayer,
-              actions: [
-                getActionProperties('PLACE_BID'),
-                getActionProperties('SKIP_BID')
-              ]
+              ...state.players.anotherPlayer
             },
             thirdPlayer: {
-              ...state.players.thirdPlayer,
-              actions: [
-                getActionProperties('PLACE_BID'),
-                getActionProperties('SKIP_BID')
-              ]
+              ...state.players.thirdPlayer
             },
             fourthPlayer: {
-              ...state.players.fourthPlayer,
-              actions: [
-                getActionProperties('PLACE_BID'),
-                getActionProperties('SKIP_BID')
-              ]
+              ...state.players.fourthPlayer
             }
           },
           auctions: [

@@ -1,7 +1,7 @@
 import { firstRegularPhase } from '../dictionaries'
 import { Game } from '../models'
 import { initialGameState } from '../reducers/initialGameState'
-import { getInitialPhasePlayerState } from './getInitialPhasePlayerState'
+import { createNewPhasePlayerState } from './createNewPhasePlayerState'
 
 export const createNewTurnState = (state: Game): Game => ({
   ...state,
@@ -9,5 +9,5 @@ export const createNewTurnState = (state: Game): Game => ({
   currentTurn: state.currentTurn + 1,
   currentFirstPlayer: null,
   currentPhase: firstRegularPhase,
-  players: getInitialPhasePlayerState(state)
+  players: createNewPhasePlayerState(state.players)
 })

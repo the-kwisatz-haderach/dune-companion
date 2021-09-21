@@ -9,11 +9,7 @@ describe('createPlayer', () => {
       faction: null,
       spice: 0,
       treacheryCards: 0,
-      hasCompletedPhase: false,
-      actions: [
-        { type: 'UPDATE_PLAYER_NAME', isRequired: true },
-        { type: 'SELECT_FACTION', isRequired: true }
-      ]
+      hasCompletedPhase: false
     })
   })
   it('creates a player', () => {
@@ -24,11 +20,7 @@ describe('createPlayer', () => {
       faction: null,
       spice: 0,
       treacheryCards: 0,
-      hasCompletedPhase: false,
-      actions: [
-        { type: 'UPDATE_PLAYER_NAME', isRequired: true },
-        { type: 'SELECT_FACTION', isRequired: true }
-      ]
+      hasCompletedPhase: false
     })
   })
 })

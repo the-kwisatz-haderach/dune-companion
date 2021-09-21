@@ -9,7 +9,6 @@ export const createInitialPlayerConditions = (state: Game): Game => ({
       ...acc,
       [player.id]: {
         ...player,
-        actions: getPhaseActionProperties(firstRegularPhase, player.isAdmin),
         spice: player.faction
           ? factions[player.faction].startingSpice
           : player.spice,
