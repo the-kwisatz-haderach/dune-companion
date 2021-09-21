@@ -3,11 +3,29 @@ import { clientActions } from '../../actions'
 import { Game } from '../../models'
 import { initialGameState } from '../initialGameState'
 
-export const conditionsReducer = createReducer(
-  initialGameState.conditions,
-  (builder: ActionReducerMapBuilder<Game['conditions']>) =>
+export const maxPlayersReducer = createReducer(
+  initialGameState.maxPlayers,
+  (builder: ActionReducerMapBuilder<Game['maxPlayers']>) =>
     builder.addCase(
       clientActions.CREATE_GAME,
-      (_, action) => action.payload.conditions
+      (_, action) => action.payload.conditions.maxPlayers
+    )
+)
+
+export const maxTurnsReducer = createReducer(
+  initialGameState.maxTurns,
+  (builder: ActionReducerMapBuilder<Game['maxPlayers']>) =>
+    builder.addCase(
+      clientActions.CREATE_GAME,
+      (_, action) => action.payload.conditions.maxTurns
+    )
+)
+
+export const isAdvancedModeReducer = createReducer(
+  initialGameState.isAdvancedMode,
+  (builder: ActionReducerMapBuilder<Game['isAdvancedMode']>) =>
+    builder.addCase(
+      clientActions.CREATE_GAME,
+      (_, action) => action.payload.conditions.advancedMode
     )
 )

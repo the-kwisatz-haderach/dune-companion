@@ -5,7 +5,11 @@ import {
   createReducer,
   Reducer
 } from '@reduxjs/toolkit'
-import { conditionsReducer } from './conditionsReducer/conditionsReducer'
+import {
+  isAdvancedModeReducer,
+  maxTurnsReducer,
+  maxPlayersReducer
+} from './conditionsReducer/conditionsReducer'
 import { playerOrderReducer } from './playerOrderReducer/playerOrderReducer'
 import { playersReducer } from './playersReducer/playersReducer'
 import { auctionsReducer } from './auctionsReducer/auctionsReducer'
@@ -18,6 +22,7 @@ import { initialGameState } from './initialGameState'
 import { phaseStatesReducer } from './phaseStatesReducer/phaseStatesReducer'
 import { currentFirstPlayerReducer } from './currentFirstPlayerReducer/currentFirstPlayerReducer'
 import { currentPhaseReducer } from './currentPhaseReducer'
+import { isRunningTimerReducer } from './isRunningTimerReducer'
 
 const defaultBuilder = <T>(builder: ActionReducerMapBuilder<T>) =>
   builder.addDefaultCase(state => state)
@@ -26,7 +31,10 @@ const combinedReducer: Reducer<
   Game,
   ClientAction | HostAction
 > = combineReducers({
-  conditions: conditionsReducer,
+  isRunningTimer: isRunningTimerReducer,
+  isAdvancedMode: isAdvancedModeReducer,
+  maxPlayers: maxPlayersReducer,
+  maxTurns: maxTurnsReducer,
   playerOrder: playerOrderReducer,
   auctions: auctionsReducer,
   allianceRequests: allianceRequestsReducer,

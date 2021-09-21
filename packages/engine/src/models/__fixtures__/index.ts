@@ -7,5 +7,6 @@ export const playerFixture: Player = {
   spice: 0,
   treacheryCards: 0,
   faction: null,
-  actions: []
+  actions: [],
+  hasCompletedPhase: false
 }

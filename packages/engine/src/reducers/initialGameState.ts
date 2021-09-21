@@ -3,11 +3,10 @@ import { Game } from '../models'
 export const initialGameState: Game = {
   players: {},
   playerOrder: [],
-  conditions: {
-    advancedMode: false,
-    maxPlayers: 6,
-    maxTurns: 10
-  },
+  isAdvancedMode: false,
+  isRunningTimer: false,
+  maxPlayers: 6,
+  maxTurns: 10,
   currentTurn: 0,
   currentFirstPlayer: null,
   currentPhase: 'FACTION_SELECT',

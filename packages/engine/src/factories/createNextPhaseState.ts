@@ -7,11 +7,12 @@ export const createNextPhaseState = (state: Game): Game => {
   return {
     ...state,
     currentPhase: nextPhase,
-    players: Object.values(state.players).reduce(
+    players: Object.values(state.players).reduce<Game['players']>(
       (players, player) => ({
         ...players,
         [player.id]: {
           ...player,
+          hasCompletedPhase: false,
           actions: getPhaseActionProperties(nextPhase, player.isAdmin)
         }
       }),

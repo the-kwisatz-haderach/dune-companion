@@ -23,7 +23,11 @@ describe('playersReducer', () => {
           clientActions.CREATE_GAME({
             playerId: 'test',
             roomId: 'someId',
-            conditions: initialGameState.conditions
+            conditions: {
+              maxTurns: initialGameState.maxTurns,
+              advancedMode: initialGameState.isAdvancedMode,
+              maxPlayers: initialGameState.maxPlayers
+            }
           })
         )
       ).toEqual({
@@ -296,12 +300,13 @@ describe('playersReducer', () => {
     })
   })
   describe('SET_IS_READY', () => {
-    it('gives the player an option to undo', () => {
+    it('updates the player state', () => {
       expect(
         playersReducer(
           {
             somePlayer: {
               ...playerFixture,
+              hasCompletedPhase: false,
               actions: [getActionProperties('SET_IS_READY')]
             }
           },
@@ -312,6 +317,7 @@ describe('playersReducer', () => {
       ).toEqual({
         somePlayer: {
           ...playerFixture,
+          hasCompletedPhase: true,
           actions: [getActionProperties('SET_IS_NOT_READY')]
         }
       })
@@ -319,12 +325,13 @@ describe('playersReducer', () => {
   })
 
   describe('SET_IS_NOT_READY', () => {
-    it('requires the player to set ready state again', () => {
+    it('updates the player state', () => {
       expect(
         playersReducer(
           {
             somePlayer: {
               ...playerFixture,
+              hasCompletedPhase: true,
               actions: [getActionProperties('SET_IS_NOT_READY')]
             }
           },
@@ -335,6 +342,7 @@ describe('playersReducer', () => {
       ).toEqual({
         somePlayer: {
           ...playerFixture,
+          hasCompletedPhase: false,
           actions: [getActionProperties('SET_IS_READY')]
         }
       })

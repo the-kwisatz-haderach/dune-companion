@@ -15,5 +15,6 @@ export const createPlayer = (
   faction: null,
   spice: 0,
   treacheryCards: 0,
+  hasCompletedPhase: false,
   actions: getPhaseActionProperties('FACTION_SELECT', options?.isAdmin)
 })

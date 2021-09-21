@@ -1,7 +1,6 @@
-import { Factions } from './faction'
 import { ClientActionType } from '../actions'
 
-export type CommonProps = { isRequired?: boolean }
+export type CommonProps = { label: string }
 
 export type StaticPlayerActionProperties = Partial<
   Record<ClientActionType, CommonProps>
@@ -18,13 +17,7 @@ export type PlayerAction<T extends ClientActionType = ClientActionType> = {
     ? DynamicPlayerActionProperties[T]
     : never)
 
-export type Player = {
-  id: string
-  isAdmin: boolean
-  faction: Factions | null
-  name: string
-  spice: number
-  treacheryCards: number
-  actions: PlayerAction[]
-  hasCompletedPhase: boolean
+export type PlayerActionCollection = {
+  primary: PlayerAction[]
+  secondary: PlayerAction[]
 }

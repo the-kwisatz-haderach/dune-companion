@@ -12,8 +12,7 @@ export const actionSideEffectsReducer = (
 ): Game => {
   const players = Object.values(state.players)
   const isOngoing =
-    players.some(player => player.actions.some(action => action.isRequired)) ||
-    players.length === 0
+    players.some(player => !player.hasCompletedPhase) || players.length === 0
   if (isOngoing) return state
   switch (state.currentPhase) {
     case 'BIDDING': {
@@ -23,7 +22,7 @@ export const actionSideEffectsReducer = (
     }
     case 'SETUP':
     case 'MENTAT_PAUSE': {
-      if (state.currentTurn === state.conditions.maxTurns) {
+      if (state.currentTurn === state.maxTurns) {
         return createFinishedGameState(state)
       }
       return createNewTurnState(state)

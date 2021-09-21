@@ -85,6 +85,7 @@ export const playersReducer = createReducer(
         delete state[action.payload.playerId]
       })
       .addCase(clientActions.SET_IS_READY, (state, action) => {
+        state[action.payload.playerId].hasCompletedPhase = true
         state[action.payload.playerId].actions = removeByType(action.type)(
           state[action.payload.playerId].actions
         )
@@ -93,6 +94,7 @@ export const playersReducer = createReducer(
         )
       })
       .addCase(clientActions.SET_IS_NOT_READY, (state, action) => {
+        state[action.payload.playerId].hasCompletedPhase = false
         state[action.payload.playerId].actions = removeByType(action.type)(
           state[action.payload.playerId].actions
         )
