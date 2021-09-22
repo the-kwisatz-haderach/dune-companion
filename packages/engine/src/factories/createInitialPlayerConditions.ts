@@ -1,6 +1,6 @@
 import { factions, firstRegularPhase } from '../dictionaries'
 import { Game } from '../models'
-import { getPhaseActionProperties } from './getPhaseActionProperties'
+import { getPhaseActionProperties } from '../actions/getPhaseActionProperties'
 
 export const createInitialPlayerConditions = (state: Game): Game => ({
   ...state,
