@@ -4,7 +4,6 @@ export const initialGameState: Game = {
   players: {},
   playerOrder: [],
   isAdvancedMode: false,
-  isRunningTimer: false,
   maxPlayers: 6,
   maxTurns: 10,
   currentTurn: 0,

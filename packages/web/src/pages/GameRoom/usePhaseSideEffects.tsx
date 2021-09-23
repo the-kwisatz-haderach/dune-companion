@@ -16,15 +16,11 @@ export const usePhaseSideEffects = (currentPhase: Phases) => {
         break
       }
       case 'BIDDING': {
-        if (player.actions.some(action => action.type === 'SET_PLAYER_SPICE')) {
+        if (!player.hasCompletedPhase) {
           showPrompt('SetPlayerSpicePrompt', {})
           break
         }
-        if (
-          player.actions.some(
-            action => action.type === 'SET_PLAYER_TREACHERY_CARDS'
-          )
-        ) {
+        if (player.hasCompletedPhase) {
           setTimeout(() => {
             showPrompt('SetPlayerTreacheryCardsPrompt', {})
           }, 1000)
@@ -32,5 +28,5 @@ export const usePhaseSideEffects = (currentPhase: Phases) => {
         }
       }
     }
-  }, [showPrompt, currentPhase, player?.name, player?.actions])
+  }, [showPrompt, currentPhase, player?.name, player.hasCompletedPhase])
 }

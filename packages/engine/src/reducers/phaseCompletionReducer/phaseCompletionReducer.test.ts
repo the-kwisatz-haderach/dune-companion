@@ -7,9 +7,9 @@ import {
 import { Factions, Game } from '../../models'
 import { playerFixture } from '../../models/__fixtures__'
 import { initialGameState } from '../initialGameState'
-import { actionSideEffectsReducer } from './actionSideEffectsReducer'
+import { phaseCompletionReducer } from './phaseCompletionReducer'
 
-describe('actionSideEffectsReducer', () => {
+describe('phaseCompletionReducer', () => {
   describe("when some players haven't completed the phase", () => {
     it('returns the input state', () => {
       const state: Game = {
@@ -26,14 +26,12 @@ describe('actionSideEffectsReducer', () => {
           }
         }
       }
-      expect(actionSideEffectsReducer(state)).toEqual(state)
+      expect(phaseCompletionReducer(state)).toEqual(state)
     })
   })
   describe('when there are no players', () => {
     it('returns the input state', () => {
-      expect(actionSideEffectsReducer(initialGameState)).toEqual(
-        initialGameState
-      )
+      expect(phaseCompletionReducer(initialGameState)).toEqual(initialGameState)
     })
   })
   describe('when FACTION_SELECT is complete', () => {
@@ -64,9 +62,7 @@ describe('actionSideEffectsReducer', () => {
           }
         }
       }
-      expect(actionSideEffectsReducer(state)).toEqual(
-        createNextPhaseState(state)
-      )
+      expect(phaseCompletionReducer(state)).toEqual(createNextPhaseState(state))
     })
   })
 
@@ -99,7 +95,7 @@ describe('actionSideEffectsReducer', () => {
           }
         }
       }
-      expect(actionSideEffectsReducer(state)).toEqual(createNewTurnState(state))
+      expect(phaseCompletionReducer(state)).toEqual(createNewTurnState(state))
     })
   })
 
@@ -120,6 +116,7 @@ describe('actionSideEffectsReducer', () => {
           auctions: [
             {
               isDone: true,
+              isRunning: false,
               participants: [
                 {
                   ...playerFixture,
@@ -182,7 +179,7 @@ describe('actionSideEffectsReducer', () => {
             }
           }
         }
-        expect(actionSideEffectsReducer(state)).toEqual(
+        expect(phaseCompletionReducer(state)).toEqual(
           createNewAuctionState(state)
         )
       })
@@ -235,7 +232,7 @@ describe('actionSideEffectsReducer', () => {
             }
           }
         }
-        expect(actionSideEffectsReducer(state)).toEqual(
+        expect(phaseCompletionReducer(state)).toEqual(
           createNewAuctionState(state)
         )
       })
@@ -277,9 +274,7 @@ describe('actionSideEffectsReducer', () => {
           }
         }
       }
-      expect(actionSideEffectsReducer(state)).toEqual(
-        createNextPhaseState(state)
-      )
+      expect(phaseCompletionReducer(state)).toEqual(createNextPhaseState(state))
     })
   })
   describe('when MENTAT PAUSE is completed', () => {
@@ -323,7 +318,7 @@ describe('actionSideEffectsReducer', () => {
           }
         }
       }
-      expect(actionSideEffectsReducer(state)).toEqual(createNewTurnState(state))
+      expect(phaseCompletionReducer(state)).toEqual(createNewTurnState(state))
     })
 
     describe('when the last turn has been completed', () => {
@@ -344,7 +339,7 @@ describe('actionSideEffectsReducer', () => {
             }
           }
         }
-        expect(actionSideEffectsReducer(state)).toEqual(
+        expect(phaseCompletionReducer(state)).toEqual(
           createFinishedGameState(state)
         )
       })
@@ -367,7 +362,7 @@ describe('actionSideEffectsReducer', () => {
             }
           }
         }
-        expect(actionSideEffectsReducer(state)).toEqual(
+        expect(phaseCompletionReducer(state)).toEqual(
           createNextPhaseState(state)
         )
       })

@@ -29,4 +29,7 @@ export const phaseStatesReducer = createReducer(
           }
         })
       })
+      .addCase(clientActions.SET_FIRST_PLAYER, state => {
+        state.STORM.isFirstPlayerDetermined = true
+      })
 )

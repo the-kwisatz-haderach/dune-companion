@@ -1,5 +1,5 @@
 import { ClientActionType } from '.'
-import { playerActionDetails } from '../dictionaries'
+import { playerActionProperties } from '../dictionaries'
 import {
   DynamicPlayerActionProperties,
   PlayerAction,
@@ -23,7 +23,7 @@ export function getActionProperties<T extends ClientActionType>(
 ): PlayerAction<T> {
   return {
     type,
-    ...playerActionDetails[type],
+    ...playerActionProperties[type],
     ...additional
   }
 }

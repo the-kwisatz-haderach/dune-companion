@@ -13,7 +13,6 @@ export type Game = {
   playerOrder: Array<Player['id']>
   players: Record<Player['id'], Player>
   auctions: Auction[]
-  isRunningTimer: boolean
   allianceRequests: AllianceRequest[]
   alliances: Alliance[]
   phaseStates: PhaseStates

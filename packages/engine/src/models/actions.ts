@@ -1,10 +1,12 @@
 import { ClientActionType } from '../actions'
 
-export type CommonProps = { label: string }
+export type CommonProps = {
+  label: string
+  style: 'positive' | 'negative' | 'neutral'
+  actionType: 'primary' | 'secondary'
+}
 
-export type StaticPlayerActionProperties = Partial<
-  Record<ClientActionType, CommonProps>
->
+export type StaticPlayerActionProperties = Record<ClientActionType, CommonProps>
 
 export type DynamicPlayerActionProperties = {
   RESPOND_TO_ALLIANCE_REQUEST: { id: string }

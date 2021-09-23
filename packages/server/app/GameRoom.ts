@@ -24,6 +24,15 @@ const createPersistStateMiddleware = (
   return result
 }
 
+const createStateBroadcastMiddleware = (
+  broadcaster: (game: Game) => Promise<void>
+): Middleware<{}, Game> => ({ getState }) => next => async action => {
+  const result = next(action)
+  const state = getState()
+  await broadcaster(state)
+  return result
+}
+
 type GameRoomDependencies = {
   initialGameState: Game
   password?: string
@@ -44,15 +53,13 @@ export class GameRoom {
     this.store = createStore(
       rootReducer,
       initialGameState,
-      applyMiddleware(createPersistStateMiddleware(persistGame))
-    )
-
-    this.store.subscribe(async () => {
-      const updatedGame = this.store.getState()
-      await this.broadcastMessage(
-        hostActions.GAME_UPDATED({ game: updatedGame })
+      applyMiddleware(
+        createPersistStateMiddleware(persistGame),
+        createStateBroadcastMiddleware(updatedGame =>
+          this.broadcastMessage(hostActions.GAME_UPDATED({ game: updatedGame }))
+        )
       )
-    })
+    )
   }
 
   updateGame(action: ClientAction) {
@@ -90,7 +97,7 @@ export class GameRoom {
     ...payload
   }: { socket: WebSocket } & ClientAction<'JOIN_GAME'>['payload']) {
     const actionSender = createActionSender(socket)
-    if (this.size >= this.store.getState().conditions.maxPlayers) {
+    if (this.size >= this.store.getState().maxPlayers) {
       return await actionSender(
         hostActions.SHOW_NOTIFICATION({
           message: 'Game room is already full.',

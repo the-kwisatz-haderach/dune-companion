@@ -27,14 +27,14 @@ function GamePhase(): ReactElement {
       createRuleFilter({
         currentPhase: game.currentPhase,
         currentTurn: game.currentTurn,
-        advancedMode: game.conditions.advancedMode,
+        advancedMode: game.isAdvancedMode,
         playerFaction: player.faction,
         showAllFactions: showAllFactionRules
       }),
     [
       game.currentPhase,
       game.currentTurn,
-      game.conditions.advancedMode,
+      game.isAdvancedMode,
       player.faction,
       showAllFactionRules
     ]

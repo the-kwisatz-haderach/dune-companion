@@ -18,6 +18,7 @@ export function createAuction(game: Game): Auction {
 
   return {
     isDone: false,
+    isRunning: false,
     participants,
     rounds: [
       {

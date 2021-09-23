@@ -48,9 +48,11 @@ export const Auction = ({ auction }: Props) => {
         <Grid item xs={6}>
           <Typography variant="h5">Bidding</Typography>
           {auction.participants
-            .filter(participant => !currentRound.skipped.includes(participant))
-            .map(playerId => (
-              <Typography>{game.players[playerId].name}</Typography>
+            .filter(
+              participant => !currentRound.skipped.includes(participant.id)
+            )
+            .map(player => (
+              <Typography>{game.players[player.id].name}</Typography>
             ))}
         </Grid>
         <Grid item xs={6}>
@@ -64,7 +66,7 @@ export const Auction = ({ auction }: Props) => {
           <Typography>
             {
               game.players[
-                auction.participants[currentRound.currentBidderIndex]
+                auction.participants[currentRound.currentBidderIndex].id
               ].name
             }
           </Typography>

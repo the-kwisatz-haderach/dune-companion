@@ -1,4 +1,4 @@
-import { actionLabels } from '@dune-companion/engine'
+import { playerActionProperties } from '@dune-companion/engine'
 import { useMemo } from 'react'
 import usePromptContext from '../../contexts/PromptContext'
 import { useGameDispatch } from './useGameDispatch'
@@ -23,54 +23,57 @@ const createActionHandlers = ({
 }) =>
   ({
     SET_IS_READY: {
-      handler: () => dispatch('SET_IS_READY', {}),
-      style: 'positive',
-      label: actionLabels['SET_IS_READY']
+      ...playerActionProperties['SET_IS_READY'],
+      handler: () => dispatch('SET_IS_READY', {})
     },
     SET_IS_NOT_READY: {
-      handler: () => dispatch('SET_IS_NOT_READY', {}),
-      style: 'negative',
-      label: actionLabels['SET_IS_NOT_READY']
+      ...playerActionProperties['SET_IS_NOT_READY'],
+      handler: () => dispatch('SET_IS_NOT_READY', {})
     },
     SET_PLAYER_ORDER: {
-      handler: () => showPrompt('SetPlayerOrderPrompt', {}),
-      style: 'positive',
-      label: actionLabels['SET_PLAYER_ORDER']
+      ...playerActionProperties['SET_PLAYER_ORDER'],
+      handler: () => showPrompt('SetPlayerOrderPrompt', {})
     },
     UPDATE_PLAYER_NAME: {
-      handler: () => showPrompt('PlayerSetupPrompt', {}),
-      style: 'positive',
-      label: actionLabels['UPDATE_PLAYER_NAME']
+      ...playerActionProperties['UPDATE_PLAYER_NAME'],
+      handler: () => showPrompt('PlayerSetupPrompt', {})
     },
     SET_FIRST_PLAYER: {
-      handler: () => showPrompt('SetCurrentFirstPlayerPrompt', {}),
-      style: 'positive',
-      label: actionLabels['SET_FIRST_PLAYER']
+      ...playerActionProperties['SET_FIRST_PLAYER'],
+      handler: () => showPrompt('SetCurrentFirstPlayerPrompt', {})
     },
     LEAVE_GAME: {
-      handler: () => dispatch('LEAVE_GAME', {}),
-      style: 'negative',
-      label: actionLabels['LEAVE_GAME']
+      ...playerActionProperties['LEAVE_GAME'],
+      handler: () => dispatch('LEAVE_GAME', {})
     },
     SET_PLAYER_SPICE: {
-      handler: () => showPrompt('SetPlayerSpicePrompt', {}),
-      style: 'positive',
-      label: actionLabels['SET_PLAYER_SPICE']
+      ...playerActionProperties['SET_PLAYER_SPICE'],
+      handler: () => showPrompt('SetPlayerSpicePrompt', {})
     },
     SET_PLAYER_TREACHERY_CARDS: {
-      handler: () => showPrompt('SetPlayerTreacheryCardsPrompt', {}),
-      style: 'positive',
-      label: actionLabels['SET_PLAYER_TREACHERY_CARDS']
+      ...playerActionProperties['SET_PLAYER_TREACHERY_CARDS'],
+      handler: () => showPrompt('SetPlayerTreacheryCardsPrompt', {})
     },
     GO_TO_NEXUS: {
-      handler: () => dispatch('GO_TO_NEXUS', {}),
-      style: 'positive',
-      label: actionLabels['GO_TO_NEXUS']
+      ...playerActionProperties['GO_TO_NEXUS'],
+      handler: () => dispatch('GO_TO_NEXUS', {})
     },
     SKIP_BID: {
-      handler: () => dispatch('SKIP_BID', {}),
-      style: 'negative',
-      label: actionLabels['SKIP_BID']
+      ...playerActionProperties['SKIP_BID'],
+      handler: () => dispatch('SKIP_BID', {})
+    },
+    REQUEST_ALLIANCE: {
+      ...playerActionProperties['REQUEST_ALLIANCE'],
+      handler: () =>
+        showPrompt('SimplePrompt', {
+          title: 'Request Alliance',
+          closable: true,
+          children: 'Hello',
+          primaryAction: {
+            label: 'Send request',
+            onClick: () => console.log('clicked me')
+          }
+        })
     }
     // SET_ADMIN: {
     //   handler: (id: string) => dispatch('SET_ADMIN', { id }),
@@ -81,11 +84,6 @@ const createActionHandlers = ({
     //   handler: () => dispatch('RESPOND_TO_ALLIANCE_REQUEST', {}),
     //   style: 'positive',
     //   label: actionLabels['RESPOND_TO_ALLIANCE_REQUEST']
-    // },
-    // REQUEST_ALLIANCE: {
-    //   handler: () => dispatch('REQUEST_ALLIANCE', {}),
-    //   style: 'positive',
-    //   label: actionLabels['REQUEST_ALLIANCE']
     // },
     // SELECT_FACTION: {
     //   handler: () => dispatch('SELECT_FACTION', {}),

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useGameActions, usePlayer } from '../../../dune-react'
+import { useGame, useGameActions, usePlayer } from '../../../dune-react'
 import PlayerOrderIcon from '@material-ui/icons/FormatListNumbered'
 import FirstPlayerIcon from '@material-ui/icons/PlusOne'
 import useGameSettingsContext from '../../../contexts/GameSettingsContext/GameSettingsContext'
@@ -7,7 +7,7 @@ import {
   GameActionMenu,
   GameActionMenuProps
 } from '../../../components/GameActionMenu'
-import { Player } from '@dune-companion/engine'
+import { getPhaseActionProperties } from '@dune-companion/engine'
 
 const getSecondaryActions = (
   actions: ReturnType<typeof useGameActions>,
@@ -31,30 +31,10 @@ const getSecondaryActions = (
   return secondaryActions
 }
 
-const getPrimaryAction = (
-  actions: ReturnType<typeof useGameActions>,
-  playerActions: Player['actions']
-) => {
-  const action =
-    actions[
-      playerActions.filter(
-        action =>
-          action.isRequired ||
-          action.type === 'SET_IS_NOT_READY' ||
-          action.type === 'SKIP_BID'
-      )[0]?.type as keyof typeof actions
-    ]
-  if (!action) return
-  return {
-    label: action.label,
-    onClick: action.handler,
-    style: action.style
-  }
-}
-
 export const CommonActionMenu = () => {
   const player = usePlayer()
   const actions = useGameActions()
+  const game = useGame()
   const { showAllFactionRules, dispatch } = useGameSettingsContext()
 
   const settingsMenu: GameActionMenuProps['settingsMenu'] = useMemo(
@@ -74,14 +54,33 @@ export const CommonActionMenu = () => {
   )
 
   const secondaryActions: GameActionMenuProps['secondaryActions'] = useMemo(
-    () => getSecondaryActions(actions, player.isAdmin),
-    [actions, player.isAdmin]
+    () =>
+      getPhaseActionProperties(game.currentPhase, player.isAdmin)
+        // .filter(action => action.actionType === 'secondary')
+        .map(action => {
+          const currentAction = actions[action.type as keyof typeof actions]
+          return {
+            label: currentAction?.label,
+            onClick: currentAction?.handler,
+            style: currentAction?.style
+          }
+        }),
+    [actions, player.isAdmin, game.currentPhase]
   )
 
-  const primaryAction = useMemo(
-    () => getPrimaryAction(actions, player.actions),
-    [actions, player.actions]
-  )
+  console.log(actions)
+  console.log(getPhaseActionProperties(game.currentPhase, player.isAdmin))
+
+  const primaryAction: GameActionMenuProps['primaryAction'] = useMemo(() => {
+    const actionKey: keyof typeof actions = player.hasCompletedPhase
+      ? 'SET_IS_NOT_READY'
+      : 'SET_IS_READY'
+    return {
+      label: actions[actionKey].label,
+      onClick: actions[actionKey].handler,
+      style: actions[actionKey].style
+    }
+  }, [actions, player.hasCompletedPhase])
 
   return (
     <GameActionMenu

@@ -4,6 +4,9 @@ import { createNewPhasePlayerState } from './createNewPhasePlayerState'
 
 export const createNextPhaseState = (state: Game): Game => ({
   ...state,
-  currentPhase: phaseOrder[phaseOrder.indexOf(state.currentPhase) + 1],
+  currentPhase:
+    state.currentPhase === 'NEXUS'
+      ? 'CHOAM_CHARITY'
+      : phaseOrder[phaseOrder.indexOf(state.currentPhase) + 1],
   players: createNewPhasePlayerState(state.players)
 })

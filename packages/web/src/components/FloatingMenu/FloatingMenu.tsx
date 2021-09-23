@@ -17,7 +17,8 @@ type Action = {
   selected?: boolean
   disabled?: boolean
   selectable?: boolean
-  style?: 'positive' | 'negative'
+  actionType?: 'primary' | 'secondary'
+  style?: 'positive' | 'negative' | 'neutral'
 }
 
 export type Props = {

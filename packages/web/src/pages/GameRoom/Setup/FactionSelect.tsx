@@ -147,7 +147,7 @@ export default function FactionSelect(): ReactElement {
         <Section heading="Phase Advantages">
           <FactionAdvantages
             faction={currentFactionKey}
-            isAdvancedMode={game.conditions.advancedMode}
+            isAdvancedMode={game.isAdvancedMode}
           />
         </Section>
         <Section heading="Common Advantages">
@@ -155,8 +155,7 @@ export default function FactionSelect(): ReactElement {
             {currentFaction.advantages
               .filter(
                 rule =>
-                  (game.conditions.advancedMode && rule.isAdvanced) ||
-                  !rule.isAdvanced
+                  (game.isAdvancedMode && rule.isAdvanced) || !rule.isAdvanced
               )
               .map(rule => (
                 <Card
@@ -168,7 +167,7 @@ export default function FactionSelect(): ReactElement {
                   body={rule.description}
                 />
               ))}
-            {game.conditions.advancedMode && (
+            {game.isAdvancedMode && (
               <Card
                 title="Karama Power"
                 meta="Faction rule"

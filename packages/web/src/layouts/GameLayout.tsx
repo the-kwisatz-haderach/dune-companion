@@ -33,7 +33,7 @@ export const GameLayout: React.FC = ({ children }) => {
         <Slide direction="down" in={!transition}>
           <div className={classes.conditionsMenu}>
             <ConditionsMenu
-              maxTurns={game.conditions.maxTurns}
+              maxTurns={game.maxTurns}
               currentFirstPlayer={
                 game.currentFirstPlayer !== null
                   ? game.players[game.playerOrder[game.currentFirstPlayer]].name

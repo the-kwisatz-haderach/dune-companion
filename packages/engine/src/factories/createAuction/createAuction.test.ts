@@ -6,6 +6,7 @@ describe('createAuction', () => {
   it('returns an auction based on the current game state', () => {
     expect(createAuction(initialGameState)).toEqual({
       isDone: false,
+      isRunning: false,
       participants: [],
       rounds: [
         {
@@ -41,6 +42,7 @@ describe('createAuction', () => {
       })
     ).toEqual({
       isDone: false,
+      isRunning: false,
       participants: [
         {
           ...playerFixture,
@@ -88,6 +90,7 @@ describe('createAuction', () => {
       })
     ).toEqual({
       isDone: false,
+      isRunning: false,
       participants: [
         {
           ...playerFixture,
@@ -136,6 +139,7 @@ describe('createAuction', () => {
       })
     ).toEqual({
       isDone: false,
+      isRunning: false,
       participants: [
         {
           ...playerFixture,

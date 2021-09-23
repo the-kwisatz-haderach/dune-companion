@@ -1,6 +1,5 @@
 export * from './cities'
 export * from './factions'
 export * from './phases'
-export * from './actionLabels'
-export * from './playerActionDetails'
+export * from './playerActionProperties'
 export * from './rules'
