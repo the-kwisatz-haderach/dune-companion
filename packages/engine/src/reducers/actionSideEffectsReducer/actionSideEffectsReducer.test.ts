@@ -120,7 +120,24 @@ describe('actionSideEffectsReducer', () => {
           auctions: [
             {
               isDone: true,
-              participants: ['somePlayer', 'anotherPlayer'],
+              participants: [
+                {
+                  ...playerFixture,
+                  isAdmin: true,
+                  id: 'somePlayer',
+                  spice: 5,
+                  treacheryCards: 2,
+                  hasCompletedPhase: true
+                },
+                {
+                  ...playerFixture,
+                  isAdmin: false,
+                  id: 'anotherPlayer',
+                  spice: 1,
+                  hasCompletedPhase: true,
+                  treacheryCards: 3
+                }
+              ],
               rounds: [
                 {
                   bids: [],
@@ -165,42 +182,9 @@ describe('actionSideEffectsReducer', () => {
             }
           }
         }
-        expect(actionSideEffectsReducer(state)).toEqual({
-          ...state,
-          players: {
-            somePlayer: {
-              ...state.players.somePlayer
-            },
-            anotherPlayer: {
-              ...state.players.anotherPlayer
-            },
-            thirdPlayer: {
-              ...state.players.thirdPlayer
-            },
-            fourthPlayer: {
-              ...state.players.fourthPlayer
-            }
-          },
-          auctions: [
-            ...state.auctions,
-            {
-              isDone: false,
-              participants: [
-                'anotherPlayer',
-                'thirdPlayer',
-                'fourthPlayer',
-                'somePlayer'
-              ],
-              rounds: [
-                {
-                  bids: [],
-                  skipped: [],
-                  currentBidderIndex: 0
-                }
-              ]
-            }
-          ]
-        })
+        expect(actionSideEffectsReducer(state)).toEqual(
+          createNewAuctionState(state)
+        )
       })
       it("doesn't add players who already have maximum number of treachery cards", () => {
         const state: Game = {

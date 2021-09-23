@@ -1,7 +1,7 @@
-import { Factions, Game, Auction } from '../models'
+import { Factions, Player, Game, Auction } from '../../models'
 
 export function createAuction(game: Game): Auction {
-  const participants: string[] = []
+  const participants: Player[] = []
   for (let i = 0; i < game.playerOrder.length; i++) {
     const playerId =
       game.playerOrder[
@@ -12,9 +12,10 @@ export function createAuction(game: Game): Auction {
       player.treacheryCards < 4 ||
       (player.faction === Factions.HOUSE_HARKONNEN && player.treacheryCards < 8)
     ) {
-      participants.push(playerId)
+      participants.push(player)
     }
   }
+
   return {
     isDone: false,
     participants,

@@ -1,8 +1,9 @@
 import { Player } from '.'
 
 export type Auction = {
-  participants: Player['id'][]
+  participants: Player[]
   isDone: boolean
+  isRunning: boolean
   rounds: AuctionRound[]
 }
 
