@@ -20,9 +20,9 @@ export function createAuction(game: Game): Auction {
     isDone: false,
     isRunning: false,
     participants,
+    currentBidderIndex: 0,
     rounds: [
       {
-        currentBidderIndex: 0,
         bids: [],
         skipped: []
       }

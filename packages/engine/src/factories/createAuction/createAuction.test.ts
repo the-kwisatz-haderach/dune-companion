@@ -8,9 +8,9 @@ describe('createAuction', () => {
       isDone: false,
       isRunning: false,
       participants: [],
+      currentBidderIndex: 0,
       rounds: [
         {
-          currentBidderIndex: 0,
           bids: [],
           skipped: []
         }
@@ -55,9 +55,9 @@ describe('createAuction', () => {
           treacheryCards: 1
         }
       ],
+      currentBidderIndex: 0,
       rounds: [
         {
-          currentBidderIndex: 0,
           bids: [],
           skipped: []
         }
@@ -104,9 +104,9 @@ describe('createAuction', () => {
           treacheryCards: 1
         }
       ],
+      currentBidderIndex: 0,
       rounds: [
         {
-          currentBidderIndex: 0,
           bids: [],
           skipped: []
         }
@@ -153,9 +153,9 @@ describe('createAuction', () => {
           faction: Factions.HOUSE_HARKONNEN
         }
       ],
+      currentBidderIndex: 0,
       rounds: [
         {
-          currentBidderIndex: 0,
           bids: [],
           skipped: []
         }

@@ -3,7 +3,7 @@ import { ClientActionType } from '../actions'
 export type CommonProps = {
   label: string
   style: 'positive' | 'negative' | 'neutral'
-  actionType: 'primary' | 'secondary'
+  isPrimary: boolean
 }
 
 export type StaticPlayerActionProperties = Record<ClientActionType, CommonProps>

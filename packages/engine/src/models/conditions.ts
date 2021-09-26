@@ -1,5 +1,5 @@
 export type Conditions = {
-  advancedMode: boolean
+  isAdvancedMode: boolean
   maxPlayers: number
   maxTurns: number
 }

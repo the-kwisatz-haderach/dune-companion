@@ -26,6 +26,6 @@ export const isAdvancedModeReducer = createReducer(
   (builder: ActionReducerMapBuilder<Game['isAdvancedMode']>) =>
     builder.addCase(
       clientActions.CREATE_GAME,
-      (_, action) => action.payload.conditions.advancedMode
+      (_, action) => action.payload.conditions.isAdvancedMode
     )
 )

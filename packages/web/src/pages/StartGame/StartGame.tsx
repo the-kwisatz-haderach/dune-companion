@@ -76,7 +76,7 @@ export default function StartGame(): ReactElement {
   const [password, setPassword] = useState('')
   const [maxPlayers, setMaxPlayers] = useState(4)
   const [maxTurns, setMaxTurns] = useState(10)
-  const [advancedMode, setAdvancedMode] = useState(false)
+  const [isAdvancedMode, setIsAdvancedMode] = useState(false)
   const [joinRoomId, setJoinRoomId] = useState('')
   const [joinPassword, setJoinPassword] = useState('')
 
@@ -90,7 +90,7 @@ export default function StartGame(): ReactElement {
       roomId,
       password,
       conditions: {
-        advancedMode,
+        isAdvancedMode,
         maxPlayers,
         maxTurns
       }
@@ -169,8 +169,8 @@ export default function StartGame(): ReactElement {
               Advanced Mode
               <Switch
                 color="primary"
-                checked={advancedMode}
-                onChange={e => setAdvancedMode(e.target.checked)}
+                checked={isAdvancedMode}
+                onChange={e => setIsAdvancedMode(e.target.checked)}
               />
             </InputLabel>
             <Typography variant="body2">

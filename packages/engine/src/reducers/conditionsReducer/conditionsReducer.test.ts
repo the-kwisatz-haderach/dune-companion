@@ -17,7 +17,7 @@ describe('isAdvancedModeReducer', () => {
           conditions: {
             maxPlayers: 4,
             maxTurns: 5,
-            advancedMode: true
+            isAdvancedMode: true
           }
         })
       )
@@ -35,7 +35,7 @@ describe('maxPlayersReducer', () => {
           conditions: {
             maxPlayers: 4,
             maxTurns: 5,
-            advancedMode: true
+            isAdvancedMode: true
           }
         })
       )
@@ -53,7 +53,7 @@ describe('maxTurnsReducer', () => {
           conditions: {
             maxPlayers: 4,
             maxTurns: 5,
-            advancedMode: true
+            isAdvancedMode: true
           }
         })
       )
