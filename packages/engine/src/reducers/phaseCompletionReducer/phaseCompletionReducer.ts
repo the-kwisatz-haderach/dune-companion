@@ -67,6 +67,7 @@ export const phaseCompletionReducer = (
       if (playersReady(state)) {
         return createNextPhaseState(state)
       }
+      return state
     case 'SHIPMENT_AND_MOVEMENT':
       if (playersReady(state)) {
         return createNextPhaseState(state)
