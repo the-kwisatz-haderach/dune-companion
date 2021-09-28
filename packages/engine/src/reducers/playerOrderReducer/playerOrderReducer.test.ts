@@ -21,7 +21,7 @@ describe('playerOrderReducer', () => {
         clientActions.CREATE_GAME({
           conditions: {
             maxTurns: initialGameState.maxTurns,
-            advancedMode: initialGameState.isAdvancedMode,
+            isAdvancedMode: initialGameState.isAdvancedMode,
             maxPlayers: initialGameState.maxPlayers
           },
           roomId: 'someRoom',

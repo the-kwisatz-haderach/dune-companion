@@ -25,7 +25,7 @@ describe('playersReducer', () => {
             roomId: 'someId',
             conditions: {
               maxTurns: initialGameState.maxTurns,
-              advancedMode: initialGameState.isAdvancedMode,
+              isAdvancedMode: initialGameState.isAdvancedMode,
               maxPlayers: initialGameState.maxPlayers
             }
           })
