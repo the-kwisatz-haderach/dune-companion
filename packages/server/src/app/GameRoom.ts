@@ -15,23 +15,27 @@ import {
 } from '@dune-companion/engine'
 import { createActionSender } from '../utils/createActionSender'
 
-const createPersistStateMiddleware = (
-  persistGame: (game: Game) => Promise<void>
-): Middleware<{}, Game> => ({ getState }) => next => async action => {
-  const result = next(action)
-  const state = getState()
-  await persistGame(state)
-  return result
-}
+const createPersistStateMiddleware =
+  (persistGame: (game: Game) => Promise<void>): Middleware<any, Game> =>
+  ({ getState }) =>
+  (next) =>
+  async (action) => {
+    const result = next(action)
+    const state = getState()
+    await persistGame(state)
+    return result
+  }
 
-const createStateBroadcastMiddleware = (
-  broadcaster: (game: Game) => Promise<void>
-): Middleware<{}, Game> => ({ getState }) => next => async action => {
-  const result = next(action)
-  const state = getState()
-  await broadcaster(state)
-  return result
-}
+const createStateBroadcastMiddleware =
+  (broadcaster: (game: Game) => Promise<void>): Middleware<any, Game> =>
+  ({ getState }) =>
+  (next) =>
+  async (action) => {
+    const result = next(action)
+    const state = getState()
+    await broadcaster(state)
+    return result
+  }
 
 type GameRoomDependencies = {
   initialGameState: Game
@@ -55,7 +59,7 @@ export class GameRoom {
       initialGameState,
       applyMiddleware(
         createPersistStateMiddleware(persistGame),
-        createStateBroadcastMiddleware(updatedGame =>
+        createStateBroadcastMiddleware((updatedGame) =>
           this.broadcastMessage(hostActions.GAME_UPDATED({ game: updatedGame }))
         )
       )
@@ -76,7 +80,7 @@ export class GameRoom {
 
   async broadcastMessage<T extends Record<string, unknown>>(message: T) {
     await Promise.all(
-      this.getClients().map(async socket => {
+      this.getClients().map(async (socket) => {
         if (socket.readyState === WebSocket.OPEN) {
           socket.send(JSON.stringify(message))
         }

@@ -8,7 +8,7 @@ import { createPlayer } from '../../factories'
 import { factions } from '../../dictionaries'
 
 jest.mock('@reduxjs/toolkit', () => ({
-  ...(jest.requireActual('@reduxjs/toolkit') as object),
+  ...(jest.requireActual('@reduxjs/toolkit') as Record<string, unknown>),
   nanoid: () => 'mockNanoId'
 }))
 
