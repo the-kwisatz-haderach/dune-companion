@@ -8,5 +8,3 @@ COPY ./src ./
 
 RUN yarn install && yarn global add typescript
 RUN yarn run build
-
-CMD ["npm", "run", "start"]

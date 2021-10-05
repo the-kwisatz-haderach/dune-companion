@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev ./src/index.ts",
-    "start": "node index.js",
+    "start": "node ./dist/index.js",
     "build": "tsc -b",
     "clean": "rm -rf dist & rm tsconfig.tsbuildinfo",
     "watch": "tsc -b -w --preserveWatchOutput"
@@ -24,8 +24,6 @@
     "@types/connect-redis": "^0.0.17",
     "@types/express": "^4.17.13",
     "@types/express-session": "^1.17.4",
-    "@types/jest": "^26.0.20",
-    "@types/node": "^14.14.20",
     "@types/redis": "^2.8.31",
     "@types/ws": "^7.4.7",
     "ts-node-dev": "^1.1.8"

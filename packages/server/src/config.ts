@@ -3,6 +3,6 @@ export const config = {
   HTTP_HOST: 'localhost',
   WEBSOCKET_HOST: 'localhost',
   REDIS_PORT: 6379,
-  REDIS_HOST: 'localhost',
+  REDIS_HOST: 'redis',
   SESSION_SECRET: 'secrets'
 }

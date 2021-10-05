@@ -16,9 +16,4 @@ export const createHttpServer = (sessionStore: Store) =>
       )
       .use(express.json())
       .use(express.urlencoded({ extended: true }))
-      .get('/', async (req, res) =>
-        res.status(200).send({
-          message: 'Hello World!'
-        })
-      )
   )
