@@ -1,0 +1,27 @@
+# Build frontend assets
+FROM node:16-alpine as build
+
+WORKDIR /app
+
+COPY package.json .
+COPY tsconfig.json .
+COPY yarn.lock .
+COPY packages/engine ./packages/engine
+COPY packages/web ./packages/web
+
+RUN yarn install --pure-lockfile --non-interactive
+
+WORKDIR /app/packages/web
+
+RUN yarn build
+
+# Serve static files with nginx
+FROM nginx:stable-alpine
+
+WORKDIR /usr/share/nginx/html
+
+RUN rm -rf ./*
+
+COPY --from=build /app/packages/web/build .
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
