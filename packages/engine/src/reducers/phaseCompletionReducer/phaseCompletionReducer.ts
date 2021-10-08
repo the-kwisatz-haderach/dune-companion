@@ -56,8 +56,16 @@ export const phaseCompletionReducer = (
           else
           - isDone is true
         */
-      if (!state.auctions[state.currentTurn]?.isDone) {
+      if (!state.auctions[state.currentTurn - 1]) {
         return createNewAuctionState(state)
+      }
+      if (state.auctions[state.currentTurn - 1].isDone || playersReady(state)) {
+        return createNextPhaseState(state)
+      }
+      return state
+    case 'REVIVAL':
+      if (playersReady(state)) {
+        return createNextPhaseState(state)
       }
       return state
     case 'SHIPMENT_AND_MOVEMENT':

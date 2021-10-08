@@ -4,13 +4,11 @@ import { Factions } from '../../models/faction'
 import { playerFixture } from '../../models/__fixtures__'
 import { initialGameState } from '../initialGameState'
 import { Game } from '../../models'
-import { getActionProperties } from '../../actions/getActionProperties'
 import { createPlayer } from '../../factories'
 import { factions } from '../../dictionaries'
-import { getPhaseActionProperties } from '../../actions/getPhaseActionProperties'
 
 jest.mock('@reduxjs/toolkit', () => ({
-  ...(jest.requireActual('@reduxjs/toolkit') as object),
+  ...(jest.requireActual('@reduxjs/toolkit') as Record<string, unknown>),
   nanoid: () => 'mockNanoId'
 }))
 
@@ -25,7 +23,7 @@ describe('playersReducer', () => {
             roomId: 'someId',
             conditions: {
               maxTurns: initialGameState.maxTurns,
-              advancedMode: initialGameState.isAdvancedMode,
+              isAdvancedMode: initialGameState.isAdvancedMode,
               maxPlayers: initialGameState.maxPlayers
             }
           })

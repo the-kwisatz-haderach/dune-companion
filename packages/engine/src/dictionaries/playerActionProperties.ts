@@ -3,87 +3,87 @@ import { StaticPlayerActionProperties } from '../models'
 export const playerActionProperties: StaticPlayerActionProperties = {
   RESPOND_TO_ALLIANCE_REQUEST: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Respond'
   },
   CREATE_GAME: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Create game'
   },
-  JOIN_GAME: { style: 'neutral', actionType: 'secondary', label: 'Join game' },
+  JOIN_GAME: { style: 'neutral', isPrimary: false, label: 'Join game' },
   LEAVE_GAME: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Leave game'
   },
   REQUEST_ALLIANCE: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Request alliance'
   },
   SELECT_FACTION: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Select faction'
   },
   SET_ADMIN: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Update admin'
   },
   SET_PLAYER_ORDER: {
     style: 'neutral',
-    actionType: 'primary',
+    isPrimary: true,
     label: 'Set player order'
   },
   SET_IS_NOT_READY: {
     style: 'negative',
-    actionType: 'primary',
+    isPrimary: true,
     label: 'Not ready'
   },
-  SET_IS_READY: { style: 'positive', actionType: 'primary', label: 'Ready' },
+  SET_IS_READY: { style: 'positive', isPrimary: true, label: 'Ready' },
   UPDATE_PLAYER_NAME: {
     style: 'neutral',
-    actionType: 'primary',
+    isPrimary: true,
     label: 'Update name'
   },
   MARK_PHASE_STEP_COMPLETED: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Complete'
   },
   MARK_PHASE_STEP_NOT_COMPLETED: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Not Completed'
   },
   DECLARE_AS_WINNER: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Declare winner'
   },
   CONFIRM_WINNER: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Confirm winner'
   },
   SET_PLAYER_SPICE: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Update spice'
   },
   SET_PLAYER_TREACHERY_CARDS: {
     style: 'neutral',
-    actionType: 'secondary',
+    isPrimary: false,
     label: 'Update cards'
   },
   SET_FIRST_PLAYER: {
     style: 'neutral',
-    actionType: 'primary',
+    isPrimary: true,
     label: 'Set first player'
   },
-  SKIP_BID: { style: 'negative', actionType: 'primary', label: 'Skip bid' },
-  PLACE_BID: { style: 'positive', actionType: 'primary', label: 'Place bid' },
-  GO_TO_NEXUS: { style: 'neutral', actionType: 'primary', label: 'Go to Nexus' }
+  SKIP_BID: { style: 'negative', isPrimary: true, label: 'Skip bid' },
+  PLACE_BID: { style: 'positive', isPrimary: true, label: 'Place bid' },
+  GO_TO_NEXUS: { style: 'neutral', isPrimary: true, label: 'Go to Nexus' }
 }

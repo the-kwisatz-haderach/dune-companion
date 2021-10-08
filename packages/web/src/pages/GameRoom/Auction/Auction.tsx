@@ -65,9 +65,8 @@ export const Auction = ({ auction }: Props) => {
           <Typography variant="h5">Current Bidder</Typography>
           <Typography>
             {
-              game.players[
-                auction.participants[currentRound.currentBidderIndex].id
-              ].name
+              game.players[auction.participants[auction.currentBidderIndex].id]
+                .name
             }
           </Typography>
         </Grid>

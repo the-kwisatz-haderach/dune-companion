@@ -135,10 +135,10 @@ describe('phaseCompletionReducer', () => {
                   treacheryCards: 3
                 }
               ],
+              currentBidderIndex: 0,
               rounds: [
                 {
                   bids: [],
-                  currentBidderIndex: 0,
                   skipped: ['anotherPlayer']
                 }
               ]

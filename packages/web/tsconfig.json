@@ -1,7 +1,8 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2019",
+    "outDir": "dist",
     "rootDir": "src",
     "lib": [
       "dom",
@@ -25,5 +26,13 @@
   },
   "include": [
     "src"
+  ],
+  "references": [
+    { "path":  "../engine" }
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
   ]
 }

@@ -2,7 +2,7 @@ import { allianceRequestsReducer } from './allianceRequestsReducer'
 import { clientActions } from '../../actions'
 
 jest.mock('@reduxjs/toolkit', () => ({
-  ...(jest.requireActual('@reduxjs/toolkit') as object),
+  ...(jest.requireActual('@reduxjs/toolkit') as Record<string, unknown>),
   nanoid: () => 'mockNanoId'
 }))
 

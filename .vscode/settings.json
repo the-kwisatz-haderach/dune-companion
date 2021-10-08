@@ -1,0 +1,13 @@
+{
+  "eslint.workingDirectories": [
+    {
+      "directory": "./packages/engine",
+    },
+    {
+      "directory": "./packages/web",
+    },
+    {
+      "directory": "./packages/server",
+    },
+  ]
+}

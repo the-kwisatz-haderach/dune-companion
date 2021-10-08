@@ -1,7 +1,8 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "lib",
+    "outDir": "dist",
+    "rootDir": "src",
     "noImplicitAny": true,
     "sourceMap": true,
     "module": "CommonJS",
@@ -11,11 +12,11 @@
     "downlevelIteration": true,
     "moduleResolution": "Node",
     "esModuleInterop": true,
+    "composite": true,
     "declaration": true,
-    // "composite": true,
     "lib": ["ES2019", "DOM"],
     "types": ["node", "jest"]
   },
   "include": ["src"],
-  "exclude": ["node_modules", "src/**/*.test.ts", "**/__tests__/**"]
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts", "**/__tests__/**"]
 }
