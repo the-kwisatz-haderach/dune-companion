@@ -8,7 +8,7 @@ interface Props {
   faction: Factions
 }
 
-const useStyles = makeStyles<Theme, Props>(theme =>
+const useStyles = makeStyles<Theme, Props>((theme) =>
   createStyles({
     icon: {
       backgroundColor: ({ faction }) => theme.palette[faction].main,
