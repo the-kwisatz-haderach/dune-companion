@@ -15,7 +15,7 @@ interface Props {
   title: string
   preamble?: string
   subtitle?: string
-  BackdropImage?: React.ComponentType<{ className?: string }>
+  BackdropIcon?: React.ComponentType<{ className?: string }>
 }
 
 const sizeTable = {
@@ -24,48 +24,51 @@ const sizeTable = {
   large: 420
 } as const
 
-const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(theme =>
-  createStyles({
-    root: {
-      width: '100%',
-      position: 'relative',
-      display: 'flex',
-      alignItems: 'flex-end',
-      paddingBottom: theme.spacing(5),
-      height: ({ size = 'medium' }) => sizeTable[size],
-      backgroundSize: 'contain',
-      backgroundRepeat: 'no-repeat',
-      backgroundAttachment: 'fixed',
-      backgroundColor: ({ color }) => color ?? 'grey',
-      transition: 'background 1s ease-in-out',
-      backgroundImage: ({ src, glow, color }) =>
-        `linear-gradient(to bottom, ${
-          color ? 'transparent' : 'black'
-        }, transparent 6%, transparent, ${glow ?? 'black'} 40%)${
-          src ? `, url(${src})` : ''
-        }`
-    },
-    textContainer: {
-      display: 'flex',
-      padding: theme.spacing(2),
-      flexDirection: 'column',
-      justifyContent: 'flex-end',
-      color: ({ color }) =>
-        color ? theme.palette.getContrastText(color) : 'white',
-      height: 'fit-content',
-      zIndex: 1
-    },
-    icon: {
-      position: 'fixed',
-      width: 400,
-      height: 400,
-      zIndex: 0,
-      top: -50,
-      left: 'calc(50% - 200px)',
-      fill: 'white',
-      opacity: 0.2
-    }
-  })
+const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(
+  (theme) =>
+    createStyles({
+      root: {
+        width: '100%',
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'flex-end',
+        paddingBottom: theme.spacing(5),
+        height: ({ size = 'medium' }) => sizeTable[size],
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        backgroundColor: ({ color }) => color ?? theme.palette.primary.dark,
+        transition: 'background 1s ease-in-out',
+        backgroundImage: ({ src, glow, color }) =>
+          `linear-gradient(to bottom, ${
+            color ? 'transparent' : theme.palette.primary.main
+          }, transparent 6%, transparent, ${
+            glow ?? theme.palette.primary.light
+          } 40%)${src ? `, url(${src})` : ''}`
+      },
+      textContainer: {
+        display: 'flex',
+        padding: theme.spacing(2),
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        color: ({ color }) =>
+          color ? theme.palette.getContrastText(color) : 'white',
+        height: 'fit-content',
+        zIndex: 1
+      },
+      icon: {
+        position: 'fixed',
+        width: '100%',
+        height: '50%',
+        zIndex: 0,
+        top: -50,
+        right: 0,
+        left: 0,
+        bottom: 0,
+        fill: 'white',
+        opacity: 0.2
+      }
+    })
 )
 
 export default function HeaderImage({
@@ -75,13 +78,13 @@ export default function HeaderImage({
   title,
   preamble,
   subtitle,
-  BackdropImage,
+  BackdropIcon,
   size = 'medium'
 }: Props): ReactElement {
   const classes = useStyles({ src, size, glow, color })
   return (
     <Box className={classes.root}>
-      {BackdropImage && <BackdropImage className={classes.icon} />}
+      {BackdropIcon && <BackdropIcon className={classes.icon} />}
       <Box className={classes.textContainer}>
         {preamble && (
           <Typography

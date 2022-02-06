@@ -14,8 +14,8 @@ import {
 import { Header } from '../../../components/Header'
 import { Alert } from '@material-ui/lab'
 import { RuleSection } from './RuleSection'
-import { phaseIcons } from '../../../lib/phaseIcons'
 import { usePhaseSideEffects } from '../usePhaseSideEffects'
+import { phaseIcons } from '../../../lib/phaseIcons'
 
 interface Props {
   phase: Phases
@@ -39,9 +39,10 @@ export function CommonPhases({
   return (
     <Box bgcolor="white">
       <HeaderImage
+        size="small"
         title={phases[phase].name}
         preamble="Phase"
-        BackdropImage={phaseIcons[phase]}
+        BackdropIcon={phaseIcons[phase]}
       />
       <RoundedContainer>
         {phase === 'SETUP' && (
@@ -71,14 +72,14 @@ function filterRules(
   playerFactions: Factions[]
 ): RuleSectionType[] {
   return [
-    ...commonRuleSets[phase]?.map(section => ({
+    ...commonRuleSets[phase]?.map((section) => ({
       ...section,
       rules: section?.rules?.filter(ruleFilter)
     })),
     {
       title: 'Faction Rules',
       rules: playerFactions
-        .flatMap(faction => factionRuleSets[faction][phase])
+        .flatMap((faction) => factionRuleSets[faction][phase])
         .filter(ruleFilter)
     }
   ]

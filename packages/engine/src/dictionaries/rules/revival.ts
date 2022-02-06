@@ -2,7 +2,7 @@ import { RuleSection } from '../../models'
 
 export const revivalRules: RuleSection[] = [
   {
-    title: 'Force revival',
+    title: '',
     rules: [
       {
         name: 'Force Revival',
@@ -13,12 +13,12 @@ export const revivalRules: RuleSection[] = [
     ]
   },
   {
-    title: 'Leader Revival',
+    title: '',
     rules: [
       {
         name: 'Leader Revival',
         description:
-          'If all 5 of a player’s leaders are in the Tleilaxu Tanks they may revive 1 leader per turn until all of their leaders have been revived.\nTo revive a leader, a player must pay that leader’s fighting strength in spice to the Spice Bank. A revived leader can be played normally and is still subject to being a traitor.\nIf a revived leader is killed again, place it face down in the Tleilaxu Tanks. This leader cannot be revived again until all of the player’s other revivable leaders have been revived, killed, and sent to the Tleilaxu Tanks again.',
+          "If all 5 of a player's leaders are in the Tleilaxu Tanks they may revive 1 leader per turn until all of their leaders have been revived.\nTo revive a leader, a player must pay that leader’s fighting strength in spice to the Spice Bank. A revived leader can be played normally and is still subject to being a traitor.\nIf a revived leader is killed again, place it face down in the Tleilaxu Tanks. This leader cannot be revived again until all of the player’s other revivable leaders have been revived, killed, and sent to the Tleilaxu Tanks again.",
         isAdvanced: false
       }
     ]

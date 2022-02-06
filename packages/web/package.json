@@ -36,7 +36,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "watch": "tsc -b -w --preserveWatchOutput"
+    "watch": "tsc -b -w --preserveWatchOutput",
+    "clean": "rm -rf build & rm tsconfig.tsbuildinfo"
   },
   "eslintConfig": {
     "extends": [

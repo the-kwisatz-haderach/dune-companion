@@ -27,7 +27,7 @@ export const factions: Record<Factions, Faction> = {
     startingItems: 1,
     startingPlanetaryForces: 1,
     startingReserveForces: 19,
-    alliancePower: 'In an Alliance you may Voice an ally’s opponent.',
+    alliancePower: "In an Alliance you may Voice an ally's opponent.",
     strategy:
       'Your major handicap is your low revival rate. You must not allow large numbers of your forces to be sent to the Tleilaxu Tanks or you may find yourself without sufficient reserves to bring onto the planet. Your strengths are that you have the ability to win by correctly predicting the turn another player will win the game and then secretly working for a favorable outcome. In addition, you can be quite effective in battles by voicing your opponent and leaving them weaponless or defenseless. You can afford to bide your time while casting subtle innuendos about who you have picked to win.',
     startingCity: null,

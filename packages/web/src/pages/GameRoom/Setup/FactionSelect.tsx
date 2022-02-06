@@ -23,7 +23,7 @@ import { usePhaseSideEffects } from '../usePhaseSideEffects'
 import { FactionOverlay } from '../../../components/FactionOverlay'
 import { useTransition } from '../../../hooks/useTransition'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     sideScrollContainer: {
       display: 'flex',
@@ -68,16 +68,16 @@ export default function FactionSelect(): ReactElement {
   const currentFaction = factions[currentFactionKey]
 
   const playerSelected = Object.values(game.players).find(
-    player => player.faction === currentFactionKey
+    (player) => player.faction === currentFactionKey
   )
   const isSelectedByPlayer = player.id === playerSelected?.id
 
   const getNextFaction = () => {
-    setFactionIndex(curr => (curr + 1) % factionKeys.length)
+    setFactionIndex((curr) => (curr + 1) % factionKeys.length)
   }
 
   const getPreviousFaction = () => {
-    setFactionIndex(curr => {
+    setFactionIndex((curr) => {
       const prev = curr - 1
       if (prev < 0) {
         return factionKeys.length - 1
@@ -115,7 +115,7 @@ export default function FactionSelect(): ReactElement {
         title={currentFaction.name}
         preamble="Faction"
         subtitle={currentFaction.keyAdvantage}
-        BackdropImage={factionIcons[currentFactionKey]}
+        BackdropIcon={factionIcons[currentFactionKey]}
         color={palette[currentFactionKey].dark}
         glow={palette[currentFactionKey].light}
       />
@@ -132,7 +132,7 @@ export default function FactionSelect(): ReactElement {
         </Section>
         <Section heading="Leaders">
           <Box className={classes.sideScrollContainer}>
-            {currentFaction.leaders.map(leader => (
+            {currentFaction.leaders.map((leader) => (
               <Leader
                 key={leader.name}
                 faction={currentFactionKey}
@@ -154,10 +154,10 @@ export default function FactionSelect(): ReactElement {
           <Box className={classes.cardContainer}>
             {currentFaction.advantages
               .filter(
-                rule =>
+                (rule) =>
                   (game.isAdvancedMode && rule.isAdvanced) || !rule.isAdvanced
               )
-              .map(rule => (
+              .map((rule) => (
                 <Card
                   key={rule.name}
                   title={rule.name}

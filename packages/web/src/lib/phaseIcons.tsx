@@ -1,14 +1,10 @@
 import { Phases } from '@dune-companion/engine'
-import { SvgIconTypeMap } from '@material-ui/core'
-import { OverridableComponent } from '@material-ui/core/OverridableComponent'
 import StormIcon from '@material-ui/icons/FlashOn'
+import storm from '../images/phases/storm.png'
 
-export const phaseIcons: Record<
-  Phases,
-  OverridableComponent<SvgIconTypeMap<{}, 'svg'>>
-> = {
-  FACTION_SELECT: StormIcon,
-  STORM: StormIcon,
+export const phaseIcons: Record<Phases, React.FC<{ className?: string }>> = {
+  FACTION_SELECT: () => <img src={storm} />,
+  STORM: (props) => <img {...props} src={storm} />,
   SPICE_BLOW_AND_NEXUS: StormIcon,
   NEXUS: StormIcon,
   CHOAM_CHARITY: StormIcon,

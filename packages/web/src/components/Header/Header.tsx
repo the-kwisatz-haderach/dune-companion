@@ -18,7 +18,7 @@ interface Props {
   faction?: Factions
 }
 
-const useStyles = makeStyles<Theme, Pick<Props, 'faction' | 'img'>>(theme =>
+const useStyles = makeStyles<Theme, Pick<Props, 'faction' | 'img'>>((theme) =>
   createStyles({
     container: {
       display: 'flex',
