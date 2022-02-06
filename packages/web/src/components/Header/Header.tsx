@@ -40,9 +40,10 @@ const useStyles = makeStyles<Theme, Pick<Props, 'faction' | 'img'>>((theme) =>
       textAlign: 'center',
       transition: 'background-color 1s ease-in-out 0.5s',
       position: 'relative',
-      bottom: 24,
+      bottom: ({ faction }) => (faction ? 24 : 0),
+      marginBottom: theme.spacing(2),
       backgroundColor: ({ faction }) =>
-        faction ? theme.palette[faction].main : theme.palette.grey[300],
+        faction ? theme.palette[faction].main : theme.palette.grey[700],
       '& > *': {
         color: 'white'
       }

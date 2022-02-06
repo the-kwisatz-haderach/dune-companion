@@ -128,7 +128,10 @@ export default function FactionSelect(): ReactElement {
           img={dune}
         />
         <Section heading="Summary">
-          <FactionSummary faction={currentFaction} />
+          <FactionSummary
+            faction={currentFaction}
+            factionKey={currentFactionKey}
+          />
         </Section>
         <Section heading="Leaders">
           <Box className={classes.sideScrollContainer}>

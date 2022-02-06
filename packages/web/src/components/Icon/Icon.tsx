@@ -5,6 +5,7 @@ import TreacheryCardIcon from '@material-ui/icons/SimCard'
 
 type Props = {
   icon: 'spice' | 'treachery-card' | 'revival' | 'force' | 'city'
+  size?: 'medium' | 'small' | 'inherit' | 'default' | 'large'
 }
 
 const icons: Record<
@@ -26,8 +27,8 @@ const useStyles = makeStyles(() =>
   })
 )
 
-export const Icon: React.FC<Props> = ({ icon }) => {
+export const Icon: React.FC<Props> = ({ icon, size = 'medium' }) => {
   const classes = useStyles()
   const IconElement = icons[icon]
-  return <IconElement fontSize="large" className={classes.root} />
+  return <IconElement fontSize={size} className={classes.root} />
 }

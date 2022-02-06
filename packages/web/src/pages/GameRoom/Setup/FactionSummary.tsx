@@ -1,70 +1,137 @@
-import { cities, Faction } from '@dune-companion/engine'
+import { cities, Faction, Factions } from '@dune-companion/engine'
 import {
-  Grid,
   TableContainer,
   Paper,
   Table,
   TableBody,
   TableRow,
-  TableCell
+  TableCell,
+  makeStyles,
+  createStyles,
+  Typography,
+  TableHead,
+  Theme
 } from '@material-ui/core'
 import { Icon } from '../../../components/Icon'
-import { Showcase } from '../../../components/Showcase'
 
 type Props = {
   faction: Faction
+  factionKey: Factions
 }
 
-export const FactionSummary = ({ faction }: Props) => {
+const useStyles = makeStyles<Theme, Props>((theme) =>
+  createStyles({
+    headerRow: {
+      backgroundColor: ({ factionKey }) => theme.palette[factionKey].dark,
+      '& th': {
+        color: ({ factionKey }) => theme.palette[factionKey].contrastText
+      }
+    },
+    statistic: {
+      display: 'inline-flex',
+      '& > *:first-child': {
+        marginRight: 8
+      }
+    }
+  })
+)
+
+export const FactionSummary = ({ faction, factionKey }: Props) => {
+  const classes = useStyles({ faction, factionKey })
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table size="small">
+        <TableHead className={classes.headerRow}>
+          <TableRow>
+            <TableCell width="60%">Asset</TableCell>
+            <TableCell />
+          </TableRow>
+        </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell>Test1</TableCell>
-            <TableCell>Test2</TableCell>
+            <TableCell width="60%">
+              <span className={classes.statistic}>
+                <Icon icon="revival" size="medium" />
+                <Typography variant="body2">Free revivals</Typography>
+              </span>
+            </TableCell>
+            <TableCell>
+              <Typography variant="body2">
+                {faction.freeRevivals.toString()}
+              </Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell width="60%">
+              <span className={classes.statistic}>
+                <Icon icon="spice" size="medium" />
+                <Typography variant="body2">Starting spice</Typography>
+              </span>
+            </TableCell>
+            <TableCell>
+              <Typography variant="body2">
+                {faction.startingSpice.toString()}
+              </Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell width="60%">
+              <span className={classes.statistic}>
+                <Icon icon="treachery-card" size="medium" />
+                <Typography variant="body2">Starting items</Typography>
+              </span>
+            </TableCell>
+            <TableCell>
+              <Typography variant="body2">
+                {faction.startingItems.toString()}
+              </Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell width="60%">
+              <span className={classes.statistic}>
+                <Icon icon="force" size="medium" />
+                <Typography variant="body2">
+                  Starting planetary forces
+                </Typography>
+              </span>
+            </TableCell>
+            <TableCell>
+              <Typography variant="body2">
+                {faction.startingPlanetaryForces.toString()}
+              </Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell width="75%">
+              <span className={classes.statistic}>
+                <Icon icon="force" size="medium" />
+                <Typography variant="body2">Starting reserve forces</Typography>
+              </span>
+            </TableCell>
+            <TableCell>
+              <Typography variant="body2">
+                {faction.startingReserveForces.toString()}
+              </Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell width="50%">
+              <span className={classes.statistic}>
+                <Icon icon="city" size="medium" />
+                <Typography variant="body2">Starting city</Typography>
+              </span>
+            </TableCell>
+            <TableCell>
+              <Typography variant="body2">
+                {faction.startingCity
+                  ? cities[faction.startingCity].name
+                  : 'None'}
+              </Typography>
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
-    // <Grid container spacing={2} justifyContent="space-between">
-    //   <Grid item xs={6}>
-    //     <Showcase
-    //       title="Free revivals"
-    //       body={faction.freeRevivals.toString()}
-    //       Icon={<Icon icon="revival" />}
-    //     />
-    //   </Grid>
-    //   <Grid item xs={6}>
-    //     <Showcase
-    //       title="Starting spice"
-    //       body={faction.startingSpice.toString()}
-    //       Icon={<Icon icon="spice" />}
-    //     />
-    //   </Grid>
-    //   <Grid item xs={6}>
-    //     <Showcase
-    //       title="Starting items"
-    //       body={faction.startingItems.toString()}
-    //       Icon={<Icon icon="treachery-card" />}
-    //     />
-    //   </Grid>
-    //   <Grid item xs={6}>
-    //     <Showcase
-    //       title="Starting forces"
-    //       body={`${faction.startingPlanetaryForces} + ${faction.startingReserveForces}`}
-    //       Icon={<Icon icon="force" />}
-    //     />
-    //   </Grid>
-    //   {faction.startingCity && (
-    //     <Grid item xs={12}>
-    //       <Showcase
-    //         title="Starting city"
-    //         body={cities[faction.startingCity].name}
-    //         Icon={<Icon icon="city" />}
-    //       />
-    //     </Grid>
-    //   )}
-    // </Grid>
   )
 }
