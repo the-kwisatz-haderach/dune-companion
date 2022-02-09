@@ -21,6 +21,14 @@ type Props = {
 
 const useStyles = makeStyles<Theme, Props>((theme) =>
   createStyles({
+    table: {
+      '& td:not(:last-child)': {
+        borderRight: `1px solid ${theme.palette.grey[300]}`
+      },
+      '& > tbody > tr:nth-child(odd)': {
+        backgroundColor: () => theme.palette.grey[100]
+      }
+    },
     headerRow: {
       backgroundColor: ({ factionKey }) => theme.palette[factionKey].dark,
       '& th': {
@@ -29,6 +37,7 @@ const useStyles = makeStyles<Theme, Props>((theme) =>
     },
     statistic: {
       display: 'inline-flex',
+      alignItems: 'center',
       '& > *:first-child': {
         marginRight: 8
       }
@@ -40,7 +49,7 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
   const classes = useStyles({ faction, factionKey })
   return (
     <TableContainer component={Paper}>
-      <Table size="small">
+      <Table size="small" className={classes.table}>
         <TableHead className={classes.headerRow}>
           <TableRow>
             <TableCell width="60%">Asset</TableCell>

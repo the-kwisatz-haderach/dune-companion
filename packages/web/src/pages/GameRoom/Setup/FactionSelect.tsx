@@ -46,6 +46,12 @@ const useStyles = makeStyles((theme) =>
       '& > *:not(:last-child)': {
         marginBottom: theme.spacing(3)
       }
+    },
+    strategy: {
+      padding: theme.spacing(3),
+      borderRadius: 5,
+      lineHeight: 1.6,
+      border: `1px solid ${theme.palette.grey[100]}`
     }
   })
 )
@@ -127,13 +133,13 @@ export default function FactionSelect(): ReactElement {
           faction={currentFactionKey}
           img={dune}
         />
-        <Section heading="Summary">
+        <Section heading="Summary" faction={currentFactionKey}>
           <FactionSummary
             faction={currentFaction}
             factionKey={currentFactionKey}
           />
         </Section>
-        <Section heading="Leaders">
+        <Section heading="Leaders" faction={currentFactionKey}>
           <Box className={classes.sideScrollContainer}>
             {currentFaction.leaders.map((leader) => (
               <Leader
@@ -147,13 +153,13 @@ export default function FactionSelect(): ReactElement {
             ))}
           </Box>
         </Section>
-        <Section heading="Phase Advantages">
+        <Section heading="Phase Advantages" faction={currentFactionKey}>
           <FactionAdvantages
             faction={currentFactionKey}
             isAdvancedMode={game.isAdvancedMode}
           />
         </Section>
-        <Section heading="Common Advantages">
+        <Section heading="Common Advantages" faction={currentFactionKey}>
           <Box className={classes.cardContainer}>
             {currentFaction.advantages
               .filter(
@@ -187,8 +193,10 @@ export default function FactionSelect(): ReactElement {
             />
           </Box>
         </Section>
-        <Section heading="Strategy">
-          <Typography variant="body2">{currentFaction.strategy}</Typography>
+        <Section heading="Strategy" faction={currentFactionKey}>
+          <Typography className={classes.strategy} variant="body2">
+            {currentFaction.strategy}
+          </Typography>
         </Section>
       </RoundedContainer>
     </Box>

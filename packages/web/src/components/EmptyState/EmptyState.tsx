@@ -6,25 +6,26 @@ type Props = {
   description: string
 }
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      textAlign: 'center',
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(5),
       paddingRight: theme.spacing(4),
       paddingLeft: theme.spacing(4),
       flexDirection: 'column',
-      backgroundImage: `linear-gradient(120deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
       borderRadius: 5,
-      color: theme.palette.common.white
+      border: `2px dashed ${theme.palette.grey[300]}`,
+      color: theme.palette.grey[500]
     },
     icon: {
       fontSize: theme.typography.pxToRem(72),
       marginBottom: theme.spacing(2),
-      color: theme.palette.common.white
+      color: theme.palette.grey[500]
     }
   })
 )
@@ -34,7 +35,6 @@ export const EmptyState = ({ title, description }: Props) => {
   return (
     <Box className={classes.root}>
       <Icon className={classes.icon} />
-      <Typography variant="h6">{title}</Typography>
       <Typography variant="body2">{description}</Typography>
     </Box>
   )

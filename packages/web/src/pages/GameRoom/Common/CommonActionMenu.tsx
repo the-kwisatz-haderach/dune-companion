@@ -7,7 +7,11 @@ import {
   GameActionMenu,
   GameActionMenuProps
 } from '../../../components/GameActionMenu'
-import { getPhaseActionProperties } from '@dune-companion/engine'
+import {
+  factionRuleSets,
+  getPhaseActionProperties
+} from '@dune-companion/engine'
+import { Badge } from '@material-ui/core'
 
 const getSecondaryActions = (
   actions: ReturnType<typeof useGameActions>,
@@ -57,7 +61,7 @@ export const CommonActionMenu = () => {
     () =>
       getPhaseActionProperties(game.currentPhase, player.isAdmin)
         // .filter(action => action.actionType === 'secondary')
-        .map(action => {
+        .map((action) => {
           const currentAction = actions[action.type as keyof typeof actions]
           return {
             label: currentAction?.label,
@@ -67,9 +71,6 @@ export const CommonActionMenu = () => {
         }),
     [actions, player.isAdmin, game.currentPhase]
   )
-
-  console.log(actions)
-  console.log(getPhaseActionProperties(game.currentPhase, player.isAdmin))
 
   const primaryAction: GameActionMenuProps['primaryAction'] = useMemo(() => {
     const actionKey: keyof typeof actions = player.hasCompletedPhase
@@ -83,10 +84,18 @@ export const CommonActionMenu = () => {
   }, [actions, player.hasCompletedPhase])
 
   return (
-    <GameActionMenu
-      primaryAction={primaryAction}
-      settingsMenu={settingsMenu}
-      secondaryActions={secondaryActions}
-    />
+    <Badge
+      badgeContent={
+        player.faction &&
+        factionRuleSets[player.faction][game.currentPhase].length
+      }
+      color="primary"
+    >
+      <GameActionMenu
+        primaryAction={primaryAction}
+        settingsMenu={settingsMenu}
+        secondaryActions={secondaryActions}
+      />
+    </Badge>
   )
 }

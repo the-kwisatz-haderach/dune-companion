@@ -1,4 +1,4 @@
-import { memo, ReactElement } from 'react'
+import { memo, ReactElement, useMemo } from 'react'
 import { Box } from '@material-ui/core'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
@@ -28,10 +28,16 @@ export function CommonPhases({
   ruleFilter,
   playerFactions
 }: Props): ReactElement {
-  const rules: RuleSectionType[] = filterRules(
-    phase,
-    ruleFilter,
-    playerFactions
+  const rules: RuleSectionType[] = filterRules(phase, ruleFilter)
+
+  const factionRules: RuleSectionType = useMemo(
+    () => ({
+      title: 'Faction Rules',
+      rules: playerFactions
+        .flatMap((faction) => factionRuleSets[faction][phase])
+        .filter(ruleFilter)
+    }),
+    [playerFactions, phase, ruleFilter]
   )
 
   usePhaseSideEffects(phase)
@@ -52,15 +58,16 @@ export function CommonPhases({
           />
         )}
         {phase === 'SETUP' && (
-          <Alert severity="info">
+          <Alert severity="info" style={{ marginBottom: 24 }}>
             A faction has special advantages that may contradict the rules. A
-            faction’s particular advantages always have precedence over the
+            faction's particular advantages always have precedence over the
             rules.
           </Alert>
         )}
         {rules.map((section, index) => (
           <RuleSection key={`${section.title}${index}`} section={section} />
         ))}
+        <RuleSection section={factionRules} />
       </RoundedContainer>
     </Box>
   )
@@ -68,20 +75,13 @@ export function CommonPhases({
 
 function filterRules(
   phase: Phases,
-  ruleFilter: (value: RuleSet) => boolean,
-  playerFactions: Factions[]
+  ruleFilter: (value: RuleSet) => boolean
 ): RuleSectionType[] {
   return [
     ...commonRuleSets[phase]?.map((section) => ({
       ...section,
       rules: section?.rules?.filter(ruleFilter)
-    })),
-    {
-      title: 'Faction Rules',
-      rules: playerFactions
-        .flatMap((faction) => factionRuleSets[faction][phase])
-        .filter(ruleFilter)
-    }
+    }))
   ]
 }
 
