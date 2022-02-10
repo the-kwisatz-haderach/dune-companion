@@ -1,1 +1,1 @@
-export { default as Leader } from './Leader'
+export { default as Leader, LeaderTeaser } from './Leader'

@@ -2,16 +2,22 @@ import { useMemo } from 'react'
 import { useGame, useGameActions, usePlayer } from '../../../dune-react'
 import PlayerOrderIcon from '@material-ui/icons/FormatListNumbered'
 import FirstPlayerIcon from '@material-ui/icons/PlusOne'
-import useGameSettingsContext from '../../../contexts/GameSettingsContext/GameSettingsContext'
 import {
-  GameActionMenu,
-  GameActionMenuProps
-} from '../../../components/GameActionMenu'
+  Settings as SettingsIcon,
+  Menu as MenuIcon,
+  QuestionAnswer as FAQIcon
+} from '@material-ui/icons'
+import useGameSettingsContext from '../../../contexts/GameSettingsContext/GameSettingsContext'
+import { GameActionMenuProps } from '../../../components/GameActionMenu'
 import {
   factionRuleSets,
   getPhaseActionProperties
 } from '@dune-companion/engine'
-import { Badge } from '@material-ui/core'
+import {
+  Badge,
+  BottomNavigation,
+  BottomNavigationAction
+} from '@material-ui/core'
 
 const getSecondaryActions = (
   actions: ReturnType<typeof useGameActions>,
@@ -35,7 +41,12 @@ const getSecondaryActions = (
   return secondaryActions
 }
 
-export const CommonActionMenu = () => {
+type Props = {
+  value?: 'actions' | 'faq' | 'faction' | 'settings'
+  onChange: (newValue: Props['value']) => void
+}
+
+export const CommonActionMenu = ({ value, onChange }: Props) => {
   const player = usePlayer()
   const actions = useGameActions()
   const game = useGame()
@@ -83,19 +94,32 @@ export const CommonActionMenu = () => {
     }
   }, [actions, player.hasCompletedPhase])
 
+  const playerFactionRulesCount =
+    (player.faction &&
+      factionRuleSets[player.faction][game.currentPhase].length) ||
+    0
+
   return (
-    <Badge
-      badgeContent={
-        player.faction &&
-        factionRuleSets[player.faction][game.currentPhase].length
-      }
-      color="primary"
+    <BottomNavigation
+      value={value}
+      showLabels
+      onChange={(_, newValue) => {
+        onChange(newValue)
+      }}
     >
-      <GameActionMenu
-        primaryAction={primaryAction}
-        settingsMenu={settingsMenu}
-        secondaryActions={secondaryActions}
+      <BottomNavigationAction label="Actions" icon={<MenuIcon />} />
+      <BottomNavigationAction label="FAQ" icon={<FAQIcon />} disabled />
+      <BottomNavigationAction label="Faction" icon={<FirstPlayerIcon />} />
+      <BottomNavigationAction
+        label="Settings"
+        icon={<SettingsIcon />}
+        disabled
       />
-    </Badge>
+    </BottomNavigation>
+    // <GameActionMenu
+    //   primaryAction={primaryAction}
+    //   settingsMenu={settingsMenu}
+    //   secondaryActions={secondaryActions}
+    // />
   )
 }

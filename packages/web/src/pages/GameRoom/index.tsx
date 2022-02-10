@@ -1,4 +1,4 @@
-import { ReactElement, useMemo } from 'react'
+import { ReactElement, useMemo, useState } from 'react'
 import { useGame, usePlayer } from '../../dune-react'
 import CommonPhases from './Common'
 import { createRuleFilter } from './helpers'
@@ -6,12 +6,28 @@ import FactionSelect from './Setup/FactionSelect'
 import { Loading } from '../Loading'
 import useGameSettingsContext from '../../contexts/GameSettingsContext/GameSettingsContext'
 import { Factions } from '@dune-companion/engine'
-import { Box, Fade } from '@material-ui/core'
+import { Box, createStyles, Fade, makeStyles, Slide } from '@material-ui/core'
 import { useDelayedState } from '../../hooks/useDelayedState'
 import { useTransition } from '../../hooks/useTransition'
 import { Auction } from './Auction'
+import { CommonActionMenu } from './Common/CommonActionMenu'
+
+const useStyles = makeStyles(() =>
+  createStyles({
+    actionsMenu: {
+      position: 'fixed',
+      width: '100%',
+      zIndex: 500,
+      bottom: 0
+    }
+  })
+)
 
 function GamePhase(): ReactElement {
+  const classes = useStyles()
+  const [menuValue, setMenuValue] = useState<
+    'actions' | 'faq' | 'faction' | 'settings'
+  >()
   const { showAllFactionRules } = useGameSettingsContext()
   const game = useGame()
   const player = usePlayer()
@@ -43,7 +59,7 @@ function GamePhase(): ReactElement {
   const playerFactions = useMemo(
     () =>
       Object.values(game.players)
-        .map(player => player.faction)
+        .map((player) => player.faction)
         .filter((faction): faction is Factions => faction !== null),
     [game.players]
   )
@@ -75,6 +91,13 @@ function GamePhase(): ReactElement {
           <Loading phase={game.currentPhase} />
         </Box>
       </Fade>
+      <div className={classes.actionsMenu}>
+        <Slide direction="up" in={!transition}>
+          <div>
+            <CommonActionMenu value={menuValue} onChange={setMenuValue} />
+          </div>
+        </Slide>
+      </div>
     </>
   )
 }

@@ -21,7 +21,6 @@ export const PromptProvider: React.FC = ({ children }) => {
   }, [])
 
   const closePrompt = useCallback(() => {
-    // setPrompt(undefined)
     setOpen(false)
   }, [])
 

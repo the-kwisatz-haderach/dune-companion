@@ -4,7 +4,8 @@ import {
   Theme,
   createStyles,
   makeStyles,
-  Typography
+  Typography,
+  Grid
 } from '@material-ui/core'
 import { ReactElement } from 'react'
 
@@ -16,7 +17,7 @@ interface Props {
   description?: string
 }
 
-const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>(theme =>
+const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>((theme) =>
   createStyles({
     root: {
       width: '100%',
@@ -77,5 +78,45 @@ export default function Leader({
         {name}
       </Typography>
     </Box>
+  )
+}
+
+const useTeaserStyles = makeStyles<Theme, Pick<Props, 'faction'>>((theme) =>
+  createStyles({
+    root: {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      '&:not(:last-child)': {
+        borderBottom: `1px solid ${theme.palette.grey[200]}`
+      }
+    },
+    img: {
+      width: 30,
+      height: 30,
+      borderRadius: '50%',
+      padding: 4,
+      backgroundImage: ({ faction }) =>
+        `linear-gradient(175deg, ${theme.palette[faction].main}, ${theme.palette[faction].dark})`
+    },
+    strength: {
+      fontWeight: 'bold'
+    }
+  })
+)
+
+export const LeaderTeaser = ({ imgSrc, name, strength, faction }: Props) => {
+  const classes = useTeaserStyles({ faction })
+  return (
+    <Grid container alignItems="center" className={classes.root}>
+      <Grid item xs={2} alignItems="center">
+        <img className={classes.img} src={imgSrc} alt={name} />
+      </Grid>
+      <Grid item xs>
+        <Typography variant="body2">{name}</Typography>
+      </Grid>
+      <Grid item xs={2}>
+        <Typography className={classes.strength}>{strength}</Typography>
+      </Grid>
+    </Grid>
   )
 }

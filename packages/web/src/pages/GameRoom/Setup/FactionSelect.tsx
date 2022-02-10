@@ -15,7 +15,7 @@ import { Section } from '../../../components/Section'
 import { factionIcons } from '../../../lib/factionIcons'
 import { ActionMenu } from '../../../components/ActionMenu'
 import { Header } from '../../../components/Header'
-import { Leader } from '../../../components/Leader'
+import { LeaderTeaser } from '../../../components/Leader'
 import { FactionSummary } from './FactionSummary'
 import { FactionAdvantages } from './FactionAdvantages'
 import dune from '../../../images/dune.jpeg'
@@ -25,20 +25,9 @@ import { useTransition } from '../../../hooks/useTransition'
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    sideScrollContainer: {
+    leadersContainer: {
       display: 'flex',
-      flexWrap: 'nowrap',
-      overflowX: 'auto',
-      marginLeft: '-1rem',
-      marginRight: '-1rem',
-      paddingLeft: '2rem',
-      paddingRight: '2rem',
-      '& > *:not(:last-child)': {
-        marginRight: theme.spacing(4)
-      },
-      '&::-webkit-scrollbar': {
-        display: 'none'
-      }
+      flexDirection: 'column'
     },
     cardContainer: {
       marginTop: theme.spacing(3),
@@ -48,10 +37,17 @@ const useStyles = makeStyles((theme) =>
       }
     },
     strategy: {
-      padding: theme.spacing(3),
-      borderRadius: 5,
+      padding: theme.spacing(2),
+      textAlign: 'justify',
       lineHeight: 1.6,
-      border: `1px solid ${theme.palette.grey[100]}`
+      '&::first-letter': {
+        fontFamily: theme.typography.h1.fontFamily,
+        fontSize: '300%',
+        float: 'left',
+        marginRight: '6px',
+        marginTop: '13px',
+        lineHeight: 0.5
+      }
     }
   })
 )
@@ -140,9 +136,9 @@ export default function FactionSelect(): ReactElement {
           />
         </Section>
         <Section heading="Leaders" faction={currentFactionKey}>
-          <Box className={classes.sideScrollContainer}>
+          <Box className={classes.leadersContainer}>
             {currentFaction.leaders.map((leader) => (
-              <Leader
+              <LeaderTeaser
                 key={leader.name}
                 faction={currentFactionKey}
                 name={leader.name}

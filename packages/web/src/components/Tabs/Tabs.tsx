@@ -33,7 +33,7 @@ function a11yProps(index: any) {
   }
 }
 
-const useStyles = makeStyles<Theme, Pick<Props, 'sticky'>>(theme =>
+const useStyles = makeStyles<Theme, Pick<Props, 'sticky'>>((theme) =>
   createStyles({
     root: {
       flexGrow: 1

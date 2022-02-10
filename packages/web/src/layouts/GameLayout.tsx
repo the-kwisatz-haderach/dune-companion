@@ -2,17 +2,10 @@ import React from 'react'
 import { Box, makeStyles, createStyles, Slide } from '@material-ui/core'
 import { useGame } from '../dune-react'
 import { ConditionsMenu } from '../components/ConditionsMenu'
-import { CommonActionMenu } from '../pages/GameRoom/Common/CommonActionMenu'
 import { useTransition } from '../hooks/useTransition'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
-    actionsMenu: {
-      position: 'fixed',
-      width: '100%',
-      zIndex: 500,
-      bottom: theme.spacing(1)
-    },
     conditionsMenu: {
       zIndex: 500,
       position: 'fixed',
@@ -46,15 +39,6 @@ export const GameLayout: React.FC = ({ children }) => {
         </Slide>
       )}
       {children}
-      {game.currentPhase !== 'FACTION_SELECT' && (
-        <div className={classes.actionsMenu}>
-          <Slide direction="up" in={!transition}>
-            <div>
-              <CommonActionMenu />
-            </div>
-          </Slide>
-        </div>
-      )}
     </Box>
   )
 }

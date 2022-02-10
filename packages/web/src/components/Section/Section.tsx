@@ -24,13 +24,12 @@ const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>((theme) =>
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
       borderTop: `1px solid ${theme.palette.grey[200]}`,
-      '&:nth-child(odd)': {
+      '&:nth-child(even)': {
         backgroundColor: theme.palette.grey[50]
       }
     },
     sectionHeading: {
       marginBottom: theme.spacing(1),
-      color: 'white',
       marginLeft: -16,
       paddingLeft: 16,
       width: 'fit-content',
@@ -39,6 +38,8 @@ const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>((theme) =>
       paddingBottom: theme.spacing(1),
       fontSize: 14,
       letterSpacing: 1,
+      color: ({ faction }) =>
+        faction ? theme.palette[faction].contrastText : 'white',
       backgroundColor: ({ faction }) =>
         faction ? theme.palette[faction].dark : theme.palette.grey[800]
     },
