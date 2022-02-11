@@ -23,9 +23,11 @@ const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>((theme) =>
       paddingBottom: theme.spacing(4),
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
-      borderTop: `1px solid ${theme.palette.grey[200]}`,
       '&:nth-child(even)': {
         backgroundColor: theme.palette.grey[50]
+      },
+      '&:not(:last-child)': {
+        borderBottom: `1px solid ${theme.palette.grey[200]}`
       }
     },
     sectionHeading: {
