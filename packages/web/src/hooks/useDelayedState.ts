@@ -4,8 +4,8 @@ type Options = {
   disabled?: boolean
 }
 
-export const useDelayedState = (
-  value: any,
+export const useDelayedState = <T>(
+  value: T,
   delay: number,
   options?: Options
 ) => {
