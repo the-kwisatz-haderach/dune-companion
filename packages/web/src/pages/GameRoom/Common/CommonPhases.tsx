@@ -11,11 +11,12 @@ import {
   RuleSection as RuleSectionType,
   RuleSet
 } from '@dune-companion/engine'
-import { Header } from '../../../components/Header'
 import { Alert } from '@material-ui/lab'
 import { RuleSection } from './RuleSection'
 import { usePhaseSideEffects } from '../usePhaseSideEffects'
 import { phaseIcons } from '../../../lib/phaseIcons'
+import { EmphasisedText } from '../../../components/EmphasisedText'
+import { Section } from '../../../components/Section'
 
 interface Props {
   phase: Phases
@@ -52,17 +53,21 @@ export function CommonPhases({
       />
       <RoundedContainer>
         {phase === 'SETUP' && (
-          <Header
-            title="Game Objective"
-            description="Each faction has a set of unique economic, military, strategic, or treacherous advantages. The object of the game is to use these advantages to gain control of Dune. The winner is the First Player to occupy at least 3 strongholds with at least one of their forces during the Mentat Pause Phase. A player may win alone or in an Alliance with other players."
-          />
-        )}
-        {phase === 'SETUP' && (
-          <Alert severity="info" style={{ marginBottom: 24 }}>
-            A faction has special advantages that may contradict the rules. A
-            faction's particular advantages always have precedence over the
-            rules.
-          </Alert>
+          <Section heading="Game objective">
+            <EmphasisedText>
+              Each faction has a set of unique economic, military, strategic, or
+              treacherous advantages. The object of the game is to use these
+              advantages to gain control of Dune. The winner is the First Player
+              to occupy at least 3 strongholds with at least one of their forces
+              during the Mentat Pause Phase. A player may win alone or in an
+              Alliance with other players.
+            </EmphasisedText>
+            <Alert severity="info" style={{ marginBottom: 24 }}>
+              A faction has special advantages that may contradict the rules. A
+              faction's particular advantages always have precedence over the
+              rules.
+            </Alert>
+          </Section>
         )}
         {rules.map((section, index) => (
           <RuleSection key={`${section.title}${index}`} section={section} />

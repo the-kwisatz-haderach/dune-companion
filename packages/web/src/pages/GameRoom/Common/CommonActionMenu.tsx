@@ -8,16 +8,16 @@ import {
   QuestionAnswer as FAQIcon
 } from '@material-ui/icons'
 import useGameSettingsContext from '../../../contexts/GameSettingsContext/GameSettingsContext'
-import { GameActionMenuProps } from '../../../components/GameActionMenu'
+import {
+  GameActionMenu,
+  GameActionMenuProps
+} from '../../../components/GameActionMenu'
 import {
   factionRuleSets,
   getPhaseActionProperties
 } from '@dune-companion/engine'
-import {
-  Badge,
-  BottomNavigation,
-  BottomNavigationAction
-} from '@material-ui/core'
+import { BottomNavigation, BottomNavigationAction } from '@material-ui/core'
+import styles from './CommonActionMenu.module.css'
 
 const getSecondaryActions = (
   actions: ReturnType<typeof useGameActions>,
@@ -41,12 +41,7 @@ const getSecondaryActions = (
   return secondaryActions
 }
 
-type Props = {
-  value?: 'actions' | 'faq' | 'faction' | 'settings'
-  onChange: (newValue: Props['value']) => void
-}
-
-export const CommonActionMenu = ({ value, onChange }: Props) => {
+export const CommonActionMenu = () => {
   const player = usePlayer()
   const actions = useGameActions()
   const game = useGame()
@@ -100,26 +95,27 @@ export const CommonActionMenu = ({ value, onChange }: Props) => {
     0
 
   return (
-    <BottomNavigation
-      value={value}
-      showLabels
-      onChange={(_, newValue) => {
-        onChange(newValue)
-      }}
-    >
-      <BottomNavigationAction label="Actions" icon={<MenuIcon />} />
-      <BottomNavigationAction label="FAQ" icon={<FAQIcon />} disabled />
-      <BottomNavigationAction label="Faction" icon={<FirstPlayerIcon />} />
-      <BottomNavigationAction
-        label="Settings"
-        icon={<SettingsIcon />}
-        disabled
-      />
-    </BottomNavigation>
-    // <GameActionMenu
-    //   primaryAction={primaryAction}
-    //   settingsMenu={settingsMenu}
-    //   secondaryActions={secondaryActions}
-    // />
+    // <BottomNavigation
+    //   className={styles.menu}
+    //   value={value}
+    //   showLabels
+    //   onChange={(_, newValue) => {
+    //     onChange(newValue)
+    //   }}
+    // >
+    //   <BottomNavigationAction label="Actions" icon={<MenuIcon />} />
+    //   <BottomNavigationAction label="FAQ" icon={<FAQIcon />} disabled />
+    //   <BottomNavigationAction label="Faction" icon={<FirstPlayerIcon />} />
+    //   <BottomNavigationAction
+    //     label="Settings"
+    //     icon={<SettingsIcon />}
+    //     disabled
+    //   />
+    // </BottomNavigation>
+    <GameActionMenu
+      primaryAction={primaryAction}
+      settingsMenu={settingsMenu}
+      secondaryActions={secondaryActions}
+    />
   )
 }

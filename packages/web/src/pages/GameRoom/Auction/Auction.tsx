@@ -1,4 +1,3 @@
-import { Auction as AuctionType } from '@dune-companion/engine'
 import {
   Box,
   makeStyles,
@@ -9,11 +8,7 @@ import {
 import { useMemo } from 'react'
 import { useGame, useGameDispatch } from '../../../dune-react'
 
-type Props = {
-  auction: AuctionType
-}
-
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       marginTop: 50,
@@ -31,9 +26,10 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export const Auction = ({ auction }: Props) => {
+export const Auction = () => {
   const classes = useStyles()
   const game = useGame()
+  const auction = game.auctions[game.currentTurn - 1]
   const dispatch = useGameDispatch()
 
   if (auction.isDone) {
@@ -49,15 +45,15 @@ export const Auction = ({ auction }: Props) => {
           <Typography variant="h5">Bidding</Typography>
           {auction.participants
             .filter(
-              participant => !currentRound.skipped.includes(participant.id)
+              (participant) => !currentRound.skipped.includes(participant.id)
             )
-            .map(player => (
+            .map((player) => (
               <Typography>{game.players[player.id].name}</Typography>
             ))}
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h5">Skipped</Typography>
-          {currentRound.skipped.map(playerId => (
+          {currentRound.skipped.map((playerId) => (
             <Typography>{game.players[playerId].name}</Typography>
           ))}
         </Grid>
@@ -73,7 +69,7 @@ export const Auction = ({ auction }: Props) => {
         <Grid item xs={12}>
           <Typography variant="h5">Bids</Typography>
           <Typography>
-            {currentRound.bids.map(bid => (
+            {currentRound.bids.map((bid) => (
               <Box>
                 <Typography>
                   Bidder: {game.players[bid.playerId].name}

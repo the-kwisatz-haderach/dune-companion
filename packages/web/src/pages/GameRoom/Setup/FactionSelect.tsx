@@ -1,19 +1,12 @@
 import { ReactElement, useState } from 'react'
-import {
-  Box,
-  createStyles,
-  makeStyles,
-  Typography,
-  useTheme
-} from '@material-ui/core'
+import { Box, createStyles, makeStyles, useTheme } from '@material-ui/core'
 import { factions, Factions } from '@dune-companion/engine'
-import { useGame, useGameDispatch, usePlayer } from '../../../dune-react'
+import { useGame, usePlayer } from '../../../dune-react'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
 import { Card } from '../../../components/Card'
 import { Section } from '../../../components/Section'
 import { factionIcons } from '../../../lib/factionIcons'
-import { ActionMenu } from '../../../components/ActionMenu'
 import { Header } from '../../../components/Header'
 import { LeaderTeaser } from '../../../components/Leader'
 import { FactionSummary } from './FactionSummary'
@@ -22,6 +15,8 @@ import dune from '../../../images/dune.jpeg'
 import { usePhaseSideEffects } from '../usePhaseSideEffects'
 import { FactionOverlay } from '../../../components/FactionOverlay'
 import { useTransition } from '../../../hooks/useTransition'
+import { FactionSelectMenu } from '../Common/FactionSelectMenu'
+import { EmphasisedText } from '../../../components/EmphasisedText'
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -35,19 +30,6 @@ const useStyles = makeStyles((theme) =>
       '& > *:not(:last-child)': {
         marginBottom: theme.spacing(3)
       }
-    },
-    strategy: {
-      padding: theme.spacing(2),
-      textAlign: 'justify',
-      lineHeight: 1.6,
-      '&::first-letter': {
-        fontFamily: theme.typography.h1.fontFamily,
-        fontSize: '300%',
-        float: 'left',
-        marginRight: '6px',
-        marginTop: '13px',
-        lineHeight: 0.5
-      }
     }
   })
 )
@@ -58,7 +40,6 @@ export default function FactionSelect(): ReactElement {
   const factionKeys = Object.keys(factions)
   const currentFactionKey = factionKeys[factionIndex] as Factions
   const classes = useStyles()
-  const dispatch = useGameDispatch()
   const game = useGame()
   const player = usePlayer()
   const showEffect = useTransition(player.faction, {
@@ -69,16 +50,11 @@ export default function FactionSelect(): ReactElement {
 
   const currentFaction = factions[currentFactionKey]
 
-  const playerSelected = Object.values(game.players).find(
-    (player) => player.faction === currentFactionKey
-  )
-  const isSelectedByPlayer = player.id === playerSelected?.id
-
-  const getNextFaction = () => {
+  const onNext = () => {
     setFactionIndex((curr) => (curr + 1) % factionKeys.length)
   }
 
-  const getPreviousFaction = () => {
+  const onPrev = () => {
     setFactionIndex((curr) => {
       const prev = curr - 1
       if (prev < 0) {
@@ -88,30 +64,13 @@ export default function FactionSelect(): ReactElement {
     })
   }
 
-  const onSelectFaction = (faction: Factions) =>
-    dispatch('SELECT_FACTION', {
-      faction: isSelectedByPlayer ? null : faction
-    })
-
   return (
     <Box>
       {showEffect && <FactionOverlay faction={currentFactionKey} />}
-      <ActionMenu
-        primaryActionLabel={isSelectedByPlayer ? 'Deselect' : 'Select'}
-        primaryActionType={isSelectedByPlayer ? 'negative' : 'positive'}
-        primaryActionPreamble={
-          playerSelected
-            ? `Selected by ${isSelectedByPlayer ? 'you' : playerSelected.name}`
-            : undefined
-        }
-        primaryActionIsDisabled={playerSelected && !isSelectedByPlayer}
-        secondaryActionLeftLabel="Prev"
-        onSecondaryActionLeft={getPreviousFaction}
-        secondaryActionRightLabel="Next"
-        onSecondaryActionRight={getNextFaction}
-        onPrimaryAction={() =>
-          onSelectFaction(factionKeys[factionIndex] as Factions)
-        }
+      <FactionSelectMenu
+        onNext={onNext}
+        onPrev={onPrev}
+        selectedFactionIndex={factionIndex}
       />
       <HeaderImage
         title={currentFaction.name}
@@ -190,9 +149,7 @@ export default function FactionSelect(): ReactElement {
           </Box>
         </Section>
         <Section heading="Strategy" faction={currentFactionKey}>
-          <Typography className={classes.strategy} variant="body2">
-            {currentFaction.strategy}
-          </Typography>
+          <EmphasisedText>{currentFaction.strategy}</EmphasisedText>
         </Section>
       </RoundedContainer>
     </Box>
