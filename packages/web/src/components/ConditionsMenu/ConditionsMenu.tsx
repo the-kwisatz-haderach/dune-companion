@@ -1,5 +1,11 @@
 import { Phases, phases } from '@dune-companion/engine'
-import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
+import {
+  createStyles,
+  Grid,
+  LinearProgress,
+  makeStyles,
+  Typography
+} from '@material-ui/core'
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -49,31 +55,37 @@ export const ConditionsMenu: React.FC<Props> = ({
 }) => {
   const classes = useStyles()
   return (
-    <Grid container className={classes.root} wrap="nowrap">
-      <Grid item xs={3} className={classes.item}>
-        <Typography className={classes.title} variant="caption">
-          Turn
-        </Typography>
-        <Typography variant="body2" className={classes.text}>
-          {currentTurn} / {maxTurns}
-        </Typography>
+    <>
+      <Grid container className={classes.root} wrap="nowrap">
+        <Grid item xs={3} className={classes.item}>
+          <Typography className={classes.title} variant="caption">
+            Turn
+          </Typography>
+          <Typography variant="body2" className={classes.text}>
+            {currentTurn} / {maxTurns}
+          </Typography>
+        </Grid>
+        <Grid item xs className={classes.item}>
+          <Typography className={classes.title} variant="caption">
+            First player
+          </Typography>
+          <Typography variant="body2" className={classes.text}>
+            {currentFirstPlayer}
+          </Typography>
+        </Grid>
+        <Grid item xs={4} className={classes.item}>
+          <Typography className={classes.title} variant="caption">
+            Phase
+          </Typography>
+          <Typography variant="body2" className={classes.text}>
+            {phases[currentPhase].name}
+          </Typography>
+        </Grid>
       </Grid>
-      <Grid item xs className={classes.item}>
-        <Typography className={classes.title} variant="caption">
-          First player
-        </Typography>
-        <Typography variant="body2" className={classes.text}>
-          {currentFirstPlayer}
-        </Typography>
-      </Grid>
-      <Grid item xs={4} className={classes.item}>
-        <Typography className={classes.title} variant="caption">
-          Phase
-        </Typography>
-        <Typography variant="body2" className={classes.text}>
-          {phases[currentPhase].name}
-        </Typography>
-      </Grid>
-    </Grid>
+      <LinearProgress
+        variant="determinate"
+        value={(currentTurn / maxTurns) * 100}
+      />
+    </>
   )
 }
