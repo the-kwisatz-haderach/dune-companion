@@ -67,6 +67,10 @@ const useStyles = makeStyles<Theme, Omit<Props, 'preamble' | 'title'>>(
         bottom: 0,
         fill: 'white',
         opacity: 0.2
+      },
+      title: {
+        fontSize: ({ size }) =>
+          size === 'small' ? theme.typography.pxToRem(32) : '3rem'
       }
     })
 )
@@ -96,7 +100,7 @@ export default function HeaderImage({
           </Typography>
         )}
         {title && (
-          <Typography variant="h1" color="inherit">
+          <Typography variant="h1" color="inherit" className={classes.title}>
             {title}
           </Typography>
         )}

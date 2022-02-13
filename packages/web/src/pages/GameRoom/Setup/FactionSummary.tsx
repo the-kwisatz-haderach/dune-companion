@@ -23,6 +23,7 @@ const useStyles = makeStyles<Theme, Pick<Props, 'factionKey'>>((theme) =>
         borderBottom: `1px solid ${theme.palette.grey[200]}`
       }
     },
+    title: {},
     img: {
       width: 30,
       height: 30,
@@ -32,7 +33,8 @@ const useStyles = makeStyles<Theme, Pick<Props, 'factionKey'>>((theme) =>
         `linear-gradient(175deg, ${theme.palette[factionKey].main}, ${theme.palette[factionKey].dark})`
     },
     strength: {
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      fontSize: 14
     }
   })
 )
@@ -40,13 +42,15 @@ const useStyles = makeStyles<Theme, Pick<Props, 'factionKey'>>((theme) =>
 export const FactionSummary = ({ faction, factionKey }: Props) => {
   const classes = useStyles({ factionKey })
   return (
-    <Box>
+    <Box px={1}>
       <Grid container alignItems="center" className={classes.root}>
         <Grid item xs={2} alignItems="center">
           <Icon icon="revival" />
         </Grid>
         <Grid item xs>
-          <Typography variant="body2">Free revivals</Typography>
+          <Typography variant="body2" className={classes.title}>
+            Free revivals
+          </Typography>
         </Grid>
         <Grid item xs={2}>
           <Typography className={classes.strength}>
@@ -59,7 +63,9 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
           <Icon icon="spice" />
         </Grid>
         <Grid item xs>
-          <Typography variant="body2">Starting spice</Typography>
+          <Typography variant="body2" className={classes.title}>
+            Starting spice
+          </Typography>
         </Grid>
         <Grid item xs={2}>
           <Typography className={classes.strength}>
@@ -72,7 +78,9 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
           <Icon icon="treachery-card" />
         </Grid>
         <Grid item xs>
-          <Typography variant="body2">Starting items</Typography>
+          <Typography variant="body2" className={classes.title}>
+            Starting items
+          </Typography>
         </Grid>
         <Grid item xs={2}>
           <Typography className={classes.strength}>
@@ -85,7 +93,9 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
           <Icon icon="force" />
         </Grid>
         <Grid item xs>
-          <Typography variant="body2">Starting planetary forces</Typography>
+          <Typography variant="body2" className={classes.title}>
+            Starting planetary forces
+          </Typography>
         </Grid>
         <Grid item xs={2}>
           <Typography className={classes.strength}>
@@ -98,7 +108,9 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
           <Icon icon="force" />
         </Grid>
         <Grid item xs>
-          <Typography variant="body2">Starting reserve forces</Typography>
+          <Typography variant="body2" className={classes.title}>
+            Starting reserve forces
+          </Typography>
         </Grid>
         <Grid item xs={2}>
           <Typography className={classes.strength}>
@@ -111,11 +123,13 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
           <Icon icon="city" />
         </Grid>
         <Grid item xs>
-          <Typography variant="body2">Starting city</Typography>
+          <Typography variant="body2" className={classes.title}>
+            Starting city
+          </Typography>
         </Grid>
         <Grid item xs={2}>
           <Typography className={classes.strength}>
-            {faction.startingCity ? cities[faction.startingCity].name : 'None'}
+            {faction.startingCity ? cities[faction.startingCity].name : '-'}
           </Typography>
         </Grid>
       </Grid>

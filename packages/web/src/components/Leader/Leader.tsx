@@ -99,7 +99,8 @@ const useTeaserStyles = makeStyles<Theme, Pick<Props, 'faction'>>((theme) =>
         `linear-gradient(175deg, ${theme.palette[faction].main}, ${theme.palette[faction].dark})`
     },
     strength: {
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      fontSize: 14
     }
   })
 )

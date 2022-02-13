@@ -11,12 +11,6 @@ export const factions: Record<Factions, Faction> = {
         description:
           'Your forces have two sides, the spiritual, striped side (advisor) and the battle side with no stripes (fighter). Fighters are normal forces.',
         isAdvanced: true
-      },
-      {
-        name: 'Karama',
-        description:
-          'You may use any worthless card as if it is a Karama Card.',
-        isAdvanced: true
       }
     ],
     description:
@@ -44,7 +38,7 @@ export const factions: Record<Factions, Faction> = {
       { name: 'Princess Irulan', strength: 5, backstory: '' },
       { name: 'Wanna Yueh', strength: 5, backstory: '' }
     ],
-    karamaPower: '',
+    karamaPower: 'You may use any worthless card as if it is a Karama Card.',
     keyAdvantage: 'You are adept in the ways of mind control.'
   },
   HOUSE_ATREIDES: {

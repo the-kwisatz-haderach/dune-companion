@@ -1,30 +1,35 @@
 import { Phases, phases } from '@dune-companion/engine'
 import { createStyles, Grid, makeStyles, Typography } from '@material-ui/core'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       display: 'flex',
       width: '100%',
-      backgroundColor: theme.palette.common.white,
-      boxShadow: '0px 5px 20px -2px rgb(0 0 0 / 20%)',
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1)
+      backgroundImage:
+        'linear-gradient(0deg, hsl(219, 40%, 30%), hsl(219deg 36% 60%))',
+      boxShadow: '0px 5px 20px -2px rgb(0 0 0 / 10%)',
+      paddingLeft: theme.spacing(0.5),
+      paddingRight: theme.spacing(0.5)
     },
     item: {
-      padding: `${theme.spacing(1)}px ${theme.spacing(1)}px`,
+      padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
       display: 'flex',
-      flexDirection: 'column',
-      '& p': {
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        lineHeight: 1.4,
-        overflow: 'hidden'
-      }
+      flexDirection: 'column'
     },
     title: {
-      fontSize: theme.typography.pxToRem(10),
+      fontWeight: 400,
+      color: theme.palette.primary.contrastText,
+      fontSize: theme.typography.pxToRem(9),
       textTransform: 'uppercase'
+    },
+    text: {
+      color: theme.palette.primary.contrastText,
+      fontSize: theme.typography.pxToRem(12),
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      fontWeight: 500
     }
   })
 )
@@ -45,30 +50,28 @@ export const ConditionsMenu: React.FC<Props> = ({
   const classes = useStyles()
   return (
     <Grid container className={classes.root} wrap="nowrap">
-      <Grid item xs={2} className={classes.item}>
-        <Typography className={classes.title} variant="body1">
+      <Grid item xs={3} className={classes.item}>
+        <Typography className={classes.title} variant="caption">
           Turn
         </Typography>
-        <Typography variant="body1">
-          <strong>
-            {currentTurn} / {maxTurns}
-          </strong>
+        <Typography variant="body2" className={classes.text}>
+          {currentTurn} / {maxTurns}
+        </Typography>
+      </Grid>
+      <Grid item xs className={classes.item}>
+        <Typography className={classes.title} variant="caption">
+          First player
+        </Typography>
+        <Typography variant="body2" className={classes.text}>
+          {currentFirstPlayer}
         </Typography>
       </Grid>
       <Grid item xs={4} className={classes.item}>
-        <Typography className={classes.title} variant="body1">
-          First player
-        </Typography>
-        <Typography variant="body1">
-          <strong>{currentFirstPlayer}</strong>
-        </Typography>
-      </Grid>
-      <Grid item xs={6} className={classes.item}>
-        <Typography className={classes.title} variant="body1">
+        <Typography className={classes.title} variant="caption">
           Phase
         </Typography>
-        <Typography variant="body1">
-          <strong>{phases[currentPhase].name}</strong>
+        <Typography variant="body2" className={classes.text}>
+          {phases[currentPhase].name}
         </Typography>
       </Grid>
     </Grid>

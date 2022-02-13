@@ -26,9 +26,7 @@ const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>((theme) =>
       '&:nth-child(even)': {
         backgroundColor: theme.palette.grey[50]
       },
-      '&:not(:last-child)': {
-        borderBottom: `1px solid ${theme.palette.grey[200]}`
-      }
+      borderTop: `1px solid ${theme.palette.grey[200]}`
     },
     sectionHeading: {
       marginBottom: theme.spacing(1),
@@ -40,6 +38,7 @@ const useStyles = makeStyles<Theme, Pick<Props, 'faction'>>((theme) =>
       paddingBottom: theme.spacing(1),
       fontSize: 14,
       letterSpacing: 1,
+      transition: 'background-color 1s ease-in-out',
       color: ({ faction }) =>
         faction ? theme.palette[faction].contrastText : 'white',
       backgroundColor: ({ faction }) =>

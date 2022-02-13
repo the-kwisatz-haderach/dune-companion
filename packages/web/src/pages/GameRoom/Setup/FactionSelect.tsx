@@ -1,5 +1,5 @@
 import { ReactElement, useState } from 'react'
-import { Box, createStyles, makeStyles, useTheme } from '@material-ui/core'
+import { Box, useTheme } from '@material-ui/core'
 import { factions, Factions } from '@dune-companion/engine'
 import { useGame, usePlayer } from '../../../dune-react'
 import { HeaderImage } from '../../../components/HeaderImage'
@@ -17,29 +17,13 @@ import { FactionOverlay } from '../../../components/FactionOverlay'
 import { useTransition } from '../../../hooks/useTransition'
 import { FactionSelectMenu } from '../Common/FactionSelectMenu'
 import { EmphasisedText } from '../../../components/EmphasisedText'
-
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    leadersContainer: {
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    cardContainer: {
-      marginTop: theme.spacing(3),
-      marginBottom: theme.spacing(2),
-      '& > *:not(:last-child)': {
-        marginBottom: theme.spacing(3)
-      }
-    }
-  })
-)
+import { MarginList } from '../../../components/MarginList'
 
 export default function FactionSelect(): ReactElement {
   const { palette } = useTheme()
   const [factionIndex, setFactionIndex] = useState(0)
   const factionKeys = Object.keys(factions)
   const currentFactionKey = factionKeys[factionIndex] as Factions
-  const classes = useStyles()
   const game = useGame()
   const player = usePlayer()
   const showEffect = useTransition(player.faction, {
@@ -49,6 +33,10 @@ export default function FactionSelect(): ReactElement {
   usePhaseSideEffects('FACTION_SELECT')
 
   const currentFaction = factions[currentFactionKey]
+
+  const commonAdvantages = currentFaction.advantages.filter(
+    (rule) => (game.isAdvancedMode && rule.isAdvanced) || !rule.isAdvanced
+  )
 
   const onNext = () => {
     setFactionIndex((curr) => (curr + 1) % factionKeys.length)
@@ -88,6 +76,9 @@ export default function FactionSelect(): ReactElement {
           faction={currentFactionKey}
           img={dune}
         />
+        <Section heading="Strategy" faction={currentFactionKey}>
+          <EmphasisedText>{currentFaction.strategy}</EmphasisedText>
+        </Section>
         <Section heading="Summary" faction={currentFactionKey}>
           <FactionSummary
             faction={currentFaction}
@@ -95,18 +86,16 @@ export default function FactionSelect(): ReactElement {
           />
         </Section>
         <Section heading="Leaders" faction={currentFactionKey}>
-          <Box className={classes.leadersContainer}>
-            {currentFaction.leaders.map((leader) => (
-              <LeaderTeaser
-                key={leader.name}
-                faction={currentFactionKey}
-                name={leader.name}
-                imgSrc={dune}
-                description={leader.backstory}
-                strength={leader.strength}
-              />
-            ))}
-          </Box>
+          {currentFaction.leaders.map((leader) => (
+            <LeaderTeaser
+              key={leader.name}
+              faction={currentFactionKey}
+              name={leader.name}
+              imgSrc={dune}
+              description={leader.backstory}
+              strength={leader.strength}
+            />
+          ))}
         </Section>
         <Section heading="Phase Advantages" faction={currentFactionKey}>
           <FactionAdvantages
@@ -114,14 +103,10 @@ export default function FactionSelect(): ReactElement {
             isAdvancedMode={game.isAdvancedMode}
           />
         </Section>
-        <Section heading="Common Advantages" faction={currentFactionKey}>
-          <Box className={classes.cardContainer}>
-            {currentFaction.advantages
-              .filter(
-                (rule) =>
-                  (game.isAdvancedMode && rule.isAdvanced) || !rule.isAdvanced
-              )
-              .map((rule) => (
+        {commonAdvantages.length > 0 && (
+          <Section heading="Common Advantages" faction={currentFactionKey}>
+            <MarginList marginTop={3} marginBottom={2}>
+              {commonAdvantages.map((rule) => (
                 <Card
                   key={rule.name}
                   title={rule.name}
@@ -131,25 +116,27 @@ export default function FactionSelect(): ReactElement {
                   body={rule.description}
                 />
               ))}
-            {game.isAdvancedMode && (
-              <Card
-                title="Karama Power"
-                meta="Faction rule"
-                faction={currentFactionKey}
-                advanced
-                body={currentFaction.karamaPower}
-              />
-            )}
+            </MarginList>
+          </Section>
+        )}
+        {game.isAdvancedMode && (
+          <Section heading="Karama" faction={currentFactionKey}>
             <Card
-              title="Alliance Power"
+              title="Karama Power"
               meta="Faction rule"
               faction={currentFactionKey}
-              body={currentFaction.alliancePower}
+              advanced
+              body={currentFaction.karamaPower}
             />
-          </Box>
-        </Section>
-        <Section heading="Strategy" faction={currentFactionKey}>
-          <EmphasisedText>{currentFaction.strategy}</EmphasisedText>
+          </Section>
+        )}
+        <Section heading="Alliance Advantages" faction={currentFactionKey}>
+          <Card
+            title="Alliance Power"
+            meta="Faction rule"
+            faction={currentFactionKey}
+            body={currentFaction.alliancePower}
+          />
         </Section>
       </RoundedContainer>
     </Box>

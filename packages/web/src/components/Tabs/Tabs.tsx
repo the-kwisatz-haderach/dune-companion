@@ -3,7 +3,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { useEffect } from 'react'
-import { Grow } from '@material-ui/core'
+import { Slide } from '@material-ui/core'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -13,7 +13,13 @@ interface TabPanelProps {
 
 function TabPanel({ children, value, index, ...other }: TabPanelProps) {
   return (
-    <Grow in={value === index} unmountOnExit exit={false} timeout={1000}>
+    <Slide
+      direction="right"
+      in={value === index}
+      unmountOnExit
+      exit={false}
+      timeout={500}
+    >
       <div
         role="tabpanel"
         id={`scrollable-auto-tabpanel-${index}`}
@@ -22,7 +28,7 @@ function TabPanel({ children, value, index, ...other }: TabPanelProps) {
       >
         {children}
       </div>
-    </Grow>
+    </Slide>
   )
 }
 
@@ -33,15 +39,15 @@ function a11yProps(index: any) {
   }
 }
 
-const useStyles = makeStyles<Theme, Pick<Props, 'sticky'>>((theme) =>
+const useStyles = makeStyles<Theme, Pick<Props, 'sticky' | 'top'>>((theme) =>
   createStyles({
     root: {
       flexGrow: 1
     },
     tabsContainer: {
       position: ({ sticky }) => (sticky ? 'sticky' : undefined),
-      zIndex: 10,
-      top: 0,
+      zIndex: 300,
+      top: ({ top }) => top ?? 0,
       backgroundColor: theme.palette.background.paper,
       borderTop: `1px solid ${theme.palette.grey[200]}`,
       boxShadow: '0px 10px 15px -5px rgb(0 0 0 / 20%)',
@@ -65,14 +71,16 @@ type Props = {
   }>
   sticky?: boolean
   resetDependency?: any
+  top?: number
 }
 
 export default function ScrollableTabsButtonAuto({
   tabs,
   sticky,
-  resetDependency
+  resetDependency,
+  top
 }: Props) {
-  const classes = useStyles({ sticky })
+  const classes = useStyles({ sticky, top })
   const [tabIndex, setTabIndex] = React.useState(0)
 
   useEffect(() => {

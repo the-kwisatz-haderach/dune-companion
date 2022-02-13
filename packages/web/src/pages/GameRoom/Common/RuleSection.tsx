@@ -1,8 +1,5 @@
-import {
-  factions,
-  RuleSection as RuleSectionType
-} from '@dune-companion/engine'
-import { Card } from '../../../components/Card'
+import { RuleSection as RuleSectionType } from '@dune-companion/engine'
+import { RuleCard } from '../../../components/RuleCard'
 import { EmptyState } from '../../../components/EmptyState'
 import { MarginList } from '../../../components/MarginList'
 import { Section } from '../../../components/Section'
@@ -17,21 +14,7 @@ export const RuleSection = ({ section }: Props) => {
       {section?.rules?.length > 0 ? (
         <MarginList>
           {section?.rules.map((rule, index) => (
-            <Card
-              key={`${rule.name}${index}`}
-              title={rule.name}
-              meta={
-                rule.faction
-                  ? `${factions[rule.faction].name} rule`
-                  : rule.inclusionReason
-                  ? 'Temporary rule'
-                  : 'Common rule'
-              }
-              inclusionReason={rule.inclusionReason}
-              faction={rule.faction}
-              advanced={rule.isAdvanced}
-              body={rule.description}
-            />
+            <RuleCard key={`${rule.name}${index}`} {...rule} />
           ))}
         </MarginList>
       ) : (

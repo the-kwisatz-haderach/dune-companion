@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) =>
 export const GameLayout: React.FC = ({ children }) => {
   const classes = useStyles()
   const game = useGame()
-  const transition = useTransition(game.currentPhase, { duration: 4500 })
+  const transition = useTransition(game.currentPhase, { duration: 3500 })
   return (
     <Box position="relative">
       {game.currentTurn > 0 && (

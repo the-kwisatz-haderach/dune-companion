@@ -2,7 +2,7 @@ import { RuleSection } from '../../models'
 
 export const mentatPauseRules: RuleSection[] = [
   {
-    title: '',
+    title: 'Determine victory',
     rules: [
       {
         name: 'Victory',

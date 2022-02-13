@@ -25,7 +25,7 @@ export const setupRules: RuleSection[] = [
       {
         name: 'Forces',
         description:
-          'Each player’s forces are placed on the board as indicated by their player sheet. All forces in reserve are placed next to your shield.',
+          "Each player's forces are placed on the board as indicated by their player sheet. All forces in reserve are placed next to your shield.",
         isAdvanced: false
       },
       {

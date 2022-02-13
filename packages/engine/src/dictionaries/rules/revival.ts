@@ -2,7 +2,7 @@ import { RuleSection } from '../../models'
 
 export const revivalRules: RuleSection[] = [
   {
-    title: '',
+    title: 'Forces',
     rules: [
       {
         name: 'Force Revival',
@@ -13,7 +13,7 @@ export const revivalRules: RuleSection[] = [
     ]
   },
   {
-    title: '',
+    title: 'Leaders',
     rules: [
       {
         name: 'Leader Revival',

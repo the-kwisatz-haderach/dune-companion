@@ -16,13 +16,14 @@ import { shipmentAndMovementRules } from './shipmentAndMovement'
 import { battleRules } from './battle'
 import { spiceHarvestRules } from './spiceHarvest'
 import { mentatPauseRules } from './mentatPause'
+import { nexusRules } from './nexus'
 
 export const commonRuleSets: Record<Phases, RuleSection[]> = {
   FACTION_SELECT: [],
   SETUP: setupRules,
   STORM: stormRules,
   SPICE_BLOW_AND_NEXUS: spiceBlowAndNexusRules,
-  NEXUS: [],
+  NEXUS: nexusRules,
   CHOAM_CHARITY: choamCharityRules,
   BIDDING: biddingRules,
   REVIVAL: revivalRules,

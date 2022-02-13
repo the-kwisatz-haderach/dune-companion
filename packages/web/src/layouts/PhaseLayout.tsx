@@ -17,7 +17,6 @@ export const PhaseLayout: React.FC<Props> = ({
 }) => {
   const transition = useTransition(phase, {
     duration: 3500,
-    delay: 500,
     condition: phase !== 'FACTION_SELECT'
   })
   return (

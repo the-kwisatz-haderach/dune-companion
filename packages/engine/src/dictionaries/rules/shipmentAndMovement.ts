@@ -55,7 +55,7 @@ export const shipmentAndMovementRules: RuleSection[] = [
       {
         name: 'Sectors',
         description:
-          'Sectors have no effect on movement. Forces can move into or through a territory ignoring all sectors. A sector’s only function is to regulate the movement and coverage of the storm and spice collection.',
+          "Sectors have no effect on movement. Forces can move into or through a territory ignoring all sectors. A sector's only function is to regulate the movement and coverage of the storm and spice collection.",
         isAdvanced: false
       },
       {
@@ -69,6 +69,13 @@ export const shipmentAndMovementRules: RuleSection[] = [
         description:
           'Like shipment, forces cannot be moved into or through a stronghold if forces of two other players are already there.',
         isAdvanced: false
+      },
+      {
+        name: 'Alliance Blocking',
+        description:
+          'If for any reason two factions who became allies during the last turn occupy the same territory at the beginning of the next turn, one of those factions must move out of that territory during the Shipment and Movement Phase. If the first faction to ship and move does not move out of the territory, the second faction must move out or lose those forces to the Tleilaxu Tanks.',
+        isAdvanced: false,
+        inclusionReason: 'Alliance'
       }
     ]
   }

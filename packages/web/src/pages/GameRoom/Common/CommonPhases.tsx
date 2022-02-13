@@ -1,5 +1,5 @@
 import { memo, ReactElement, useMemo } from 'react'
-import { Box } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
 import {
@@ -17,6 +17,9 @@ import { usePhaseSideEffects } from '../usePhaseSideEffects'
 import { phaseIcons } from '../../../lib/phaseIcons'
 import { EmphasisedText } from '../../../components/EmphasisedText'
 import { Section } from '../../../components/Section'
+import { Tabs } from '../../../components/Tabs'
+import { MarginList } from '../../../components/MarginList'
+import { RuleCard } from '../../../components/RuleCard'
 
 interface Props {
   phase: Phases
@@ -69,9 +72,41 @@ export function CommonPhases({
             </Alert>
           </Section>
         )}
-        {rules.map((section, index) => (
-          <RuleSection key={`${section.title}${index}`} section={section} />
-        ))}
+        <Box mb={4} mt={1}>
+          <EmphasisedText>{phases[phase].description}</EmphasisedText>
+        </Box>
+        {rules.length === 1 ? (
+          <RuleSection section={rules[0]} />
+        ) : (
+          <Tabs
+            resetDependency={phase}
+            top={40}
+            sticky
+            tabs={rules.map((ruleSection) => ({
+              label: ruleSection.title,
+              content: (
+                <MarginList>
+                  {ruleSection.description && (
+                    <Box p={1}>
+                      <Typography
+                        style={{
+                          lineHeight: 1.6,
+                          fontSize: 12
+                        }}
+                        variant="body2"
+                      >
+                        {ruleSection.description}
+                      </Typography>
+                    </Box>
+                  )}
+                  {ruleSection?.rules.map((rule, index) => (
+                    <RuleCard key={`${rule.name}${index}`} {...rule} />
+                  ))}
+                </MarginList>
+              )
+            }))}
+          />
+        )}
         <RuleSection section={factionRules} />
       </RoundedContainer>
     </Box>

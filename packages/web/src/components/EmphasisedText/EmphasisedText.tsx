@@ -3,7 +3,10 @@ import { createStyles, makeStyles, Typography } from '@material-ui/core'
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
-      padding: theme.spacing(2),
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
       textAlign: 'justify',
       lineHeight: 1.6,
       '&::first-letter': {
