@@ -57,12 +57,20 @@ export const ConditionsMenu: React.FC<Props> = ({
   return (
     <>
       <Grid container className={classes.root} wrap="nowrap">
-        <Grid item xs={3} className={classes.item}>
+        <Grid item xs={2} className={classes.item}>
           <Typography className={classes.title} variant="caption">
             Turn
           </Typography>
           <Typography variant="body2" className={classes.text}>
             {currentTurn} / {maxTurns}
+          </Typography>
+        </Grid>
+        <Grid item xs={6} className={classes.item}>
+          <Typography className={classes.title} variant="caption">
+            Phase
+          </Typography>
+          <Typography variant="body2" className={classes.text}>
+            {phases[currentPhase].name}
           </Typography>
         </Grid>
         <Grid item xs className={classes.item}>
@@ -71,14 +79,6 @@ export const ConditionsMenu: React.FC<Props> = ({
           </Typography>
           <Typography variant="body2" className={classes.text}>
             {currentFirstPlayer}
-          </Typography>
-        </Grid>
-        <Grid item xs={4} className={classes.item}>
-          <Typography className={classes.title} variant="caption">
-            Phase
-          </Typography>
-          <Typography variant="body2" className={classes.text}>
-            {phases[currentPhase].name}
           </Typography>
         </Grid>
       </Grid>
