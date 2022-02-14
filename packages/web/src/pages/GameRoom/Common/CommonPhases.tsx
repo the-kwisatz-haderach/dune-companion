@@ -1,11 +1,8 @@
-import { memo, ReactElement, useMemo } from 'react'
+import { memo, ReactElement } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { HeaderImage } from '../../../components/HeaderImage'
 import { RoundedContainer } from '../../../components/RoundedContainer'
 import {
-  commonRuleSets,
-  factionRuleSets,
-  Factions,
   Phases,
   phases,
   RuleSection as RuleSectionType,
@@ -20,29 +17,15 @@ import { Section } from '../../../components/Section'
 import { Tabs } from '../../../components/Tabs'
 import { MarginList } from '../../../components/MarginList'
 import { RuleCard } from '../../../components/RuleCard'
+import { filterRules } from '../../../lib/filterRules'
 
 interface Props {
   phase: Phases
   ruleFilter: (value: RuleSet) => boolean
-  playerFactions: Factions[]
 }
 
-export function CommonPhases({
-  phase,
-  ruleFilter,
-  playerFactions
-}: Props): ReactElement {
+export function CommonPhases({ phase, ruleFilter }: Props): ReactElement {
   const rules: RuleSectionType[] = filterRules(phase, ruleFilter)
-
-  const factionRules: RuleSectionType = useMemo(
-    () => ({
-      title: 'Faction Rules',
-      rules: playerFactions
-        .flatMap((faction) => factionRuleSets[faction][phase])
-        .filter(ruleFilter)
-    }),
-    [playerFactions, phase, ruleFilter]
-  )
 
   usePhaseSideEffects(phase)
 
@@ -107,22 +90,9 @@ export function CommonPhases({
             }))}
           />
         )}
-        <RuleSection section={factionRules} />
       </RoundedContainer>
     </Box>
   )
-}
-
-function filterRules(
-  phase: Phases,
-  ruleFilter: (value: RuleSet) => boolean
-): RuleSectionType[] {
-  return [
-    ...commonRuleSets[phase]?.map((section) => ({
-      ...section,
-      rules: section?.rules?.filter(ruleFilter)
-    }))
-  ]
 }
 
 export default memo(CommonPhases)

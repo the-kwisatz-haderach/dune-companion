@@ -1,0 +1,1 @@
+export { FactionDetails } from './FactionDetails'

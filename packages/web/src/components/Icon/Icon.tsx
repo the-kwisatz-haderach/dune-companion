@@ -1,22 +1,39 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import revival from './icons/revival.png'
 import spice from './icons/spice.png'
-import treacheryCards from './icons/treachery-cards.png'
+import treacheryCard from './icons/treachery-cards.png'
 import city from './icons/city.png'
-import forces from './icons/forces.png'
+import force from './icons/forces.png'
+import star from './icons/star.png'
+import cards from './icons/cards.png'
+import home from './icons/space-home.png'
+import menu from './icons/menu.png'
 
 type Props = {
-  icon: 'spice' | 'treachery-card' | 'revival' | 'force' | 'city'
+  icon:
+    | 'spice'
+    | 'treachery-card'
+    | 'revival'
+    | 'force'
+    | 'city'
+    | 'star'
+    | 'cards'
+    | 'home'
+    | 'menu'
   size?: 'medium' | 'small' | 'large'
   alt?: string
 }
 
 const icons: Record<Props['icon'], string> = {
-  spice: spice,
-  'treachery-card': treacheryCards,
-  revival: revival,
-  force: forces,
-  city: city
+  spice,
+  'treachery-card': treacheryCard,
+  revival,
+  force,
+  city,
+  star,
+  cards,
+  home,
+  menu
 }
 
 const useStyles = makeStyles<Theme, Pick<Props, 'size'>>(() =>

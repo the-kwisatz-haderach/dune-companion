@@ -1,0 +1,19 @@
+.container {
+  background-image: linear-gradient(0deg, hsl(219deg 25% 37%), hsl(219deg 37% 76%));
+  /* background-image: linear-gradient(0deg, hsl(219, 40%, 30%), hsl(219deg 36% 60%)); */
+  padding-top: 4px;
+  padding-bottom: 4px;
+  z-index: 2000;
+}
+
+.container > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.primaryAction {
+  position: relative;
+  bottom: 12px;
+  flex: 1;
+}

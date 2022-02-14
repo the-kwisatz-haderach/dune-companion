@@ -4,7 +4,6 @@ import CommonPhases from './Common'
 import { createRuleFilter } from './helpers'
 import FactionSelect from './Setup/FactionSelect'
 import useGameSettingsContext from '../../contexts/GameSettingsContext/GameSettingsContext'
-import { Factions } from '@dune-companion/engine'
 import { useDelayedState } from '../../hooks/useDelayedState'
 import { Auction } from './Auction'
 import { PhaseLayout } from '../../layouts/PhaseLayout'
@@ -33,14 +32,6 @@ function GamePhase(): ReactElement {
     ]
   )
 
-  const playerFactions = useMemo(
-    () =>
-      Object.values(game.players)
-        .map((player) => player.faction)
-        .filter((faction): faction is Factions => faction !== null),
-    [game.players]
-  )
-
   return (
     <PhaseLayout phase={game.currentPhase} delayedPhase={delayedCurrentPhase}>
       {delayedCurrentPhase === 'FACTION_SELECT' ? (
@@ -49,11 +40,7 @@ function GamePhase(): ReactElement {
         game.auctions[game.currentTurn - 1] ? (
         <Auction />
       ) : (
-        <CommonPhases
-          ruleFilter={ruleFilter}
-          phase={delayedCurrentPhase}
-          playerFactions={playerFactions}
-        />
+        <CommonPhases ruleFilter={ruleFilter} phase={delayedCurrentPhase} />
       )}
     </PhaseLayout>
   )

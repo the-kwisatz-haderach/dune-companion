@@ -1,13 +1,13 @@
 import React from 'react'
 import { Box, createStyles, makeStyles, Theme } from '@material-ui/core'
 
-const useStyles = makeStyles<Theme, { overlap: number }>(theme =>
+const useStyles = makeStyles<Theme, { overlap: number }>((theme) =>
   createStyles({
     root: {
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
       paddingTop: theme.spacing(4),
-      paddingBottom: theme.spacing(4),
+      paddingBottom: theme.spacing(1),
       height: '100%',
       borderRadius: '40px 40px 0px 0px',
       backgroundColor: theme.palette.common.white,

@@ -1,23 +1,19 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useGame, useGameActions, usePlayer } from '../../../dune-react'
 import PlayerOrderIcon from '@material-ui/icons/FormatListNumbered'
 import FirstPlayerIcon from '@material-ui/icons/PlusOne'
-import {
-  Settings as SettingsIcon,
-  Menu as MenuIcon,
-  QuestionAnswer as FAQIcon
-} from '@material-ui/icons'
 import useGameSettingsContext from '../../../contexts/GameSettingsContext/GameSettingsContext'
-import {
-  GameActionMenu,
-  GameActionMenuProps
-} from '../../../components/GameActionMenu'
-import {
-  factionRuleSets,
-  getPhaseActionProperties
-} from '@dune-companion/engine'
-import { BottomNavigation, BottomNavigationAction } from '@material-ui/core'
+import { GameActionMenuProps } from '../../../components/GameActionMenu'
+import { factionRuleSets, Factions } from '@dune-companion/engine'
+import { Badge, Box, Button, Drawer, Grid } from '@material-ui/core'
 import styles from './CommonActionMenu.module.css'
+import { ToggleButton } from '../../../components/ToggleButton'
+import { createRuleFilter } from '../helpers'
+import { MarginList } from '../../../components/MarginList'
+import { RuleCard } from '../../../components/RuleCard'
+import { EmptyState } from '../../../components/EmptyState'
+import { Icon } from '../../../components/Icon'
+import { FactionDetails } from '../../../components/FactionDetails'
 
 const getSecondaryActions = (
   actions: ReturnType<typeof useGameActions>,
@@ -45,38 +41,50 @@ export const CommonActionMenu = () => {
   const player = usePlayer()
   const actions = useGameActions()
   const game = useGame()
+  const [menuIndex, setMenuIndex] = useState<number | null>(null)
   const { showAllFactionRules, dispatch } = useGameSettingsContext()
 
-  const settingsMenu: GameActionMenuProps['settingsMenu'] = useMemo(
-    () => [
-      {
-        label: 'Show All Factions Rules',
-        onClick: () =>
-          dispatch({
-            type: 'updateRuleVisibility',
-            payload: !showAllFactionRules
-          }),
-        selectable: true,
-        selected: showAllFactionRules
-      }
-    ],
-    [showAllFactionRules, dispatch]
+  const ruleFilter = useMemo(
+    () =>
+      createRuleFilter({
+        currentPhase: game.currentPhase,
+        currentTurn: game.currentTurn,
+        advancedMode: game.isAdvancedMode,
+        playerFaction: player.faction,
+        showAllFactions: showAllFactionRules
+      }),
+    [
+      game.currentPhase,
+      game.currentTurn,
+      game.isAdvancedMode,
+      player.faction,
+      showAllFactionRules
+    ]
   )
 
-  const secondaryActions: GameActionMenuProps['secondaryActions'] = useMemo(
+  const playerFactions = useMemo(
     () =>
-      getPhaseActionProperties(game.currentPhase, player.isAdmin)
-        // .filter(action => action.actionType === 'secondary')
-        .map((action) => {
-          const currentAction = actions[action.type as keyof typeof actions]
-          return {
-            label: currentAction?.label,
-            onClick: currentAction?.handler,
-            style: currentAction?.style
-          }
-        }),
-    [actions, player.isAdmin, game.currentPhase]
+      Object.values(game.players)
+        .map((player) => player.faction)
+        .filter((faction): faction is Factions => faction !== null),
+    [game.players]
   )
+
+  const factionRules = useMemo(
+    () =>
+      playerFactions
+        .flatMap((faction) => factionRuleSets[faction][game.currentPhase])
+        .filter(ruleFilter),
+    [playerFactions, game.currentPhase, ruleFilter]
+  )
+
+  const onSelectMenuItem = (itemIndex: number) => {
+    if (menuIndex === itemIndex) {
+      setMenuIndex(null)
+    } else {
+      setMenuIndex(itemIndex)
+    }
+  }
 
   const primaryAction: GameActionMenuProps['primaryAction'] = useMemo(() => {
     const actionKey: keyof typeof actions = player.hasCompletedPhase
@@ -89,33 +97,82 @@ export const CommonActionMenu = () => {
     }
   }, [actions, player.hasCompletedPhase])
 
-  const playerFactionRulesCount =
-    (player.faction &&
-      factionRuleSets[player.faction][game.currentPhase].length) ||
-    0
-
   return (
-    // <BottomNavigation
-    //   className={styles.menu}
-    //   value={value}
-    //   showLabels
-    //   onChange={(_, newValue) => {
-    //     onChange(newValue)
-    //   }}
-    // >
-    //   <BottomNavigationAction label="Actions" icon={<MenuIcon />} />
-    //   <BottomNavigationAction label="FAQ" icon={<FAQIcon />} disabled />
-    //   <BottomNavigationAction label="Faction" icon={<FirstPlayerIcon />} />
-    //   <BottomNavigationAction
-    //     label="Settings"
-    //     icon={<SettingsIcon />}
-    //     disabled
-    //   />
-    // </BottomNavigation>
-    <GameActionMenu
-      primaryAction={primaryAction}
-      settingsMenu={settingsMenu}
-      secondaryActions={secondaryActions}
-    />
+    <>
+      <Grid container className={styles.container}>
+        <Grid item xs={2}>
+          <Button onClick={() => onSelectMenuItem(0)}>
+            <Icon icon="menu" size="small" />
+          </Button>
+        </Grid>
+        <Grid item xs={2}>
+          <Button onClick={() => onSelectMenuItem(1)}>
+            <Icon icon="home" size="small" />
+          </Button>
+        </Grid>
+        <Grid item xs className={styles.primaryAction}>
+          <ToggleButton
+            onClick={primaryAction.onClick}
+            status={player.hasCompletedPhase}
+            disabled={primaryAction.disabled}
+          >
+            Ready
+          </ToggleButton>
+        </Grid>
+        <Grid item xs={2}>
+          <Button onClick={() => onSelectMenuItem(2)}>
+            <Icon icon="cards" size="small" />
+          </Button>
+        </Grid>
+        <Grid item xs={2}>
+          <Button onClick={() => onSelectMenuItem(3)}>
+            <Badge badgeContent={factionRules.length} color="error">
+              <Icon icon="star" size="small" />
+            </Badge>
+          </Button>
+        </Grid>
+      </Grid>
+      <Drawer
+        anchor="bottom"
+        open={menuIndex === 1}
+        onClose={() => setMenuIndex(null)}
+      >
+        <Box height="50vh" paddingBottom={7} paddingTop={2} borderRadius="20%">
+          {player.faction && (
+            <FactionDetails
+              factionKey={player.faction}
+              isAdvancedMode={game.isAdvancedMode}
+            />
+          )}
+        </Box>
+      </Drawer>
+      <Drawer
+        anchor="bottom"
+        open={menuIndex === 3}
+        onClose={() => setMenuIndex(null)}
+      >
+        {factionRules.length > 0 ? (
+          <Box
+            height="50vh"
+            paddingBottom={7}
+            paddingTop={2}
+            borderRadius="20%"
+          >
+            <MarginList p={2} overflow="auto" height="calc(100% - 22px)">
+              {factionRules.map((rule, index) => (
+                <RuleCard key={`${rule.name}${index}`} {...rule} />
+              ))}
+            </MarginList>
+          </Box>
+        ) : (
+          <Box paddingBottom={8} paddingTop={2} px={2}>
+            <EmptyState
+              title="No faction rules"
+              description="There are no faction rules that apply currently."
+            />
+          </Box>
+        )}
+      </Drawer>
+    </>
   )
 }

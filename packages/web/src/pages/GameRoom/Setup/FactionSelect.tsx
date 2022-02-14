@@ -3,21 +3,12 @@ import { Box, useTheme } from '@material-ui/core'
 import { factions, Factions } from '@dune-companion/engine'
 import { useGame, usePlayer } from '../../../dune-react'
 import { HeaderImage } from '../../../components/HeaderImage'
-import { RoundedContainer } from '../../../components/RoundedContainer'
-import { Card } from '../../../components/Card'
-import { Section } from '../../../components/Section'
 import { factionIcons } from '../../../lib/factionIcons'
-import { Header } from '../../../components/Header'
-import { LeaderTeaser } from '../../../components/Leader'
-import { FactionSummary } from './FactionSummary'
-import { FactionAdvantages } from './FactionAdvantages'
-import dune from '../../../images/dune.jpeg'
 import { usePhaseSideEffects } from '../usePhaseSideEffects'
 import { FactionOverlay } from '../../../components/FactionOverlay'
 import { useTransition } from '../../../hooks/useTransition'
 import { FactionSelectMenu } from '../Common/FactionSelectMenu'
-import { EmphasisedText } from '../../../components/EmphasisedText'
-import { MarginList } from '../../../components/MarginList'
+import { FactionDetails } from '../../../components/FactionDetails'
 
 export default function FactionSelect(): ReactElement {
   const { palette } = useTheme()
@@ -33,10 +24,6 @@ export default function FactionSelect(): ReactElement {
   usePhaseSideEffects('FACTION_SELECT')
 
   const currentFaction = factions[currentFactionKey]
-
-  const commonAdvantages = currentFaction.advantages.filter(
-    (rule) => (game.isAdvancedMode && rule.isAdvanced) || !rule.isAdvanced
-  )
 
   const onNext = () => {
     setFactionIndex((curr) => (curr + 1) % factionKeys.length)
@@ -68,77 +55,10 @@ export default function FactionSelect(): ReactElement {
         color={palette[currentFactionKey].dark}
         glow={palette[currentFactionKey].light}
       />
-      <RoundedContainer>
-        <Header
-          type="Commanded by"
-          title={currentFaction.commander.name}
-          description={currentFaction.commander.backstory}
-          faction={currentFactionKey}
-          img={dune}
-        />
-        <Section heading="Strategy" faction={currentFactionKey}>
-          <EmphasisedText>{currentFaction.strategy}</EmphasisedText>
-        </Section>
-        <Section heading="Summary" faction={currentFactionKey}>
-          <FactionSummary
-            faction={currentFaction}
-            factionKey={currentFactionKey}
-          />
-        </Section>
-        <Section heading="Leaders" faction={currentFactionKey}>
-          {currentFaction.leaders.map((leader) => (
-            <LeaderTeaser
-              key={leader.name}
-              faction={currentFactionKey}
-              name={leader.name}
-              imgSrc={dune}
-              description={leader.backstory}
-              strength={leader.strength}
-            />
-          ))}
-        </Section>
-        <Section heading="Phase Advantages" faction={currentFactionKey}>
-          <FactionAdvantages
-            faction={currentFactionKey}
-            isAdvancedMode={game.isAdvancedMode}
-          />
-        </Section>
-        {commonAdvantages.length > 0 && (
-          <Section heading="Common Advantages" faction={currentFactionKey}>
-            <MarginList marginTop={3} marginBottom={2}>
-              {commonAdvantages.map((rule) => (
-                <Card
-                  key={rule.name}
-                  title={rule.name}
-                  meta="Faction rule"
-                  faction={currentFactionKey}
-                  advanced={rule.isAdvanced}
-                  body={rule.description}
-                />
-              ))}
-            </MarginList>
-          </Section>
-        )}
-        {game.isAdvancedMode && (
-          <Section heading="Karama" faction={currentFactionKey}>
-            <Card
-              title="Karama Power"
-              meta="Faction rule"
-              faction={currentFactionKey}
-              advanced
-              body={currentFaction.karamaPower}
-            />
-          </Section>
-        )}
-        <Section heading="Alliance Advantages" faction={currentFactionKey}>
-          <Card
-            title="Alliance Power"
-            meta="Faction rule"
-            faction={currentFactionKey}
-            body={currentFaction.alliancePower}
-          />
-        </Section>
-      </RoundedContainer>
+      <FactionDetails
+        factionKey={currentFactionKey}
+        isAdvancedMode={game.isAdvancedMode}
+      />
     </Box>
   )
 }
