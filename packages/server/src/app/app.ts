@@ -17,11 +17,11 @@ export const app = ({
       dataStore
     })
     const wsServer = new WebSocket.Server({
-      noServer: true,
-      host: config.WEBSOCKET_HOST
+      noServer: true
+      // host: config.WEBSOCKET_HOST
     })
       .on('close', () => logger.warn('Websocket server closed.'))
-      .on('error', error => logger.error(error.message))
+      .on('error', (error) => logger.error(error.message))
       .on('connection', (ws, req) => gameManager.handleConnection(ws, req.url))
 
     createHttpServer(sessionStore)

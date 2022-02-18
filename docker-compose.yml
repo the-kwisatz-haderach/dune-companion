@@ -1,25 +1,15 @@
-version: '3.8'
+version: 3.8
 
 services:
-  server:
-    build:
-      context: .
-      dockerfile: Dockerfile.server
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+
+  app:
+    build: .
+    image: dune:local
     depends_on:
       - redis
     ports:
-      - '8000:8000'
-
-  redis:
-    image: 'redis:alpine'
-    ports:
-      - '6379:6379'
-
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile.client
-    depends_on:
-      - server
-    ports:
-      - '80:80'
+      - 8000:8000

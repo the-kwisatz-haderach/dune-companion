@@ -5,3 +5,4 @@ lib-esm
 lib
 *.tgz
 .DS_Store
+tsconfig.tsbuildinfo

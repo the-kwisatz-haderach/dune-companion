@@ -6,6 +6,7 @@ import { config } from '../config'
 export const createHttpServer = (sessionStore: Store) =>
   new http.Server(
     express()
+      .use(express.static('public'))
       .use(
         session({
           store: sessionStore,
