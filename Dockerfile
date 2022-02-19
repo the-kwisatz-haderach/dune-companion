@@ -12,8 +12,8 @@ COPY packages/engine ./packages/engine
 COPY packages/server ./packages/server
 COPY packages/web ./packages/web
 
-RUN yarn install --frozen-lockfile
-RUN yarn dist
+RUN npm i lerna -g --loglevel notice
+RUN lerna bootstrap -- --production
 
 FROM node:16-alpine
 
@@ -26,9 +26,7 @@ COPY --from=build-stage /app/packages/web/build packages/server/public
 
 ENV NODE_ENV production
 
-EXPOSE 8000
-
 WORKDIR /app/packages/server
 
-ENTRYPOINT ["node", "index.js"]
+CMD ["node", "index.js"]
 

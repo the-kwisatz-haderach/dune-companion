@@ -18,7 +18,6 @@ export const app = ({
     })
     const wsServer = new WebSocket.Server({
       noServer: true
-      // host: config.WEBSOCKET_HOST
     })
       .on('close', () => logger.warn('Websocket server closed.'))
       .on('error', (error) => logger.error(error.message))
