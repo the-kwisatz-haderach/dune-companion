@@ -12,8 +12,8 @@ COPY packages/engine ./packages/engine
 COPY packages/server ./packages/server
 COPY packages/web ./packages/web
 
-RUN npm i lerna -g --loglevel notice
-RUN lerna bootstrap -- --production
+RUN yarn install --frozen-lockfile
+RUN yarn build
 
 FROM node:16-alpine
 

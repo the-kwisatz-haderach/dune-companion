@@ -12,7 +12,6 @@
     "build": "lerna run build --stream",
     "clean": "lerna run clean --parallel --no-bail",
     "watch": "lerna run watch --parallel",
-    "dist": "yarn build",
     "dev": "lerna run dev --parallel",
     "lint": "eslint ./packages --ext .ts,.tsx",
     "test": "jest",

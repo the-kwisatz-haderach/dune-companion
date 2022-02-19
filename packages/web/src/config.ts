@@ -1,3 +1,3 @@
 export const config = {
-  HOST_URL: process.env.HOST_URL ?? `ws://localhost:8000`
+  HOST_URL: window.location.origin.replace(/^http/, 'ws')
 } as const

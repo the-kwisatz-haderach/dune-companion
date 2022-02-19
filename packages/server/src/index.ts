@@ -8,24 +8,6 @@ import { app } from './app'
 import { config } from './config'
 import { IAuthenticator, IDataStore, ILogger } from './types'
 
-console.log('####')
-console.log('####')
-console.log('####')
-console.log('config.REDIS_URL', config.REDIS_URL)
-console.log('####')
-console.log('####')
-console.log('####')
-console.log('process.env.REDIS_URL', process.env.REDIS_URL)
-console.log('####')
-console.log('####')
-console.log('####')
-console.log('config.HTTP_PORT', config.HTTP_PORT)
-console.log('####')
-console.log('####')
-console.log('####')
-console.log('####')
-console.log('process.env.PORT', process.env.PORT)
-
 const redisClient = redis.createClient({
   url: config.REDIS_URL
 })
