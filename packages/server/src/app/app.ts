@@ -10,7 +10,7 @@ export const app = ({
   logger,
   sessionStore,
   authenticator
-}: IAppDependencies) => {
+}: IAppDependencies): void => {
   try {
     const gameManager = new GameManager({
       idGenerator,

@@ -24,7 +24,10 @@ export class GameManager {
     this.dataStore = dataStore
   }
 
-  async handleConnection(socket: WebSocket, connectionUrl?: string) {
+  async handleConnection(
+    socket: WebSocket,
+    connectionUrl?: string
+  ): Promise<void> {
     const actionSender = createActionSender(socket)
     const clientId = connectionUrl?.split('=')[1] || this.idGenerator()
     console.log(`Client ${clientId} connected.`)
@@ -32,7 +35,7 @@ export class GameManager {
     // Send back the generated clientId to client.
     await actionSender(hostActions.CLIENT_CONNECTED({ clientId }))
 
-    socket.on('message', async message => {
+    socket.on('message', async (message) => {
       const { type, payload } = JSON.parse(message.toString('utf-8'))
       if (type === 'CREATE_GAME') {
         this.create({ ...payload, socket })
@@ -68,7 +71,7 @@ export class GameManager {
     this.rooms[roomId] = new GameRoom({
       initialGameState,
       password,
-      persistGame: game => this.dataStore.persist(roomId, game)
+      persistGame: (game) => this.dataStore.persist(roomId, game)
     })
 
     await this.rooms[roomId].create({
@@ -80,7 +83,7 @@ export class GameManager {
     })
     await actionSender(hostActions.GAME_CREATED({ roomId }))
     socket.on('close', async () => await this.leave(roomId, playerId))
-    socket.on('message', message => {
+    socket.on('message', (message) => {
       const action = JSON.parse(message.toString('utf8'))
       this.rooms[roomId].updateGame(action)
     })
@@ -118,11 +121,12 @@ export class GameManager {
       return await actionSender(hostActions.GAME_JOINED({ roomId }))
     }
 
+    console.log(`Client ${playerId} joined room ${roomId}.`)
     this.rooms[roomId].join({ roomId, password, playerId, socket })
     await actionSender(hostActions.GAME_JOINED({ roomId }))
 
     socket.on('close', async () => await this.leave(roomId, playerId))
-    socket.on('message', message => {
+    socket.on('message', (message) => {
       const action = JSON.parse(message.toString('utf8'))
       this.rooms[roomId].updateGame(action)
     })
@@ -133,9 +137,14 @@ export class GameManager {
     this.rooms[roomId].removeClient(clientId)
 
     if (this.rooms[roomId].size === 0) {
-      console.log(`Room ${roomId} is empty and is being closed.`)
-      await this.dataStore.remove(roomId)
-      delete this.rooms[roomId]
+      console.log(`Room ${roomId} is set to close in one minute.`)
+      setTimeout(async () => {
+        if (this.rooms[roomId].size === 0) {
+          console.log(`Room ${roomId} is empty and is being closed.`)
+          await this.dataStore.remove(roomId)
+          delete this.rooms[roomId]
+        }
+      }, 60_000)
     }
   }
 
