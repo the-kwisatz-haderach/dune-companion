@@ -54,6 +54,7 @@ export class GameManager {
   }: {
     socket: WebSocket
   } & ClientAction<'CREATE_GAME'>['payload']): Promise<void> {
+    let canClose = false
     const actionSender = createActionSender(socket)
     if (this.has(roomId)) {
       return actionSender(
@@ -82,8 +83,22 @@ export class GameManager {
       socket
     })
     await actionSender(hostActions.GAME_CREATED({ roomId }))
-    socket.on('close', async () => await this.leave(roomId, playerId))
+
+    socket.on('close', async () => {
+      canClose = true
+      console.log(
+        `Client ${playerId} connection closed and leaving room ${roomId} in one minute.`
+      )
+      setTimeout(async () => {
+        if (canClose) {
+          console.log(`Client ${playerId} left room ${roomId} after timeout.`)
+          await this.leave(roomId, playerId)
+        }
+      }, 60_000)
+    })
+
     socket.on('message', (message) => {
+      canClose = false
       const action = JSON.parse(message.toString('utf8'))
       this.rooms[roomId].updateGame(action)
     })
@@ -97,6 +112,7 @@ export class GameManager {
   }: {
     socket: WebSocket
   } & ClientAction<'JOIN_GAME'>['payload']): Promise<void> {
+    let canClose = false
     const actionSender = createActionSender(socket)
     if (!this.has(roomId)) {
       return await actionSender(
@@ -125,8 +141,21 @@ export class GameManager {
     this.rooms[roomId].join({ roomId, password, playerId, socket })
     await actionSender(hostActions.GAME_JOINED({ roomId }))
 
-    socket.on('close', async () => await this.leave(roomId, playerId))
+    socket.on('close', async () => {
+      canClose = true
+      console.log(
+        `Client ${playerId} connection closed and leaving room ${roomId} in one minute.`
+      )
+      setTimeout(async () => {
+        if (canClose) {
+          console.log(`Client ${playerId} left room ${roomId} after timeout.`)
+          await this.leave(roomId, playerId)
+        }
+      }, 60_000)
+    })
+
     socket.on('message', (message) => {
+      canClose = false
       const action = JSON.parse(message.toString('utf8'))
       this.rooms[roomId].updateGame(action)
     })
