@@ -54,7 +54,6 @@ export class GameManager {
   }: {
     socket: WebSocket
   } & ClientAction<'CREATE_GAME'>['payload']): Promise<void> {
-    let canClose = false
     const actionSender = createActionSender(socket)
     if (this.has(roomId)) {
       return actionSender(
@@ -66,8 +65,11 @@ export class GameManager {
     }
 
     console.log(`Client ${playerId} created room ${roomId}.`)
-    const initialGameState =
-      (await this.dataStore.get(roomId)) ?? gameCreator(conditions)
+    const cachedGameState = await this.dataStore.get(roomId)
+    if (cachedGameState) {
+      console.log(`Serving cached game state for room ${roomId}.`)
+    }
+    const initialGameState = cachedGameState ?? gameCreator(conditions)
 
     this.rooms[roomId] = new GameRoom({
       initialGameState,
@@ -83,25 +85,7 @@ export class GameManager {
       socket
     })
     await actionSender(hostActions.GAME_CREATED({ roomId }))
-
-    socket.on('close', async () => {
-      canClose = true
-      console.log(
-        `Client ${playerId} connection closed and leaving room ${roomId} in one minute.`
-      )
-      setTimeout(async () => {
-        if (canClose) {
-          console.log(`Client ${playerId} left room ${roomId} after timeout.`)
-          await this.leave(roomId, playerId)
-        }
-      }, 60_000)
-    })
-
-    socket.on('message', (message) => {
-      canClose = false
-      const action = JSON.parse(message.toString('utf8'))
-      this.rooms[roomId].updateGame(action)
-    })
+    this.registerListeners({ socket, roomId, playerId })
   }
 
   async join({
@@ -112,7 +96,6 @@ export class GameManager {
   }: {
     socket: WebSocket
   } & ClientAction<'JOIN_GAME'>['payload']): Promise<void> {
-    let canClose = false
     const actionSender = createActionSender(socket)
     if (!this.has(roomId)) {
       return await actionSender(
@@ -134,41 +117,27 @@ export class GameManager {
 
     if (this.rooms[roomId].hasClient(playerId)) {
       console.log(`Client ${playerId} rejoining room ${roomId}.`)
-      return await actionSender(hostActions.GAME_JOINED({ roomId }))
+      const cachedGame = await this.dataStore.get(roomId)
+      if (cachedGame) {
+        await actionSender(hostActions.GAME_UPDATED({ game: cachedGame }))
+      }
+    } else {
+      console.log(`Client ${playerId} joined room ${roomId}.`)
+      this.rooms[roomId].join({ roomId, password, playerId, socket })
     }
 
-    console.log(`Client ${playerId} joined room ${roomId}.`)
-    this.rooms[roomId].join({ roomId, password, playerId, socket })
     await actionSender(hostActions.GAME_JOINED({ roomId }))
-
-    socket.on('close', async () => {
-      canClose = true
-      console.log(
-        `Client ${playerId} connection closed and leaving room ${roomId} in one minute.`
-      )
-      setTimeout(async () => {
-        if (canClose) {
-          console.log(`Client ${playerId} left room ${roomId} after timeout.`)
-          await this.leave(roomId, playerId)
-        }
-      }, 60_000)
-    })
-
-    socket.on('message', (message) => {
-      canClose = false
-      const action = JSON.parse(message.toString('utf8'))
-      this.rooms[roomId].updateGame(action)
-    })
+    this.registerListeners({ socket, roomId, playerId })
   }
 
   async leave(roomId: string, clientId: string): Promise<void> {
     console.log(`Client connection ${clientId} removed from room ${roomId}.`)
     this.rooms[roomId].removeClient(clientId)
 
-    if (this.rooms[roomId].size === 0) {
+    if (!this.rooms[roomId]?.size) {
       console.log(`Room ${roomId} is set to close in one minute.`)
       setTimeout(async () => {
-        if (this.rooms[roomId].size === 0) {
+        if (!this.rooms[roomId]?.size) {
           console.log(`Room ${roomId} is empty and is being closed.`)
           await this.dataStore.remove(roomId)
           delete this.rooms[roomId]
@@ -179,5 +148,23 @@ export class GameManager {
 
   private has(roomId: string) {
     return Boolean(this.rooms[roomId])
+  }
+
+  private registerListeners({
+    socket,
+    roomId,
+    playerId
+  }: {
+    socket: WebSocket
+    roomId: string
+    playerId: string
+  }) {
+    socket.on('close', async () => {
+      await this.leave(roomId, playerId)
+    })
+    socket.on('message', (message) => {
+      const action = JSON.parse(message.toString('utf8'))
+      this.rooms[roomId].updateGame(action)
+    })
   }
 }

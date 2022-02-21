@@ -30,6 +30,13 @@ export class DunePlayerClient {
   }: IDunePlayerClientDependencies) {
     this.HOST_URL = hostUrl
     this.clientIdStore = clientIdStore
+
+    console.log(
+      `Connecting to socket at ${this.HOST_URL}?${
+        DunePlayerClient.ID_QUERY_PARAMETER
+      }=${this.clientIdStore.get()}`
+    )
+
     this.websocket = new ReconnectingWebSocket(
       `${this.HOST_URL}?${
         DunePlayerClient.ID_QUERY_PARAMETER
@@ -52,15 +59,15 @@ export class DunePlayerClient {
         return this.eventHandlers.CONNECTION_REOPENED()
       }
     }
-    this.websocket.onerror = event =>
+    this.websocket.onerror = (event) =>
       this.eventHandlers.ERROR(
         event?.message || DunePlayerClient.DEFAULT_ERROR_MESSAGE
       )
-    this.websocket.onclose = event =>
+    this.websocket.onclose = (event) =>
       this.eventHandlers.CONNECTION_CLOSED_BY_HOST(
         event?.reason || DunePlayerClient.DEFAULT_CLOSE_CONNECTION_MESSAGE
       )
-    this.websocket.onmessage = event => {
+    this.websocket.onmessage = (event) => {
       const action = DunePlayerClient.parseIncomingAction(event.data)
       if (action.type === 'CLIENT_CONNECTED') {
         this.clientIdStore.set(action.payload.clientId)

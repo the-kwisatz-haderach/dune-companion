@@ -66,19 +66,21 @@ export class GameRoom {
     )
   }
 
-  updateGame(action: ClientAction) {
+  updateGame(action: ClientAction): void {
     this.store.dispatch(action)
   }
 
-  validatePassword(password?: string) {
+  validatePassword(password?: string): boolean {
     return this.password === undefined || this.password === password
   }
 
-  get size() {
+  get size(): number {
     return Object.keys(this.clients).length
   }
 
-  async broadcastMessage<T extends Record<string, unknown>>(message: T) {
+  async broadcastMessage<T extends Record<string, unknown>>(
+    message: T
+  ): Promise<void> {
     await Promise.all(
       this.getClients().map(async (socket) => {
         if (socket.readyState === WebSocket.OPEN) {
@@ -91,7 +93,9 @@ export class GameRoom {
   async create({
     socket,
     ...payload
-  }: { socket: WebSocket } & ClientAction<'CREATE_GAME'>['payload']) {
+  }: {
+    socket: WebSocket
+  } & ClientAction<'CREATE_GAME'>['payload']): Promise<void> {
     this.clients[payload.playerId] = socket
     this.updateGame(clientActions.CREATE_GAME(payload))
   }
@@ -99,9 +103,11 @@ export class GameRoom {
   async join({
     socket,
     ...payload
-  }: { socket: WebSocket } & ClientAction<'JOIN_GAME'>['payload']) {
-    const actionSender = createActionSender(socket)
+  }: {
+    socket: WebSocket
+  } & ClientAction<'JOIN_GAME'>['payload']): Promise<void> {
     if (this.size >= this.store.getState().maxPlayers) {
+      const actionSender = createActionSender(socket)
       return await actionSender(
         hostActions.SHOW_NOTIFICATION({
           message: 'Game room is already full.',
@@ -111,11 +117,10 @@ export class GameRoom {
     }
 
     this.clients[payload.playerId] = socket
-    console.log(`Client ${payload.playerId} joined room ${payload.roomId}.`)
     this.updateGame(clientActions.JOIN_GAME(payload))
   }
 
-  removeClient(clientId: string) {
+  removeClient(clientId: string): void {
     if (this.hasClient(clientId)) {
       delete this.clients[clientId]
       this.updateGame(clientActions.LEAVE_GAME({ playerId: clientId }))

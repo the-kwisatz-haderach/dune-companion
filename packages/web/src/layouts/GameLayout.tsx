@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, makeStyles, createStyles, Slide } from '@material-ui/core'
-import { useGame } from '../dune-react'
+import { useGame, useGameConnection } from '../dune-react'
 import { ConditionsMenu } from '../components/ConditionsMenu'
 import { useTransition } from '../hooks/useTransition'
 
@@ -17,9 +17,15 @@ const useStyles = makeStyles((theme) =>
 )
 
 export const GameLayout: React.FC = ({ children }) => {
+  const { connect } = useGameConnection()
   const classes = useStyles()
   const game = useGame()
   const transition = useTransition(game.currentPhase, { duration: 3500 })
+
+  useEffect(() => {
+    connect()
+  }, [connect])
+
   return (
     <Box position="relative">
       {game.currentTurn > 0 && (

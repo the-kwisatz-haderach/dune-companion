@@ -11,9 +11,10 @@ import {
   Typography
 } from '@material-ui/core'
 import { FormEvent, ReactElement, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useGameConnection, useGameDispatch } from '../../dune-react'
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     form: {
       display: 'flex',
@@ -69,6 +70,7 @@ const useStyles = makeStyles(theme =>
 )
 
 export default function StartGame(): ReactElement {
+  const { state } = useLocation<{ roomId?: string }>()
   const classes = useStyles()
   const { connect } = useGameConnection()
   const dispatch = useGameDispatch()
@@ -77,7 +79,7 @@ export default function StartGame(): ReactElement {
   const [maxPlayers, setMaxPlayers] = useState(4)
   const [maxTurns, setMaxTurns] = useState(10)
   const [isAdvancedMode, setIsAdvancedMode] = useState(false)
-  const [joinRoomId, setJoinRoomId] = useState('')
+  const [joinRoomId, setJoinRoomId] = useState(state?.roomId || '')
   const [joinPassword, setJoinPassword] = useState('')
 
   useEffect(() => {
@@ -118,10 +120,10 @@ export default function StartGame(): ReactElement {
         >
           <Box className={classes.fieldRow}>
             <TextField
-              autoFocus
+              autoFocus={!state?.roomId}
               className={classes.formField}
               value={roomId}
-              onChange={e => {
+              onChange={(e) => {
                 setRoomId(e.target.value)
               }}
               required
@@ -130,7 +132,7 @@ export default function StartGame(): ReactElement {
             <TextField
               className={classes.formField}
               value={password}
-              onChange={e => {
+              onChange={(e) => {
                 setPassword(e.target.value)
               }}
               label="Password"
@@ -145,7 +147,7 @@ export default function StartGame(): ReactElement {
               }}
               type="number"
               value={maxPlayers}
-              onChange={e =>
+              onChange={(e) =>
                 setMaxPlayers(Number.parseInt(e.target.value || '0', 10))
               }
               label="Max players"
@@ -158,7 +160,7 @@ export default function StartGame(): ReactElement {
               }}
               type="number"
               value={maxTurns}
-              onChange={e =>
+              onChange={(e) =>
                 setMaxTurns(Number.parseInt(e.target.value || '0', 10))
               }
               label="Max turns"
@@ -170,12 +172,12 @@ export default function StartGame(): ReactElement {
               <Switch
                 color="primary"
                 checked={isAdvancedMode}
-                onChange={e => setIsAdvancedMode(e.target.checked)}
+                onChange={(e) => setIsAdvancedMode(e.target.checked)}
               />
             </InputLabel>
             <Typography variant="body2">
               The Basic Game is changed by increasing the number of Spice Blows,
-              adding a spice advantage for holding a city or Tuek’s Sietch, (the
+              adding a spice advantage for holding a city or Tuek's Sietch, (the
               smuggler stronghold), an enhanced Karama Card, and an advanced
               battle system.
             </Typography>
@@ -190,17 +192,18 @@ export default function StartGame(): ReactElement {
         <Typography variant="h5">Join Game</Typography>
         <form onSubmit={handleJoinGame}>
           <TextField
+            autoFocus={!!state?.roomId}
             label="Room ID"
             fullWidth
             value={joinRoomId}
             required
-            onChange={e => setJoinRoomId(e.target.value)}
+            onChange={(e) => setJoinRoomId(e.target.value)}
           />
           <TextField
             label="Password"
             fullWidth
             value={joinPassword}
-            onChange={e => setJoinPassword(e.target.value)}
+            onChange={(e) => setJoinPassword(e.target.value)}
           />
           <Button type="submit" variant="contained" color="primary">
             Connect

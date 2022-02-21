@@ -19,9 +19,30 @@ export const app = ({
     const wsServer = new WebSocket.Server({
       noServer: true
     })
-      .on('close', () => logger.warn('Websocket server closed.'))
+
+    const interval = setInterval(function ping() {
+      wsServer.clients.forEach(function each(ws) {
+        if ((ws as any).isAlive === false) return ws.terminate()
+
+        ;(ws as any).isAlive = false
+        ws.ping()
+      })
+    }, 30000)
+
+    wsServer
+      .on('close', () => {
+        logger.warn('Websocket server closed.')
+        clearInterval(interval)
+      })
       .on('error', (error) => logger.error(error.message))
-      .on('connection', (ws, req) => gameManager.handleConnection(ws, req.url))
+      .on('connection', (ws, req) => {
+        gameManager.handleConnection(ws, req.url)
+
+        ;(ws as any).isAlive = true
+        ws.on('pong', function heartbeat() {
+          ;(this as any).isAlive = true
+        })
+      })
 
     createHttpServer(sessionStore)
       .on('upgrade', async (req, socket, head) => {
