@@ -37,14 +37,16 @@ export class GameManager {
     // Send back the generated clientId to client.
     await actionSender(hostActions.CLIENT_CONNECTED({ clientId }))
 
-    socket.on('message', async (message) => {
-      const { type, payload } = JSON.parse(message.toString('utf-8'))
-      if (type === CREATE_GAME) {
-        this.create({ ...payload, socket })
-      } else if (type === JOIN_GAME) {
-        this.join({ ...payload, socket })
-      }
-    })
+    socket
+      .on('message', async (message) => {
+        const { type, payload } = JSON.parse(message.toString('utf-8'))
+        if (type === CREATE_GAME) {
+          this.create({ ...payload, socket })
+        } else if (type === JOIN_GAME) {
+          this.join({ ...payload, socket })
+        }
+      })
+      .on('close', () => console.log(`Client ${clientId} disconnected.`))
   }
 
   async create({
@@ -116,17 +118,16 @@ export class GameManager {
       )
     }
 
+    this.registerListeners({ socket, roomId, playerId })
     await this.rooms[roomId].join({ roomId, password, playerId, socket })
     await actionSender(hostActions.GAME_JOINED({ roomId }))
-    this.registerListeners({ socket, roomId, playerId })
   }
 
   async leave({
     playerId,
     roomId
   }: ClientAction<'LEAVE_GAME'>['payload']): Promise<void> {
-    console.log(`Client connection ${playerId} removed from room ${roomId}.`)
-    this.rooms[roomId].leave({ playerId, roomId })
+    await this.rooms[roomId].leave({ playerId, roomId })
     if (!this.rooms[roomId]?.size) {
       console.log(`Room ${roomId} is empty and is being closed.`)
       await this.dataStore.remove(roomId)
@@ -147,7 +148,7 @@ export class GameManager {
     roomId: string
     playerId: string
   }) {
-    socket.on('close', async () => await this.leave({ playerId, roomId }))
+    socket.on('close', () => this.leave({ playerId, roomId }))
     socket.on('message', (message) => {
       const action = JSON.parse(message.toString('utf8'))
       this.rooms[roomId].updateGame(action)
