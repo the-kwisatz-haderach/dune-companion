@@ -1,7 +1,11 @@
-import React, { createContext, useContext, useReducer } from 'react'
-import { useMemo } from 'react'
-import { Dispatch } from 'react'
-import { Reducer } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  Dispatch,
+  Reducer,
+  useMemo
+} from 'react'
 
 type GameSettings = {
   showAllFactionRules: boolean

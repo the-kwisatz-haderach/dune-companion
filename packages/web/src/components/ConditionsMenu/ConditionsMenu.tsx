@@ -12,10 +12,10 @@ const useStyles = makeStyles((theme) =>
     root: {
       display: 'flex',
       width: '100%',
-      backgroundImage:
-        'linear-gradient(0deg, hsl(219deg 25% 37%), hsl(219deg 28% 72%))',
       // backgroundImage:
-      //   'linear-gradient(0deg, hsl(219, 40%, 30%), hsl(219deg 36% 60%))',
+      //   'linear-gradient(0deg, hsl(219deg 25% 37%), hsl(219deg 28% 72%))',
+      backgroundImage:
+        'linear-gradient(0deg, hsl(219, 40%, 30%), hsl(219deg 36% 60%))',
       boxShadow: '0px 5px 20px -2px rgb(0 0 0 / 10%)',
       paddingLeft: theme.spacing(0.5),
       paddingRight: theme.spacing(0.5)

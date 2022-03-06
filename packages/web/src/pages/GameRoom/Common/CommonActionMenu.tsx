@@ -5,7 +5,17 @@ import FirstPlayerIcon from '@material-ui/icons/PlusOne'
 import useGameSettingsContext from '../../../contexts/GameSettingsContext/GameSettingsContext'
 import { GameActionMenuProps } from '../../../components/GameActionMenu'
 import { factionRuleSets, Factions } from '@dune-companion/engine'
-import { Badge, Box, Button, Drawer, Grid } from '@material-ui/core'
+import {
+  Badge,
+  Box,
+  Button,
+  Drawer,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
+} from '@material-ui/core'
 import styles from './CommonActionMenu.module.css'
 import { ToggleButton } from '../../../components/ToggleButton'
 import { createRuleFilter } from '../helpers'
@@ -42,7 +52,7 @@ export const CommonActionMenu = () => {
   const actions = useGameActions()
   const game = useGame()
   const [menuIndex, setMenuIndex] = useState<number | null>(null)
-  const { showAllFactionRules, dispatch } = useGameSettingsContext()
+  const { showAllFactionRules } = useGameSettingsContext()
 
   const ruleFilter = useMemo(
     () =>
@@ -97,6 +107,11 @@ export const CommonActionMenu = () => {
     }
   }, [actions, player.hasCompletedPhase])
 
+  const secondaryActions = useMemo(
+    () => getSecondaryActions(actions, player?.isAdmin),
+    [actions, player?.isAdmin]
+  )
+
   return (
     <>
       <Grid container className={styles.container}>
@@ -132,6 +147,32 @@ export const CommonActionMenu = () => {
           </Button>
         </Grid>
       </Grid>
+      <Drawer
+        anchor="bottom"
+        open={menuIndex === 0}
+        onClose={() => setMenuIndex(null)}
+      >
+        <Box height="50vh" paddingBottom={7} paddingTop={2} borderRadius="20%">
+          <List>
+            {secondaryActions.map(({ onClick, label, Icon }) => (
+              <ListItem
+                button
+                onClick={() => {
+                  setMenuIndex(null)
+                  onClick()
+                }}
+              >
+                {Icon && (
+                  <ListItemIcon>
+                    <Icon />
+                  </ListItemIcon>
+                )}
+                <ListItemText primary={label} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
       <Drawer
         anchor="bottom"
         open={menuIndex === 1}
