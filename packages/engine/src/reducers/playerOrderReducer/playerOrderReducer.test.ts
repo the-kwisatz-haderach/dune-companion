@@ -42,7 +42,7 @@ describe('playerOrderReducer', () => {
     expect(
       playerOrderReducer(
         ['test', 'other', 'third'],
-        clientActions.LEAVE_GAME({ playerId: 'test' })
+        clientActions.LEAVE_GAME({ playerId: 'test', roomId: 'test' })
       )
     ).toEqual(['other', 'third'])
   })

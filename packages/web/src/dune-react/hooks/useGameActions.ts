@@ -42,10 +42,6 @@ const createActionHandlers = ({
       ...playerActionProperties['SET_FIRST_PLAYER'],
       handler: () => showPrompt('SetCurrentFirstPlayerPrompt', {})
     },
-    LEAVE_GAME: {
-      ...playerActionProperties['LEAVE_GAME'],
-      handler: () => dispatch('LEAVE_GAME', {})
-    },
     SET_PLAYER_SPICE: {
       ...playerActionProperties['SET_PLAYER_SPICE'],
       handler: () => showPrompt('SetPlayerSpicePrompt', {})
@@ -120,8 +116,8 @@ const createActionHandlers = ({
 export const useGameActions = () => {
   const dispatch = useGameDispatch()
   const showPrompt = usePromptContext()
-  return useMemo(() => createActionHandlers({ dispatch, showPrompt }), [
-    dispatch,
-    showPrompt
-  ])
+  return useMemo(
+    () => createActionHandlers({ dispatch, showPrompt }),
+    [dispatch, showPrompt]
+  )
 }

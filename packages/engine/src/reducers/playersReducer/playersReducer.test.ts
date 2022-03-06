@@ -188,9 +188,30 @@ describe('playersReducer', () => {
           {
             test: createPlayer('test')
           },
-          clientActions.LEAVE_GAME({ playerId: 'test' })
+          clientActions.LEAVE_GAME({ playerId: 'test', roomId: 'testRoom' })
         )
       ).toEqual({})
+    })
+    describe('if the player leaving is the admin', () => {
+      it('makes another player admin', () => {
+        const otherPlayer = createPlayer('otherPlayer')
+        expect(
+          playersReducer(
+            {
+              player: createPlayer('player', {
+                isAdmin: true
+              }),
+              otherPlayer
+            },
+            clientActions.LEAVE_GAME({ playerId: 'player', roomId: 'testRoom' })
+          )
+        ).toEqual({
+          otherPlayer: {
+            ...otherPlayer,
+            isAdmin: true
+          }
+        })
+      })
     })
   })
   describe('UPDATE_PLAYER_NAME', () => {
@@ -556,6 +577,41 @@ describe('playersReducer', () => {
         player3: {
           ...playerFixture,
           id: 'player3'
+        }
+      })
+    })
+  })
+  describe('SET_IDLE_STATUS', () => {
+    it('updates the players idle status', () => {
+      expect(
+        playersReducer(
+          {
+            player1: {
+              ...playerFixture,
+              id: 'player1',
+              isAdmin: true
+            },
+            player2: {
+              ...playerFixture,
+              id: 'player2'
+            }
+          },
+          clientActions.SET_IDLE_STATUS({
+            playerId: 'player1',
+            status: true
+          })
+        )
+      ).toEqual({
+        player1: {
+          ...playerFixture,
+          id: 'player1',
+          isAdmin: false,
+          isIdle: true
+        },
+        player2: {
+          ...playerFixture,
+          id: 'player2',
+          isAdmin: true
         }
       })
     })

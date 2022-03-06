@@ -85,5 +85,10 @@ export const playerActionProperties: StaticPlayerActionProperties = {
   },
   SKIP_BID: { style: 'negative', isPrimary: true, label: 'Skip bid' },
   PLACE_BID: { style: 'positive', isPrimary: true, label: 'Place bid' },
-  GO_TO_NEXUS: { style: 'neutral', isPrimary: true, label: 'Go to Nexus' }
+  GO_TO_NEXUS: { style: 'neutral', isPrimary: true, label: 'Go to Nexus' },
+  SET_IDLE_STATUS: {
+    style: 'neutral',
+    isPrimary: false,
+    label: 'Set idle status'
+  }
 }

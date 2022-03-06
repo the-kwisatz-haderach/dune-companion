@@ -9,7 +9,8 @@ describe('createPlayer', () => {
       faction: null,
       spice: 0,
       treacheryCards: 0,
-      hasCompletedPhase: false
+      hasCompletedPhase: false,
+      isIdle: false
     })
   })
   it('creates a player', () => {
@@ -20,7 +21,8 @@ describe('createPlayer', () => {
       faction: null,
       spice: 0,
       treacheryCards: 0,
-      hasCompletedPhase: false
+      hasCompletedPhase: false,
+      isIdle: false
     })
   })
 })

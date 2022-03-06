@@ -1,9 +1,11 @@
 import WebSocket from 'ws'
 import {
   ClientAction,
+  CREATE_GAME,
   Game,
   gameCreator,
-  hostActions
+  hostActions,
+  JOIN_GAME
 } from '@dune-companion/engine'
 import { GameRoom } from './GameRoom'
 import { createActionSender } from '../utils/createActionSender'
@@ -37,9 +39,9 @@ export class GameManager {
 
     socket.on('message', async (message) => {
       const { type, payload } = JSON.parse(message.toString('utf-8'))
-      if (type === 'CREATE_GAME') {
+      if (type === CREATE_GAME) {
         this.create({ ...payload, socket })
-      } else if (type === 'JOIN_GAME') {
+      } else if (type === JOIN_GAME) {
         this.join({ ...payload, socket })
       }
     })
@@ -105,7 +107,6 @@ export class GameManager {
         })
       )
     }
-
     if (!this.rooms[roomId].validatePassword(password)) {
       return await actionSender(
         hostActions.SHOW_NOTIFICATION({
@@ -115,34 +116,21 @@ export class GameManager {
       )
     }
 
-    if (this.rooms[roomId].hasClient(playerId)) {
-      console.log(`Client ${playerId} rejoining room ${roomId}.`)
-      const cachedGame = await this.dataStore.get(roomId)
-      if (cachedGame) {
-        await actionSender(hostActions.GAME_UPDATED({ game: cachedGame }))
-      }
-    } else {
-      console.log(`Client ${playerId} joined room ${roomId}.`)
-      this.rooms[roomId].join({ roomId, password, playerId, socket })
-    }
-
+    await this.rooms[roomId].join({ roomId, password, playerId, socket })
     await actionSender(hostActions.GAME_JOINED({ roomId }))
     this.registerListeners({ socket, roomId, playerId })
   }
 
-  async leave(roomId: string, clientId: string): Promise<void> {
-    console.log(`Client connection ${clientId} removed from room ${roomId}.`)
-    this.rooms[roomId].removeClient(clientId)
-
+  async leave({
+    playerId,
+    roomId
+  }: ClientAction<'LEAVE_GAME'>['payload']): Promise<void> {
+    console.log(`Client connection ${playerId} removed from room ${roomId}.`)
+    this.rooms[roomId].leave({ playerId, roomId })
     if (!this.rooms[roomId]?.size) {
-      console.log(`Room ${roomId} is set to close in one minute.`)
-      setTimeout(async () => {
-        if (!this.rooms[roomId]?.size) {
-          console.log(`Room ${roomId} is empty and is being closed.`)
-          await this.dataStore.remove(roomId)
-          delete this.rooms[roomId]
-        }
-      }, 60_000)
+      console.log(`Room ${roomId} is empty and is being closed.`)
+      await this.dataStore.remove(roomId)
+      delete this.rooms[roomId]
     }
   }
 
@@ -159,9 +147,7 @@ export class GameManager {
     roomId: string
     playerId: string
   }) {
-    socket.on('close', async () => {
-      await this.leave(roomId, playerId)
-    })
+    socket.on('close', async () => await this.leave({ playerId, roomId }))
     socket.on('message', (message) => {
       const action = JSON.parse(message.toString('utf8'))
       this.rooms[roomId].updateGame(action)

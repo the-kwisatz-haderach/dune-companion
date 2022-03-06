@@ -6,7 +6,7 @@ describe('alliancesReducer', () => {
     expect(
       alliancesReducer(
         [{ players: ['test', 'other', 'third'], status: 'confirmed' }],
-        clientActions.LEAVE_GAME({ playerId: 'test' })
+        clientActions.LEAVE_GAME({ playerId: 'test', roomId: 'testRoom' })
       )
     ).toEqual([{ players: ['other', 'third'], status: 'confirmed' }])
   })

@@ -277,6 +277,45 @@ describe('phaseCompletionReducer', () => {
       expect(phaseCompletionReducer(state)).toEqual(createNextPhaseState(state))
     })
   })
+  describe('when some players are idle current phase', () => {
+    it('sets up a new phase if all other players are ready', () => {
+      const state: Game = {
+        ...initialGameState,
+        currentTurn: 3,
+        currentPhase: 'CHOAM_CHARITY',
+        phaseStates: {
+          ...initialGameState.phaseStates,
+          CHOAM_CHARITY: {
+            isChoamCharityDistributed: true
+          }
+        },
+        players: {
+          somePlayer: {
+            ...playerFixture,
+            isAdmin: true,
+            id: 'somePlayer',
+            name: 'somePlayer',
+            spice: 0,
+            hasCompletedPhase: true,
+            treacheryCards: 0,
+            faction: Factions.FREMEN
+          },
+          anotherPlayer: {
+            ...playerFixture,
+            isAdmin: false,
+            id: 'anotherPlayer',
+            name: 'anotherPlayer',
+            spice: 0,
+            hasCompletedPhase: false,
+            isIdle: true,
+            treacheryCards: 0,
+            faction: Factions.HOUSE_ATREIDES
+          }
+        }
+      }
+      expect(phaseCompletionReducer(state)).toEqual(createNextPhaseState(state))
+    })
+  })
   describe('when MENTAT PAUSE is completed', () => {
     it('sets up a new turn', () => {
       const state: Game = {

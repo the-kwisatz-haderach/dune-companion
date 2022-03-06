@@ -42,20 +42,6 @@ export const phaseCompletionReducer = (
       }
       return state
     case 'BIDDING':
-      /*
-        On first bid --> start timer
-        Bid/Skip -> next player. 
-        if all have passed or one player is left
-        - Stop timer
-        else
-        - Repeat
-
-        Next round:
-          if rounds < participants
-          - Repeat by creating a new round
-          else
-          - isDone is true
-        */
       if (!state.auctions[state.currentTurn - 1]) {
         return createNewAuctionState(state)
       }
@@ -96,7 +82,9 @@ export const phaseCompletionReducer = (
 }
 
 function playersReady(state: Game) {
-  return Object.values(state.players).every(player => player.hasCompletedPhase)
+  return Object.values(state.players).every(
+    (player) => player.hasCompletedPhase || player.isIdle
+  )
 }
 
 function firstPlayerSet(state: Game) {
@@ -107,6 +95,6 @@ function playerBasicsSet(state: Game) {
   const players = Object.values(state.players)
   return (
     players.length > 0 &&
-    players.every(player => player.faction !== null && player.name !== '')
+    players.every((player) => player.faction !== null && player.name !== '')
   )
 }

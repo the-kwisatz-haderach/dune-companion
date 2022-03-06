@@ -13,7 +13,7 @@ export const playersReducer = createReducer(
         const isAlreadySelected =
           action.payload.faction !== null &&
           Object.values(state).some(
-            player => player.faction === action.payload.faction
+            (player) => player.faction === action.payload.faction
           )
         if (isAlreadySelected) return state
 
@@ -34,7 +34,7 @@ export const playersReducer = createReducer(
         if (
           action.payload.name === '' ||
           Object.values(state).some(
-            player => player.name === action.payload.name
+            (player) => player.name === action.payload.name
           )
         ) {
           return state
@@ -57,6 +57,15 @@ export const playersReducer = createReducer(
       })
       .addCase(clientActions.LEAVE_GAME, (state, action) => {
         // Add additional cleanup of alliances etc...
+        if (!state[action.payload.playerId]) return state
+        if (state[action.payload.playerId].isAdmin) {
+          const otherPlayerId = Object.keys(state).find(
+            (playerId) => playerId !== action.payload.playerId
+          )
+          if (otherPlayerId) {
+            state[otherPlayerId].isAdmin = true
+          }
+        }
         delete state[action.payload.playerId]
       })
       .addCase(clientActions.SET_IS_READY, (state, action) => {
@@ -70,5 +79,17 @@ export const playersReducer = createReducer(
       })
       .addCase(clientActions.SET_PLAYER_TREACHERY_CARDS, (state, action) => {
         state[action.payload.playerId].treacheryCards = action.payload.cards
+      })
+      .addCase(clientActions.SET_IDLE_STATUS, (state, action) => {
+        state[action.payload.playerId].isIdle = action.payload.status
+        if (state[action.payload.playerId].isAdmin) {
+          const otherPlayerId = Object.keys(state).find(
+            (playerId) => playerId !== action.payload.playerId
+          )
+          if (otherPlayerId) {
+            state[action.payload.playerId].isAdmin = false
+            state[otherPlayerId].isAdmin = true
+          }
+        }
       })
 )

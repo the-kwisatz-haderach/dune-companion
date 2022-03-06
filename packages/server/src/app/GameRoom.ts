@@ -106,6 +106,15 @@ export class GameRoom {
   }: {
     socket: WebSocket
   } & ClientAction<'JOIN_GAME'>['payload']): Promise<void> {
+    if (payload.playerId in this.store.getState().players) {
+      console.log(
+        `Player ${payload.playerId} rejoining room ${payload.roomId}.`
+      )
+      this.clients[payload.playerId] = socket
+      return this.updateGame(
+        clientActions.SET_IDLE_STATUS({ ...payload, status: false })
+      )
+    }
     if (this.size >= this.store.getState().maxPlayers) {
       const actionSender = createActionSender(socket)
       return await actionSender(
@@ -116,14 +125,18 @@ export class GameRoom {
       )
     }
 
+    console.log(`Player ${payload.playerId} joined room ${payload.roomId}.`)
     this.clients[payload.playerId] = socket
     this.updateGame(clientActions.JOIN_GAME(payload))
   }
 
-  removeClient(clientId: string): void {
-    if (this.hasClient(clientId)) {
-      delete this.clients[clientId]
-      this.updateGame(clientActions.LEAVE_GAME({ playerId: clientId }))
+  async leave(payload: ClientAction<'LEAVE_GAME'>['payload']): Promise<void> {
+    if (payload.playerId in this.clients) {
+      console.log(`Player ${payload.playerId} left room ${payload.roomId}.`)
+      delete this.clients[payload.playerId]
+      this.updateGame(
+        clientActions.SET_IDLE_STATUS({ ...payload, status: true })
+      )
     }
   }
 

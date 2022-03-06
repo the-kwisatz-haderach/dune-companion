@@ -77,7 +77,7 @@ describe('allianceRequestsReducer', () => {
     expect(
       allianceRequestsReducer(
         [{ id: 'mockNanoId', requester: 'test', responders: ['someone'] }],
-        clientActions.LEAVE_GAME({ playerId: 'test' })
+        clientActions.LEAVE_GAME({ playerId: 'test', roomId: 'testRoom' })
       )
     ).toEqual([])
   })
