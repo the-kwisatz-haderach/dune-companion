@@ -44,7 +44,7 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
   return (
     <Box px={1}>
       <Grid container alignItems="center" className={classes.root}>
-        <Grid item xs={2} alignItems="center">
+        <Grid item xs={2}>
           <Icon icon="revival" />
         </Grid>
         <Grid item xs>
@@ -59,7 +59,7 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
         </Grid>
       </Grid>
       <Grid container alignItems="center" className={classes.root}>
-        <Grid item xs={2} alignItems="center">
+        <Grid item xs={2}>
           <Icon icon="spice" />
         </Grid>
         <Grid item xs>
@@ -74,7 +74,7 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
         </Grid>
       </Grid>
       <Grid container alignItems="center" className={classes.root}>
-        <Grid item xs={2} alignItems="center">
+        <Grid item xs={2}>
           <Icon icon="treachery-card" />
         </Grid>
         <Grid item xs>
@@ -89,7 +89,7 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
         </Grid>
       </Grid>
       <Grid container alignItems="center" className={classes.root}>
-        <Grid item xs={2} alignItems="center">
+        <Grid item xs={2}>
           <Icon icon="force" />
         </Grid>
         <Grid item xs>
@@ -104,7 +104,7 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
         </Grid>
       </Grid>
       <Grid container alignItems="center" className={classes.root}>
-        <Grid item xs={2} alignItems="center">
+        <Grid item xs={2}>
           <Icon icon="force" />
         </Grid>
         <Grid item xs>
@@ -119,7 +119,7 @@ export const FactionSummary = ({ faction, factionKey }: Props) => {
         </Grid>
       </Grid>
       <Grid container alignItems="center" className={classes.root}>
-        <Grid item xs={2} alignItems="center">
+        <Grid item xs={2}>
           <Icon icon="city" />
         </Grid>
         <Grid item xs>

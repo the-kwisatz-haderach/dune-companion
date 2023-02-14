@@ -8,6 +8,13 @@ export const usePhaseSideEffects = (currentPhase: Phases) => {
   const player = usePlayer()
 
   useEffect(() => {
+    if (currentPhase !== 'FACTION_SELECT') {
+      if (!player.name) {
+        return showPrompt('PlayerSetupPrompt', {})
+      } else if (!player.faction) {
+        showPrompt('FactionSelectPrompt', {})
+      }
+    }
     switch (currentPhase) {
       case 'FACTION_SELECT': {
         if (player.name === '') {
@@ -18,15 +25,16 @@ export const usePhaseSideEffects = (currentPhase: Phases) => {
       case 'BIDDING': {
         if (!player.hasCompletedPhase) {
           showPrompt('SetPlayerSpicePrompt', {})
-          break
-        }
-        if (player.hasCompletedPhase) {
-          setTimeout(() => {
-            showPrompt('SetPlayerTreacheryCardsPrompt', {})
-          }, 1000)
+          showPrompt('SetPlayerTreacheryCardsPrompt', {})
           break
         }
       }
     }
-  }, [showPrompt, currentPhase, player?.name, player.hasCompletedPhase])
+  }, [
+    showPrompt,
+    currentPhase,
+    player.name,
+    player.hasCompletedPhase,
+    player.faction
+  ])
 }

@@ -4,6 +4,7 @@ import { SetCurrentFirstPlayerPrompt } from './SetCurrentFirstPlayerPrompt'
 import { SimplePrompt } from './SimplePrompt'
 import { SetPlayerSpicePrompt } from './SetPlayerSpicePrompt'
 import { SetPlayerTreacheryCardsPrompt } from './SetPlayerTreacheryCardsPrompt'
+import { FactionSelectPrompt } from './FactionSelectPrompt'
 
 export const prompts = {
   PlayerSetupPrompt,
@@ -11,7 +12,8 @@ export const prompts = {
   SetCurrentFirstPlayerPrompt,
   SimplePrompt,
   SetPlayerSpicePrompt,
-  SetPlayerTreacheryCardsPrompt
+  SetPlayerTreacheryCardsPrompt,
+  FactionSelectPrompt
 } as const
 
 export type Prompts = typeof prompts

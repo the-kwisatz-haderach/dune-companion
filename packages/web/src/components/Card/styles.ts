@@ -1,18 +1,13 @@
-import {
-  Theme,
-  createStyles,
-  makeStyles,
-} from '@material-ui/core'
+import { Theme, createStyles, makeStyles } from '@material-ui/core'
 import type { Props } from './Card'
 
 export const useStyles = makeStyles<
   Theme,
   Pick<Props, 'faction' | 'inclusionReason'> & { isDone: boolean }
->(theme =>
+>((theme) =>
   createStyles({
     root: {
       transition: 'opacity 0.2s ease-in-out',
-      opacity: ({ isDone }) => `${isDone ? 0.7 : 1}`,
       border: ({ faction, inclusionReason }) => {
         if (faction) return `1px solid ${theme.palette[faction].light}`
         if (inclusionReason) return `1px solid ${theme.palette.secondary.light}`
@@ -75,7 +70,7 @@ export const useStyles = makeStyles<
           ? theme.palette[faction].contrastText
           : theme.palette.common.white,
       right: 20,
-      bottom: ({ isDone }) => (isDone ? 20 : 10),
+      bottom: ({ isDone }) => (isDone ? 20 : 5),
       zIndex: 10
     },
     bodyContainer: {

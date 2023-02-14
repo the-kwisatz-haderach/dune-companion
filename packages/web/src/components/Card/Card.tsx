@@ -29,7 +29,7 @@ export default function Card({
   const Icon = faction ? factionIcons[faction] : undefined
 
   const toggleCompleteCard = useCallback(() => {
-    setIsDone(curr => !curr)
+    setIsDone((curr) => !curr)
   }, [])
 
   const handleDoubleTap = useMemo(
@@ -40,7 +40,7 @@ export default function Card({
   return (
     <Box
       className={classes.root}
-      onTouchStart={e => handleDoubleTap(e.timeStamp)}
+      onTouchStart={(e) => handleDoubleTap(e.timeStamp)}
     >
       {Icon && <Icon className={classes.watermark} />}
       <Box className={classes.header}>
@@ -90,7 +90,7 @@ export default function Card({
         className={classes.button}
         onClick={toggleCompleteCard}
       >
-        {isDone ? 'REDO' : 'DONE'}
+        {isDone ? 'SHOW' : 'CLOSE'}
       </Button>
     </Box>
   )

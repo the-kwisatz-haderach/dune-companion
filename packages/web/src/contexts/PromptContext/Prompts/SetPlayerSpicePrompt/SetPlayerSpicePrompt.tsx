@@ -53,7 +53,7 @@ export const SetPlayerSpicePrompt = ({
         }}
         value={spice}
         type="number"
-        onChange={e => {
+        onChange={(e) => {
           isDirty.current = true
           setSpice(e.target.value)
         }}

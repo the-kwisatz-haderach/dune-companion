@@ -152,10 +152,16 @@ export const CommonActionMenu = () => {
         open={menuIndex === 0}
         onClose={() => setMenuIndex(null)}
       >
-        <Box height="50vh" paddingBottom={7} paddingTop={2} borderRadius="20%">
+        <Box
+          height="50vh"
+          paddingBottom="66px"
+          paddingTop={2}
+          borderRadius="20%"
+        >
           <List>
             {secondaryActions.map(({ onClick, label, Icon }) => (
               <ListItem
+                key={label}
                 button
                 onClick={() => {
                   setMenuIndex(null)
@@ -188,14 +194,17 @@ export const CommonActionMenu = () => {
         </Box>
       </Drawer>
       <Drawer
+        style={{
+          borderRadius: '20px 20px 0px 0px'
+        }}
         anchor="bottom"
         open={menuIndex === 3}
         onClose={() => setMenuIndex(null)}
       >
         {factionRules.length > 0 ? (
           <Box
-            height="50vh"
-            paddingBottom={7}
+            height="75vh"
+            paddingBottom="66px"
             paddingTop={2}
             borderRadius="20%"
           >

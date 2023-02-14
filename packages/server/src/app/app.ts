@@ -22,8 +22,7 @@ export const app = ({
 
     const interval = setInterval(function ping() {
       wsServer.clients.forEach(function each(ws) {
-        if ((ws as any).isAlive === false) return ws.terminate()
-
+        if (!(ws as any).isAlive) return ws.terminate()
         ;(ws as any).isAlive = false
         ws.ping()
       })
@@ -37,7 +36,6 @@ export const app = ({
       .on('error', (error) => logger.error(error.message))
       .on('connection', (ws, req) => {
         gameManager.handleConnection(ws, req.url)
-
         ;(ws as any).isAlive = true
         ws.on('pong', function heartbeat() {
           ;(this as any).isAlive = true

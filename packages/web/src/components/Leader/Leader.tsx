@@ -109,7 +109,7 @@ export const LeaderTeaser = ({ imgSrc, name, strength, faction }: Props) => {
   const classes = useTeaserStyles({ faction })
   return (
     <Grid container alignItems="center" className={classes.root}>
-      <Grid item xs={2} alignItems="center">
+      <Grid item xs={2}>
         <img className={classes.img} src={imgSrc} alt={name} />
       </Grid>
       <Grid item xs>

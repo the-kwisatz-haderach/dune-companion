@@ -117,6 +117,7 @@ describe('phaseCompletionReducer', () => {
             {
               isDone: true,
               isRunning: false,
+              lastActionTimestamp: '',
               participants: [
                 {
                   ...playerFixture,

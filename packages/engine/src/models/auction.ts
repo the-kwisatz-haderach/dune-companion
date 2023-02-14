@@ -6,6 +6,7 @@ export type Auction = {
   currentBidderIndex: number
   isRunning: boolean
   rounds: AuctionRound[]
+  lastActionTimestamp: string
 }
 
 export type AuctionRound = {

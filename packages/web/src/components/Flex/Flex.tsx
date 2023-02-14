@@ -11,15 +11,15 @@ interface Props extends BoxProps {
 }
 
 const useStyles = makeStyles<Theme, Pick<Props, 'spacing' | 'flexDirection'>>(
-  () =>
+  (theme) =>
     createStyles({
       root: {
         display: 'flex',
         '& > *:not(:last-child)': {
-          marginBottom: ({ flexDirection, spacing }) =>
-            flexDirection === 'column' ? spacing : 0,
-          marginRight: ({ flexDirection, spacing }) =>
-            flexDirection === 'row' ? spacing : 0
+          marginBottom: ({ flexDirection, spacing = 0 }) =>
+            flexDirection === 'column' ? theme.spacing(spacing) : 0,
+          marginRight: ({ flexDirection, spacing = 0 }) =>
+            flexDirection === 'row' ? theme.spacing(spacing) : 0
         }
       }
     })
@@ -27,7 +27,7 @@ const useStyles = makeStyles<Theme, Pick<Props, 'spacing' | 'flexDirection'>>(
 
 export const Flex: React.FC<Props> = ({
   spacing,
-  flexDirection,
+  flexDirection = 'row',
   children,
   ...boxProps
 }) => {

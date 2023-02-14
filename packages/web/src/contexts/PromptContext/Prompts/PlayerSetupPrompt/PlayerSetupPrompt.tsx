@@ -1,16 +1,15 @@
 import { TextField } from '@material-ui/core'
 import { ReactElement, useState } from 'react'
-import { Prompt } from '../../../../components/Prompt'
 import useUserContext from '../../../UserContext'
-import { useGameDispatch, usePlayer } from '../../../../dune-react'
+import { useGameDispatch } from '../../../../dune-react'
 import { PromptProps } from '../../types'
+import { SimplePrompt } from '../SimplePrompt'
 
 export function PlayerSetupPrompt({
   closePrompt,
   open
 }: PromptProps): ReactElement {
   const { username } = useUserContext()
-  const player = usePlayer()
   const [name, setName] = useState(username)
   const dispatch = useGameDispatch()
 
@@ -22,20 +21,19 @@ export function PlayerSetupPrompt({
   }
 
   return (
-    <Prompt
+    <SimplePrompt
       open={open}
       title="Enter your name"
-      onClose={player.name !== '' ? closePrompt : undefined}
-      actions={[
-        {
-          label: 'Enter',
-          onClick: () => updateName(name),
-          disabled: !name
-        }
-      ]}
+      closable={false}
+      closePrompt={closePrompt}
+      primaryAction={{
+        label: 'Enter',
+        onClick: () => updateName(name),
+        disabled: !name
+      }}
     >
       <form
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault()
           updateName(name)
         }}
@@ -47,9 +45,9 @@ export function PlayerSetupPrompt({
           fullWidth
           value={name}
           required
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
         />
       </form>
-    </Prompt>
+    </SimplePrompt>
   )
 }

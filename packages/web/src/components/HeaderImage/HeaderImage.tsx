@@ -19,7 +19,7 @@ interface Props {
 }
 
 const sizeTable = {
-  small: 240,
+  small: 160,
   medium: 320,
   large: 420
 } as const

@@ -45,7 +45,7 @@ export const phaseCompletionReducer = (
       if (!state.auctions[state.currentTurn - 1]) {
         return createNewAuctionState(state)
       }
-      if (state.auctions[state.currentTurn - 1].isDone || playersReady(state)) {
+      if (state.auctions[state.currentTurn - 1].isDone && playersReady(state)) {
         return createNextPhaseState(state)
       }
       return state

@@ -21,6 +21,7 @@ export function createAuction(game: Game): Auction {
     isRunning: false,
     participants,
     currentBidderIndex: 0,
+    lastActionTimestamp: '',
     rounds: [
       {
         bids: [],

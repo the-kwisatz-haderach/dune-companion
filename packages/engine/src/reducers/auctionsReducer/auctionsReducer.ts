@@ -12,6 +12,7 @@ export const auctionsReducer = createReducer(
         const lastRound = lastAuction.rounds.slice(-1)[0]
         const player = lastAuction.participants[lastAuction.currentBidderIndex]
         if (player.spice < action.payload.bid) return
+        lastAuction.lastActionTimestamp = new Date().toISOString()
         if (!lastAuction.isRunning) {
           lastAuction.isRunning = true
         }
@@ -25,6 +26,7 @@ export const auctionsReducer = createReducer(
       .addCase(clientActions.SKIP_BID, (state, action) => {
         const lastAuction = state.slice(-1)[0]
         const lastRound = lastAuction.rounds.slice(-1)[0]
+        lastAuction.lastActionTimestamp = new Date().toISOString()
         if (!lastAuction.isRunning) {
           lastAuction.isRunning = true
         }
